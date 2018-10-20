@@ -1,0 +1,23 @@
+# Gradle
+*.bin
+/build/
+/.gradle/
+/gradle/
+
+# IntelliJ
+/.idea/
+*.iml
+*.ipr
+*.iws
+*.iml
+
+# Python
+*.py
+
+# Production
+/out/
+/run/
+/libs/
+
+# Wiki
+/tinkers-forging.wiki/
