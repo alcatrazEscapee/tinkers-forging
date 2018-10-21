@@ -2,7 +2,6 @@
 *.bin
 /build/
 /.gradle/
-/gradle/
 
 # IntelliJ
 /.idea/
