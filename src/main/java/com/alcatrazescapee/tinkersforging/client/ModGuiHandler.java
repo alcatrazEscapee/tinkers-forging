@@ -22,8 +22,6 @@ import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 public final class ModGuiHandler implements IGuiHandler
 {
     public static final int TINKERS_ANVIL = 0;
-    public static final int FORGE = 1;
-    public static final int LOG_PILE = 2;
 
     @Nullable
     @Override

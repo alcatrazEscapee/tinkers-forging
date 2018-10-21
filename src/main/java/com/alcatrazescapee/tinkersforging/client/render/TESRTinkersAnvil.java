@@ -16,6 +16,8 @@ public class TESRTinkersAnvil extends TileEntitySpecialRenderer<TileTinkersAnvil
     public void render(TileTinkersAnvil te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
     {
         super.render(te, x, y, z, partialTicks, destroyStage, alpha);
+
+        // todo: render the item on top of the anvil?
     }
 
     @Override

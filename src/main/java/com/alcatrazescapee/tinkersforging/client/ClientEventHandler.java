@@ -6,6 +6,8 @@
 
 package com.alcatrazescapee.tinkersforging.client;
 
+import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -22,8 +24,10 @@ import com.alcatrazescapee.tinkersforging.client.render.TESRTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
+import com.alcatrazescapee.tinkersforging.common.items.ItemHammer;
 import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
+import com.alcatrazescapee.tinkersforging.util.Metal;
 
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
 import static net.minecraft.util.text.TextFormatting.GREEN;
@@ -57,7 +61,10 @@ public final class ClientEventHandler
     @SideOnly(Side.CLIENT)
     public static void registerColorHandlerItems(ColorHandlerEvent.Item event)
     {
-        event.getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+        ItemColors itemColors = event.getItemColors();
+        BlockColors blockColors = event.getBlockColors();
+
+        itemColors.registerItemColorHandler((stack, tintIndex) -> {
             if (stack.getItem() instanceof ItemToolHead)
             {
                 ItemToolHead item = (ItemToolHead) stack.getItem();
@@ -66,19 +73,29 @@ public final class ClientEventHandler
             return 0;
         }, ItemToolHead.getAll().toArray(new ItemToolHead[0]));
 
-        event.getBlockColors().registerBlockColorHandler((state, world, pos, tintIndex) -> {
-            if (state.getBlock() instanceof BlockTinkersAnvil)
+        itemColors.registerItemColorHandler((stack, tintIndex) -> {
+            if (stack.getItem() instanceof ItemHammer && tintIndex == 1)
             {
-                return ((BlockTinkersAnvil) state.getBlock()).getMetal().getColor();
+                ItemHammer item = (ItemHammer) stack.getItem();
+                Metal metal = item.getMetal();
+                return metal != null ? metal.getColor() : 0;
             }
-            return 0;
-        }, BlockTinkersAnvil.getAll().toArray(new BlockTinkersAnvil[0]));
+            return 0xffffff;
+        }, ItemHammer.getAll().toArray(new ItemHammer[0]));
 
-        event.getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+        itemColors.registerItemColorHandler((stack, tintIndex) -> {
             if (stack.getItem() instanceof ItemBlock && ((ItemBlock) stack.getItem()).getBlock() instanceof BlockTinkersAnvil)
             {
                 BlockTinkersAnvil block = (BlockTinkersAnvil) ((ItemBlock) stack.getItem()).getBlock();
                 return block.getMetal().getColor();
+            }
+            return 0;
+        }, BlockTinkersAnvil.getAll().toArray(new BlockTinkersAnvil[0]));
+
+        blockColors.registerBlockColorHandler((state, world, pos, tintIndex) -> {
+            if (state.getBlock() instanceof BlockTinkersAnvil)
+            {
+                return ((BlockTinkersAnvil) state.getBlock()).getMetal().getColor();
             }
             return 0;
         }, BlockTinkersAnvil.getAll().toArray(new BlockTinkersAnvil[0]));

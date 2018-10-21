@@ -15,7 +15,7 @@ import com.alcatrazescapee.tinkersforging.util.Metal;
 
 import static com.alcatrazescapee.alcatrazcore.util.CoreHelpers.getNull;
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
-import static com.alcatrazescapee.tinkersforging.client.ModCreativeTabs.TAB_ITEMS;
+import static com.alcatrazescapee.tinkersforging.client.ModCreativeTabs.TAB_STUFF;
 
 @GameRegistry.ObjectHolder(value = MOD_ID)
 public final class ModBlocks
@@ -30,7 +30,7 @@ public final class ModBlocks
 
         for (Metal metal : Metal.values())
         {
-            r.registerBlock(new BlockTinkersAnvil(metal), "tinkers_anvil/" + metal.name(), TAB_ITEMS);
+            r.registerBlock(new BlockTinkersAnvil(metal), "tinkers_anvil/" + metal.name(), TAB_STUFF);
         }
 
         r.registerTile(TileTinkersAnvil.class, "tinkers_anvil");

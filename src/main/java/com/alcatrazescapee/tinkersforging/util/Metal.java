@@ -13,30 +13,27 @@ import net.minecraft.item.Item;
 
 import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
+import com.alcatrazescapee.tinkersforging.common.ModMaterials;
 
 public enum Metal
 {
-    IRON(new Color(255, 255, 255)),
-    GOLD(new Color(243, 234, 83)),
-    COPPER(new Color(207, 134, 101)),
-    TIN(new Color(160, 173, 179)),
-    BRONZE(new Color(184, 115, 51)),
-    STEEL(new Color(128, 128, 128)),
-    LEAD(new Color(121, 102, 147)),
-    SILVER(new Color(239, 246, 255)),
-    ALUMINIUM_BRASS(new Color(255, 222, 83)),
-    ALUMINIUM(new Color(224, 224, 224)),
-    ARDITE(new Color(220, 84, 43)),
-    COBALT(new Color(35, 118, 221)),
-    MANYULLYN(new Color(113, 65, 172));
+    IRON(new Color(255, 255, 255), Item.ToolMaterial.IRON),
+    GOLD(new Color(243, 234, 83), Item.ToolMaterial.GOLD),
+    DIAMOND(new Color(95, 208, 241), Item.ToolMaterial.DIAMOND),
+    COPPER(new Color(207, 134, 101), ModMaterials.COPPER),
+    TIN(new Color(160, 173, 179), ModMaterials.TIN),
+    BRONZE(new Color(184, 115, 51), ModMaterials.BRONZE),
+    STEEL(new Color(128, 128, 128), ModMaterials.STEEL),
+    LEAD(new Color(121, 102, 147), ModMaterials.LEAD),
+    SILVER(new Color(239, 246, 255), ModMaterials.SILVER),
+    ALUMINIUM_BRASS(new Color(255, 222, 83), ModMaterials.ALUMINIUM_BRASS),
+    ALUMINIUM(new Color(224, 224, 224), ModMaterials.ALUMINIUM),
+    ARDITE(new Color(220, 84, 43), ModMaterials.ARDITE),
+    COBALT(new Color(35, 118, 221), ModMaterials.COBALT),
+    MANYULLYN(new Color(113, 65, 172), ModMaterials.MANYULLYN);
 
     private final int color;
     private final Item.ToolMaterial material;
-
-    Metal(Color color)
-    {
-        this(color, null);
-    }
 
     Metal(Color color, @Nullable Item.ToolMaterial material)
     {

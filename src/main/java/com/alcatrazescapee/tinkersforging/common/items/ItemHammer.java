@@ -6,6 +6,7 @@
 
 package com.alcatrazescapee.tinkersforging.common.items;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -21,6 +22,12 @@ import com.alcatrazescapee.tinkersforging.util.Metal;
 public class ItemHammer extends ItemToolCore
 {
     private static final Map<Metal, ItemHammer> MAP = new HashMap<>();
+
+    @Nonnull
+    public static Collection<ItemHammer> getAll()
+    {
+        return MAP.values();
+    }
 
     @Nullable
     public static ItemHammer get(Metal metal)
@@ -45,6 +52,14 @@ public class ItemHammer extends ItemToolCore
         MAP.put(metal, this);
     }
 
+    public ItemHammer(ToolMaterial material)
+    {
+        super(material, 2.0f, -3.0f);
+
+        this.metal = null;
+    }
+
+    @Nullable
     public Metal getMetal()
     {
         return metal;

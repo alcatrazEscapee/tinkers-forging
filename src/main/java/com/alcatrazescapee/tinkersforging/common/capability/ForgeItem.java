@@ -48,18 +48,20 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     }
 
     @Override
+    @Nullable
     public String getRecipeName()
     {
         return recipeName;
     }
 
     @Override
-    public void setRecipe(@Nonnull AnvilRecipe recipe)
+    public void setRecipe(@Nullable AnvilRecipe recipe)
     {
-        this.recipeName = recipe.getName();
+        this.recipeName = recipe == null ? null : recipe.getName();
     }
 
     @Override
+    @Nonnull
     public ForgeSteps getSteps()
     {
         return steps;

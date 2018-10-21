@@ -70,7 +70,85 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
     @Override
     public void setAndUpdateSlots(int slot)
     {
-        updateForgeRecipe(false);
+        super.setAndUpdateSlots(slot);
+        ItemStack stack = inventory.getStackInSlot(SLOT_INPUT);
+        IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);
+
+        if (cap != null)
+        {
+            if (cachedAnvilRecipe == null || !cachedAnvilRecipe.test(stack))
+            {
+                // no current recipe or recipe exists but doesn't match input
+                // in both cases, reset the recipe based off the stack info
+                cachedAnvilRecipe = ModRecipes.ANVIL.getByName(stack, cap.getRecipeName());
+                if (cachedAnvilRecipe == null)
+                {
+                    // for some reason the stack has an invalid recipe name
+                    cachedAnvilRecipe = ModRecipes.ANVIL.get(stack);
+                    if (cachedAnvilRecipe != null)
+                    {
+                        cap.setRecipe(cachedAnvilRecipe);
+                    }
+                }
+                if (cachedAnvilRecipe == null)
+                {
+                    // no current recipe
+                    if (!world.isRemote)
+                    {
+                        workingProgress = 0;
+                        workingTarget = 0;
+                        steps.reset();
+                        rules = new ForgeRule[3];
+                    }
+
+                    // reset capability
+                    stack.removeSubCompound(CapabilityForgeItem.KEY.toString());
+                    return;
+                }
+            }
+
+            // at this point, the recipe is valid, but may have changed
+            // update server side fields
+            if (!world.isRemote)
+            {
+                workingProgress = cap.getWork();
+                steps = cap.getSteps();
+
+                workingTarget = cachedAnvilRecipe.getWorkingTarget(world.getSeed());
+                rules = cachedAnvilRecipe.getRules();
+            }
+
+            // update recipe
+            cap.setRecipe(cachedAnvilRecipe);
+
+            // update stack tag
+            stack.setTagInfo(CapabilityForgeItem.KEY.toString(), cap.serializeNBT());
+
+            // update display inventory
+            if (cachedAnvilRecipe != null)
+            {
+                displayInventory.setStackInSlot(SLOT_DISPLAY, cachedAnvilRecipe.getOutput());
+            }
+            else
+            {
+                displayInventory.setStackInSlot(SLOT_DISPLAY, ItemStack.EMPTY);
+            }
+
+        }
+        else
+        {
+            // cap was null, most likely if the slot was empty
+            if (!world.isRemote)
+            {
+                workingProgress = 0;
+                workingTarget = 0;
+                steps.reset();
+                rules = new ForgeRule[3];
+            }
+
+            cachedAnvilRecipe = null;
+            displayInventory.setStackInSlot(SLOT_DISPLAY, ItemStack.EMPTY);
+        }
     }
 
     @Override
@@ -92,7 +170,6 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
     public void readFromNBT(NBTTagCompound nbt)
     {
         displayInventory.deserializeNBT(nbt.getCompoundTag("displayInv"));
-
         super.readFromNBT(nbt);
     }
 
@@ -101,14 +178,7 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
     public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
         nbt.setTag("displayInv", displayInventory.serializeNBT());
-
         return super.writeToNBT(nbt);
-    }
-
-    @Nullable
-    public AnvilRecipe getCurrentForgeRecipe()
-    {
-        return cachedAnvilRecipe;
     }
 
     public void cycleForgeRecipe(boolean isForwards)
@@ -121,31 +191,33 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
             else
                 cachedAnvilRecipe = ModRecipes.ANVIL.getPrevious(cachedAnvilRecipe, stack);
         }
-        updateForgeRecipe(true);
+        setAndUpdateSlots(-1);
     }
 
     public void addStep(@Nullable ForgeStep step)
     {
-        steps.addStep(step);
-        markDirty();
-        if (step != null && cachedAnvilRecipe != null)
+        ItemStack input = inventory.getStackInSlot(SLOT_INPUT);
+        IForgeItem cap = input.getCapability(CapabilityForgeItem.CAPABILITY, null);
+
+        if (cap != null)
         {
-            ItemStack input = inventory.getStackInSlot(SLOT_INPUT);
-            IForgeItem cap = input.getCapability(CapabilityForgeItem.CAPABILITY, null);
-            if (cap != null)
+            // Add step to stack + tile
+            cap.addStep(step);
+            steps = cap.getSteps();
+            if (step != null)
             {
-                cap.addStep(step);
-                input.setTagInfo(CapabilityForgeItem.KEY.toString(), cap.serializeNBT());
+                workingProgress += step.getStepAmount();
             }
-            workingProgress += step.getStepAmount();
+            input.setTagInfo(CapabilityForgeItem.KEY.toString(), cap.serializeNBT());
 
-
-            if (workingProgress == workingTarget)
+            // Handle possible recipe completion
+            if (cachedAnvilRecipe != null)
             {
-                if (cachedAnvilRecipe.stepsMatch(steps))
+                if (workingProgress == workingTarget && cachedAnvilRecipe.stepsMatch(steps))
                 {
                     ItemStack output = inventory.getStackInSlot(SLOT_OUTPUT);
 
+                    // Consume input + produce output / throw it in the world
                     inventory.setStackInSlot(SLOT_INPUT, cachedAnvilRecipe.consumeInput(input));
                     ImmutablePair<ItemStack, ItemStack> result = CoreHelpers.mergeStacksWithResult(output, cachedAnvilRecipe.getOutput());
                     inventory.setStackInSlot(SLOT_OUTPUT, result.getKey());
@@ -154,26 +226,25 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
                         CoreHelpers.dropItemInWorld(world, pos, result.getValue());
                     }
 
-                    updateForgeRecipe(true);
                     world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                }
+                else if (workingProgress < 0 || workingProgress >= 150)
+                {
+                    // Consume input, produce no output
+                    inventory.setStackInSlot(SLOT_INPUT, cachedAnvilRecipe.consumeInput(input));
+                    world.playSound(null, pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0f, 1.0f);
                 }
             }
 
-            if (workingProgress < 0 || workingProgress >= 150)
-            {
-                // Consume input, produce no output, reset recipe
-                inventory.setStackInSlot(SLOT_INPUT, cachedAnvilRecipe.consumeInput(input));
-
-                updateForgeRecipe(true);
-                world.playSound(null, pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0f, 1.0f);
-            }
+            // update recipe
+            setAndUpdateSlots(-1);
         }
     }
 
     @Override
     public void onLoad()
     {
-        updateForgeRecipe(false);
+        setAndUpdateSlots(-1);
     }
 
     @SideOnly(Side.CLIENT)
@@ -241,77 +312,6 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
                 break;
             default:
                 TinkersForging.getLog().warn("Invalid field id {}", ID);
-        }
-    }
-
-    private void updateForgeRecipe(boolean shouldReset)
-    {
-        ItemStack stack = inventory.getStackInSlot(SLOT_INPUT);
-        IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);
-
-        // Try cached forge recipe, if it exists
-        if (cachedAnvilRecipe != null && cachedAnvilRecipe.test(stack))
-        {
-            // Current recipe is valid
-            if (shouldReset)
-            {
-                resetForgeRecipe(cachedAnvilRecipe);
-
-                if (cap != null)
-                {
-                    workingProgress = cap.getWork();
-                    steps = cap.getSteps();
-                    cap.setRecipe(cachedAnvilRecipe);
-                    stack.setTagInfo(CapabilityForgeItem.KEY.toString(), cap.serializeNBT());
-                }
-
-            }
-        }
-        else
-        {
-            // Need to find a new recipe anyway, since cache is null
-            // If this is null it will reset, since no recipe was found
-            AnvilRecipe recipe = null;
-            if (cap != null)
-            {
-                recipe = ModRecipes.ANVIL.getByName(stack, cap.getRecipeName());
-                workingProgress = cap.getWork();
-            }
-            if (recipe == null)
-            {
-                recipe = ModRecipes.ANVIL.get(stack);
-                workingProgress = 0;
-            }
-            resetForgeRecipe(recipe);
-        }
-    }
-
-    private void resetForgeRecipe(@Nullable AnvilRecipe recipe)
-    {
-        if (recipe != null)
-        {
-            displayInventory.setStackInSlot(SLOT_DISPLAY, recipe.getOutput());
-        }
-        else
-        {
-            displayInventory.setStackInSlot(SLOT_DISPLAY, ItemStack.EMPTY);
-        }
-
-        if (!world.isRemote)
-        {
-            steps.reset();
-            cachedAnvilRecipe = recipe;
-
-            if (cachedAnvilRecipe != null)
-            {
-                workingTarget = cachedAnvilRecipe.getWorkingTarget(world.getSeed());
-                rules = cachedAnvilRecipe.getRules();
-            }
-            else
-            {
-                workingTarget = 0;
-                rules = new ForgeRule[3];
-            }
         }
     }
 }

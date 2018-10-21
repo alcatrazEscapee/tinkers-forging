@@ -15,7 +15,6 @@ import net.minecraftforge.items.IItemHandler;
 import com.alcatrazescapee.alcatrazcore.inventory.container.ContainerTileInventory;
 import com.alcatrazescapee.alcatrazcore.inventory.slot.SlotOutput;
 import com.alcatrazescapee.alcatrazcore.inventory.slot.SlotTileCore;
-import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.slot.SlotDisplay;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeStep;
@@ -36,13 +35,9 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
         {
             case 8:
                 tile.cycleForgeRecipe(false);
-                if (tile.getCurrentForgeRecipe() != null)
-                    TinkersForging.getLog().info("Clicked left button {}", tile.getCurrentForgeRecipe().getName());
                 break;
             case 9:
                 tile.cycleForgeRecipe(true);
-                if (tile.getCurrentForgeRecipe() != null)
-                    TinkersForging.getLog().info("Clicked right button {}", tile.getCurrentForgeRecipe().getName());
                 break;
             default:
                 tile.addStep(ForgeStep.valueOf(buttonID));

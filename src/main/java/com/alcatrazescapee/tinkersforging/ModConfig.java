@@ -60,8 +60,6 @@ public final class ModConfig
         public int tierArdite = 3;
         public int tierManyullyn = 4;
 
-        //todo: tool tiers
-
         private ToolsConfig() {}
     }
 }

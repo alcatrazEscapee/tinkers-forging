@@ -15,8 +15,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
-import com.alcatrazescapee.tinkersforging.ModConfig;
-
 import static com.alcatrazescapee.alcatrazcore.util.CoreHelpers.getNull;
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
 
@@ -31,27 +29,7 @@ public final class CapabilityForgeItem
         CapabilityManager.INSTANCE.register(IForgeItem.class, new Storage(), ForgeItem::new);
     }
 
-    public static float adjustTemperature(float temperature, long lastUpdateTick)
-    {
-        final float newTemp = temperature - (Calendar.getWorldTime() - lastUpdateTick) * (float) ModConfig.GENERAL.temperatureModifier;
-        return newTemp < 0 ? 0 : newTemp;
-    }
-
-    public static class Calendar
-    {
-        private static long worldTime;
-
-        public static long getWorldTime()
-        {
-            return worldTime;
-        }
-
-        public static void setWorldTime(long worldTime)
-        {
-            Calendar.worldTime = worldTime;
-        }
-    }
-
+    // This is not for usage; it will not do anything.
     public static class Storage implements Capability.IStorage<IForgeItem>
     {
         @Nullable
@@ -62,9 +40,8 @@ public final class CapabilityForgeItem
         }
 
         @Override
-        public void readNBT(Capability<IForgeItem> capability, IForgeItem instance, EnumFacing side, NBTBase nbt)
+        public void readNBT(Capability<IForgeItem> capability, IForgeItem instance, EnumFacing side, NBTBase nbtBase)
         {
-
         }
     }
 }

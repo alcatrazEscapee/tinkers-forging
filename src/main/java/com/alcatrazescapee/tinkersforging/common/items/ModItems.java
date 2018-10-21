@@ -7,6 +7,7 @@
 package com.alcatrazescapee.tinkersforging.common.items;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -17,6 +18,7 @@ import com.alcatrazescapee.tinkersforging.util.Metal;
 
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
 import static com.alcatrazescapee.tinkersforging.client.ModCreativeTabs.TAB_ITEMS;
+import static com.alcatrazescapee.tinkersforging.client.ModCreativeTabs.TAB_STUFF;
 
 @GameRegistry.ObjectHolder(value = MOD_ID)
 public final class ModItems
@@ -27,6 +29,8 @@ public final class ModItems
 
         for (Metal metal : Metal.values())
         {
+            if (!metal.isEnabled()) continue;
+
             // todo: check if TiCon is enabled
             for (ItemType type : ItemType.values())
             {
@@ -36,12 +40,14 @@ public final class ModItems
             // todo: sheets?
             // todo: double sheets?
 
-            // todo: hammers + materials
             if (metal.getMaterial() != null)
             {
-                r.registerItem(new ItemHammer(metal, metal.getMaterial()), "tinkers_hammer/" + metal.name(), TAB_ITEMS);
+                r.registerItem(new ItemHammer(metal, metal.getMaterial()), "hammer/" + metal.name(), TAB_STUFF);
             }
         }
+
+        r.registerItem(new ItemHammer(Item.ToolMaterial.WOOD), "hammer/wood", TAB_STUFF);
+        r.registerItem(new ItemHammer(Item.ToolMaterial.STONE), "hammer/stone", TAB_STUFF);
     }
 
     public static void init()

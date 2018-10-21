@@ -7,6 +7,7 @@
 package com.alcatrazescapee.tinkersforging.common.capability;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -21,10 +22,12 @@ public interface IForgeItem extends INBTSerializable<NBTTagCompound>
 
     void setWork(int work);
 
+    @Nullable
     String getRecipeName();
 
-    void setRecipe(@Nonnull AnvilRecipe recipe);
+    void setRecipe(@Nullable AnvilRecipe recipe);
 
+    @Nonnull
     ForgeSteps getSteps();
 
     void addStep(ForgeStep step);

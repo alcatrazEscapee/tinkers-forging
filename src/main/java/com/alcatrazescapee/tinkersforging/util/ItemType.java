@@ -21,7 +21,10 @@ public enum ItemType
     AXE_HEAD(PUNCH_LAST, HIT_SECOND_LAST, UPSET_THIRD_LAST),
     HOE_HEAD(PUNCH_LAST, HIT_NOT_LAST, BEND_NOT_LAST),
     SWORD_BLADE(HIT_LAST, BEND_SECOND_LAST, BEND_THIRD_LAST),
-    SHOVEL_HEAD(PUNCH_NOT_LAST, HIT_NOT_LAST);
+    SHOVEL_HEAD(PUNCH_NOT_LAST, HIT_NOT_LAST),
+    HAMMER_HEAD(PUNCH_LAST, SHRINK_NOT_LAST);
+    // todo: armors / armor pieces?
+    // todo: sheets / double sheets?
 
     private ForgeRule[] rules;
 
