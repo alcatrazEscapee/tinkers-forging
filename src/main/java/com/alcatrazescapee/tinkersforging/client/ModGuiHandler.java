@@ -32,7 +32,7 @@ public final class ModGuiHandler implements IGuiHandler
         switch (ID)
         {
             case TINKERS_ANVIL:
-                return new ContainerTinkersAnvil(player.inventory, CoreHelpers.getTE(world, pos, TileTinkersAnvil.class));
+                return new ContainerTinkersAnvil(player, CoreHelpers.getTE(world, pos, TileTinkersAnvil.class));
             default:
                 return null;
         }

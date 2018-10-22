@@ -16,6 +16,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.item.ItemStack;
 
 import com.alcatrazescapee.alcatrazcore.item.tool.ItemToolCore;
+import com.alcatrazescapee.alcatrazcore.util.OreDictionaryHelper;
 import com.alcatrazescapee.tinkersforging.util.Metal;
 
 @ParametersAreNonnullByDefault
@@ -49,12 +50,24 @@ public class ItemHammer extends ItemToolCore
         super(material, 2.0f, -3.0f);
 
         this.metal = metal;
+        this.efficiency = Math.min(efficiency - 2.0f, 1.0f);
+        addToolClass(ToolClass.PICKAXE);
+
         MAP.put(metal, this);
+
+        OreDictionaryHelper.register(this, "hammer");
+        OreDictionaryHelper.register(this, "hammer", metal.name());
     }
 
     public ItemHammer(ToolMaterial material)
     {
         super(material, 2.0f, -3.0f);
+
+        this.efficiency = Math.min(efficiency - 2.0f, 1.0f);
+        addToolClass(ToolClass.PICKAXE);
+
+        OreDictionaryHelper.register(this, "hammer");
+        OreDictionaryHelper.register(this, "hammer", material.name());
 
         this.metal = null;
     }

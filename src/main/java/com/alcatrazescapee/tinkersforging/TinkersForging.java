@@ -72,7 +72,6 @@ public final class TinkersForging
     {
         // Init Managers
         ModRecipes.init();
-        ModItems.init();
     }
 
     @Mod.EventHandler

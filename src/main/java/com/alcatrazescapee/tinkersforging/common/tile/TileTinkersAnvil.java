@@ -46,9 +46,7 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
-    public static final int SLOT_WELD_1 = 2;
-    public static final int SLOT_WELD_2 = 3;
-    public static final int SLOT_WELD_OUTPUT = 4;
+    public static final int SLOT_HAMMER = 2;
     public static final int SLOT_DISPLAY = 0;
 
     private ItemStackHandler displayInventory;
@@ -60,7 +58,7 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
 
     public TileTinkersAnvil()
     {
-        super(5);
+        super(3); // Container has 4 slots, TE only stores 3 as part of main inventory
 
         steps = new ForgeSteps();
         rules = new ForgeRule[3];
@@ -112,7 +110,7 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
             if (!world.isRemote)
             {
                 workingProgress = cap.getWork();
-                steps = cap.getSteps();
+                steps = cap.getSteps().copy();
 
                 workingTarget = cachedAnvilRecipe.getWorkingTarget(world.getSeed());
                 rules = cachedAnvilRecipe.getRules();
@@ -158,9 +156,8 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
         {
             case SLOT_INPUT:
                 return stack.hasCapability(CapabilityForgeItem.CAPABILITY, null);
-            case SLOT_WELD_1:
-            case SLOT_WELD_2:
-                return true; // todo: check if has a welding recipe
+            case SLOT_HAMMER:
+                return CoreHelpers.doesStackMatchOre(stack, "hammer");
             default:
                 return false;
         }
@@ -191,7 +188,7 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
             else
                 cachedAnvilRecipe = ModRecipes.ANVIL.getPrevious(cachedAnvilRecipe, stack);
         }
-        setAndUpdateSlots(-1);
+        setAndUpdateSlots(0);
     }
 
     public void addStep(@Nullable ForgeStep step)
@@ -203,11 +200,12 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
         {
             // Add step to stack + tile
             cap.addStep(step);
-            steps = cap.getSteps();
+            steps = cap.getSteps().copy();
             if (step != null)
             {
                 workingProgress += step.getStepAmount();
             }
+            TinkersForging.getLog().info("Updated steps: {} {} {}", steps.getStepByID(2), steps.getStepByID(3), steps.getStepByID(4));
             input.setTagInfo(CapabilityForgeItem.KEY.toString(), cap.serializeNBT());
 
             // Handle possible recipe completion
@@ -237,14 +235,14 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
             }
 
             // update recipe
-            setAndUpdateSlots(-1);
+            setAndUpdateSlots(0);
         }
     }
 
     @Override
     public void onLoad()
     {
-        setAndUpdateSlots(-1);
+        setAndUpdateSlots(0);
     }
 
     @SideOnly(Side.CLIENT)

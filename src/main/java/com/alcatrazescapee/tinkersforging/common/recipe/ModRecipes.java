@@ -20,8 +20,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistryModifiable;
 
 import com.alcatrazescapee.alcatrazcore.inventory.crafting.InventoryCraftingEmpty;
-import com.alcatrazescapee.alcatrazcore.inventory.recipe.IRecipeManager;
-import com.alcatrazescapee.alcatrazcore.inventory.recipe.RecipeManager;
+import com.alcatrazescapee.alcatrazcore.util.collections.ImmutablePair;
 import com.alcatrazescapee.tinkersforging.ModConstants;
 import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
 import com.alcatrazescapee.tinkersforging.util.ItemType;
@@ -33,7 +32,6 @@ import static com.alcatrazescapee.tinkersforging.ModConstants.ORE_DICT_CONVERTER
 public final class ModRecipes
 {
     public static final AnvilRecipeManager ANVIL = new AnvilRecipeManager();
-    public static final IRecipeManager<WeldingRecipe> WELDING = new RecipeManager<>();
 
     public static void init()
     {
@@ -46,10 +44,6 @@ public final class ModRecipes
                 ANVIL.add(new AnvilRecipe(ItemToolHead.get(type, metal, 1), ORE_DICT_CONVERTER.convert("INGOT_" + metal.name()), 1, type.getRules()));
             }
         }
-
-        // todo: register welding recipes
-
-        WELDING.add(new WeldingRecipe(new ItemStack(Items.FLINT_AND_STEEL), "ingotIron"));
 
         // todo: tcon integration for recipes
     }
@@ -75,13 +69,14 @@ public final class ModRecipes
                 // Try with each ingot to create a tool of each type
                 for (ItemType type : ItemType.values())
                 {
-                    IRecipe recipe = getToolRecipeFor(recipes, tempCrafting, type, ingots);
-                    if (recipe != null)
+                    ImmutablePair<IRecipe, ItemStack> result = getToolRecipeFor(recipes, tempCrafting, type, ingots);
+                    if (result != null)
                     {
-                        ItemStack result = recipe.getCraftingResult(tempCrafting);
-
                         ResourceLocation loc = new ResourceLocation(MOD_ID, (metal.name() + "_" + type.name()).toLowerCase());
-                        r.register(new ShapedOreRecipe(loc, result, "H", "S", 'S', "stickWood", 'H', ItemToolHead.get(type, metal)).setRegistryName(loc));
+                        r.register(new ShapedOreRecipe(loc, result.getValue(), "H", "S", 'S', "stickWood", 'H', ItemToolHead.get(type, metal)).setRegistryName(loc));
+
+                        // un-register the old recipe
+                        r.remove(result.getKey().getRegistryName());
                     }
                 }
 
@@ -90,7 +85,7 @@ public final class ModRecipes
     }
 
     @Nullable
-    private static IRecipe getToolRecipeFor(Collection<IRecipe> recipes, InventoryCraftingEmpty tempCrafting, ItemType type, NonNullList<ItemStack> ingots)
+    private static ImmutablePair<IRecipe, ItemStack> getToolRecipeFor(Collection<IRecipe> recipes, InventoryCraftingEmpty tempCrafting, ItemType type, NonNullList<ItemStack> ingots)
     {
         ItemStack stick = new ItemStack(Items.STICK);
         for (ItemStack ingot : ingots)
@@ -103,7 +98,7 @@ public final class ModRecipes
             IRecipe recipe = recipes.stream().filter(x -> x.matches(tempCrafting, null)).findFirst().orElse(null);
             if (recipe != null)
             {
-                return recipe;
+                return ImmutablePair.of(recipe, recipe.getCraftingResult(tempCrafting));
             }
         }
         return null;

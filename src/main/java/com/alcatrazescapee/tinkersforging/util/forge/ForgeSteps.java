@@ -14,6 +14,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
+import com.alcatrazescapee.tinkersforging.TinkersForging;
+
 import static com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil.*;
 
 @ParametersAreNonnullByDefault
@@ -81,11 +83,18 @@ public class ForgeSteps implements INBTSerializable<NBTTagCompound>
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt)
+    public void deserializeNBT(@Nullable NBTTagCompound nbt)
     {
-        steps.set(0, ForgeStep.valueOf(nbt.getInteger("last")));
-        steps.set(1, ForgeStep.valueOf(nbt.getInteger("second")));
-        steps.set(2, ForgeStep.valueOf(nbt.getInteger("third")));
+        if (nbt != null)
+        {
+            addStep(ForgeStep.valueOf(nbt.getInteger("last")));
+            addStep(ForgeStep.valueOf(nbt.getInteger("second")));
+            addStep(ForgeStep.valueOf(nbt.getInteger("third")));
+        }
+        //steps.set(0, ForgeStep.valueOf(nbt.getInteger("last")));
+        //steps.set(1, ForgeStep.valueOf(nbt.getInteger("second")));
+        //steps.set(2, ForgeStep.valueOf(nbt.getInteger("third")));
+        TinkersForging.getLog().info("Deseralizing steps: {] {} {}", steps.get(0), steps.get(1), steps.get(2));
     }
 
     @Nullable
@@ -98,5 +107,13 @@ public class ForgeSteps implements INBTSerializable<NBTTagCompound>
     {
         ForgeStep step = steps.get(idx);
         return step == null ? -1 : step.ordinal();
+    }
+
+    public ForgeSteps copy()
+    {
+        ForgeSteps newSteps = new ForgeSteps();
+        for (ForgeStep step : this.steps)
+            newSteps.addStep(step);
+        return newSteps;
     }
 }

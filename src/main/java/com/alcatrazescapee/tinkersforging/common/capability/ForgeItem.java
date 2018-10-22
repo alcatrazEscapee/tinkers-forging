@@ -14,6 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
+import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeStep;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeSteps;
@@ -64,6 +65,7 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     @Nonnull
     public ForgeSteps getSteps()
     {
+        TinkersForging.getLog().info("Getting steps: {} {} {}", steps.getStepByID(2), steps.getStepByID(3), steps.getStepByID(4));
         return steps;
     }
 
@@ -91,15 +93,11 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     @Override
     public NBTTagCompound serializeNBT()
     {
-        NBTTagCompound nbt = new NBTTagCompound();
+        NBTTagCompound nbt = steps.serializeNBT();
         nbt.setInteger("work", work);
         if (recipeName != null)
         {
             nbt.setString("recipe", recipeName);
-        }
-        if (steps != null)
-        {
-            nbt.setTag("steps", steps.serializeNBT());
         }
         return nbt;
     }
@@ -115,7 +113,7 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
             }
             work = nbt.getInteger("work");
             recipeName = nbt.getString("recipe");
-            steps.deserializeNBT(nbt.getCompoundTag("steps"));
+            steps.deserializeNBT(nbt);
         }
     }
 }

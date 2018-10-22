@@ -6,11 +6,8 @@
 
 package com.alcatrazescapee.tinkersforging.common.items;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 
 import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
 import com.alcatrazescapee.tinkersforging.util.ItemType;
@@ -48,10 +45,5 @@ public final class ModItems
 
         r.registerItem(new ItemHammer(Item.ToolMaterial.WOOD), "hammer/wood", TAB_STUFF);
         r.registerItem(new ItemHammer(Item.ToolMaterial.STONE), "hammer/stone", TAB_STUFF);
-    }
-
-    public static void init()
-    {
-        OreDictionary.registerOre("charcoal", new ItemStack(Items.COAL, 1, 1));
     }
 }

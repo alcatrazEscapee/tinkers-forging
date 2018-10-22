@@ -8,7 +8,9 @@ package com.alcatrazescapee.tinkersforging.common.container;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -24,9 +26,12 @@ import static com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil.*;
 @ParametersAreNonnullByDefault
 public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnvil>
 {
-    public ContainerTinkersAnvil(InventoryPlayer playerInv, TileTinkersAnvil tile)
+    private final EntityPlayer player;
+
+    public ContainerTinkersAnvil(EntityPlayer player, TileTinkersAnvil tile)
     {
-        super(playerInv, tile, 0, 56);
+        super(player.inventory, tile, 0, 56);
+        this.player = player;
     }
 
     public void onReceivePacket(int buttonID)
@@ -40,7 +45,8 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
                 tile.cycleForgeRecipe(true);
                 break;
             default:
-                tile.addStep(ForgeStep.valueOf(buttonID));
+                if (damageHammer())
+                    tile.addStep(ForgeStep.valueOf(buttonID));
                 break;
         }
     }
@@ -55,12 +61,33 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
             addSlotToContainer(new SlotTileCore(cap, SLOT_INPUT, 21, 25, tile));
             addSlotToContainer(new SlotOutput(cap, SLOT_OUTPUT, 21, 45));
 
-            // Welding Slots
-            addSlotToContainer(new SlotTileCore(cap, SLOT_WELD_1, 129, 25, tile));
-            addSlotToContainer(new SlotTileCore(cap, SLOT_WELD_2, 147, 25, tile));
-            addSlotToContainer(new SlotOutput(cap, SLOT_WELD_OUTPUT, 138, 45));
+            // Hammer Slot
+            addSlotToContainer(new SlotTileCore(cap, SLOT_HAMMER, 138, 35, tile));
         }
         // Special Display Slot
         addSlotToContainer(new SlotDisplay(tile.getDisplayInventory(), SLOT_DISPLAY, 80, 20));
+    }
+
+    private boolean damageHammer()
+    {
+        Slot slot = inventorySlots.get(SLOT_HAMMER);
+        if (slot != null)
+        {
+            ItemStack stack = slot.getStack();
+            if (!stack.isEmpty())
+            {
+                stack.damageItem(1, player);
+                if (stack.getCount() <= 0)
+                {
+                    slot.putStack(ItemStack.EMPTY);
+                }
+                else
+                {
+                    slot.putStack(stack);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }
