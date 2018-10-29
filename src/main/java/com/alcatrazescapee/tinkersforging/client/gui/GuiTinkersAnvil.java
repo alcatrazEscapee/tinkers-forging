@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.alcatrazescapee.alcatrazcore.client.gui.GuiContainerTileCore;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
-import com.alcatrazescapee.tinkersforging.common.network.PacketTinkersAnvilButtonPress;
+import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilButton;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.integration.jei.JEIIntegration;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeRule;
@@ -35,9 +35,9 @@ public class GuiTinkersAnvil extends GuiContainerTileCore<TileTinkersAnvil>
 {
     static final ResourceLocation BACKGROUND = new ResourceLocation(MOD_ID, "textures/gui/tinkers_anvil.png");
 
-    public GuiTinkersAnvil(TileTinkersAnvil tile, Container container, InventoryPlayer playerInv)
+    public GuiTinkersAnvil(TileTinkersAnvil tile, String translationKey, Container container, InventoryPlayer playerInv)
     {
-        super(tile, container, playerInv, BACKGROUND, MOD_ID + ".tooltip.tinkers_anvil_title");
+        super(tile, container, playerInv, BACKGROUND, translationKey);
 
         this.ySize = 222;
     }
@@ -148,7 +148,7 @@ public class GuiTinkersAnvil extends GuiContainerTileCore<TileTinkersAnvil>
         // Handle gui buttons being clicked here
         if (button instanceof GuiButtonTinkersAnvil)
         {
-            TinkersForging.getNetwork().sendToServer(new PacketTinkersAnvilButtonPress(button.id));
+            TinkersForging.getNetwork().sendToServer(new PacketAnvilButton(button.id));
             if (button.id == 8)
             {
                 tile.cycleForgeRecipe(false);

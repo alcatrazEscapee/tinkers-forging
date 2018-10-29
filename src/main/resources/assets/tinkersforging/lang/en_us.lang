@@ -4,7 +4,9 @@ itemGroup.tinkersforging.stuff=Tinker's Forging
 
 # Gui
 
-tinkersforging.tooltip.has_been_worked=This item has been worked
+tinkersforging.tooltip.has_been_worked=This item has been worked.
+tinkersforging.tooltip.tier_too_low=This anvil is too low tier for that item!
+tinkersforging.tooltip.no_hammer=There is no hammer in the anvil!
 tinkersforging.tooltip.tinkers_anvil_title.name=Tinker's Anvil
 
 tinkersforging.tooltip.hit_light=Light Hit

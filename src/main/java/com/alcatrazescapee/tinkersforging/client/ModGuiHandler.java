@@ -8,6 +8,7 @@ package com.alcatrazescapee.tinkersforging.client;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.math.BlockPos;
@@ -48,7 +49,8 @@ public final class ModGuiHandler implements IGuiHandler
         switch (ID)
         {
             case TINKERS_ANVIL:
-                return new GuiTinkersAnvil(CoreHelpers.getTE(world, pos, TileTinkersAnvil.class), container, player.inventory);
+                Block block = world.getBlockState(pos).getBlock();
+                return new GuiTinkersAnvil(CoreHelpers.getTE(world, pos, TileTinkersAnvil.class), block.getTranslationKey(), container, player.inventory);
             default:
                 return null;
         }

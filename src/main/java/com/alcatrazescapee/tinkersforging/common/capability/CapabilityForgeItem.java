@@ -18,8 +18,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
-import com.alcatrazescapee.tinkersforging.TinkersForging;
-
 import static com.alcatrazescapee.alcatrazcore.util.CoreHelpers.getNull;
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
 
@@ -56,14 +54,11 @@ public final class CapabilityForgeItem
 
     private static void clearStack(ItemStack stack, IForgeItem cap)
     {
-        // todo: remove log statements
         cap.reset();
         stack.removeSubCompound(CapabilityForgeItem.NBT_KEY);
         NBTTagCompound nbt = stack.getTagCompound();
-        TinkersForging.getLog().info("Clearing Stack Data: {}", (nbt == null ? "null" : nbt.toString()));
         if (nbt != null && nbt.isEmpty())
         {
-            TinkersForging.getLog().info("Clearing");
             stack.setTagCompound(null);
         }
     }

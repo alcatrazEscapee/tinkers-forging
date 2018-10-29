@@ -23,6 +23,7 @@ import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
+import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilRecipeUpdate;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeRule;
@@ -60,20 +61,56 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
         rules = new ForgeRule[3];
     }
 
+    public AnvilRecipe getRecipe()
+    {
+        // Called on server
+        return cachedAnvilRecipe;
+    }
+
+    public void setRecipe(@Nullable AnvilRecipe recipe)
+    {
+        cachedAnvilRecipe = recipe;
+
+        // update recipe-based fields (both sides)
+        // note on client the recipe is only a shallow copy of the actual recipe (it has no input paramaters)
+        if (recipe != null)
+        {
+            ItemStack stack = inventory.getStackInSlot(SLOT_INPUT);
+            IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);
+            if (cap != null)
+            {
+                cap.setRecipe(cachedAnvilRecipe);
+                // update stack tag
+                stack.setTagInfo(CapabilityForgeItem.NBT_KEY, cap.serializeNBT());
+            }
+
+            inventory.setStackInSlot(SLOT_DISPLAY, cachedAnvilRecipe.getOutput());
+        }
+        else
+        {
+            inventory.setStackInSlot(SLOT_DISPLAY, ItemStack.EMPTY);
+        }
+    }
+
     @Override
     public void setAndUpdateSlots(int slot)
     {
         super.setAndUpdateSlots(slot);
+
+        if (world.isRemote)
+            return;
+
         ItemStack stack = inventory.getStackInSlot(SLOT_INPUT);
         IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);
 
-        // todo: remove
+        /* Only for debugging
         TinkersForging.getLog().info("Insert | Recipe: {} | NBT: {} | Display: {} | Cap: {} -> {}",
                 (cachedAnvilRecipe == null ? "<null>" : cachedAnvilRecipe.getName()),
                 stack.hasTagCompound() ? (stack.getTagCompound().getCompoundTag(CapabilityForgeItem.NBT_KEY).getString("recipe")) : "<null>",
                 inventory.getStackInSlot(SLOT_DISPLAY).getDisplayName(),
                 cap != null,
                 cap == null ? "<null>" : cap.getRecipeName());
+        */
 
         if (cap != null)
         {
@@ -81,11 +118,11 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
             {
                 // no current recipe or recipe exists but doesn't match input
                 // in both cases, reset the recipe based off the stack info
-                cachedAnvilRecipe = ModRecipes.ANVIL.getByName(cap.getRecipeName());
+                updateRecipe(ModRecipes.ANVIL.getByName(cap.getRecipeName()));
                 if (cachedAnvilRecipe == null)
                 {
                     // for some reason the stack has an invalid recipe name
-                    cachedAnvilRecipe = ModRecipes.ANVIL.get(stack);
+                    updateRecipe(ModRecipes.ANVIL.get(stack));
                     if (cachedAnvilRecipe != null)
                     {
                         cap.setRecipe(cachedAnvilRecipe);
@@ -102,16 +139,12 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
 
             // at this point, the recipe is valid, but may have changed
             // update server side fields
-            if (!world.isRemote)
-            {
-                workingProgress = cap.getWork();
-                steps = cap.getSteps().copy();
+            workingProgress = cap.getWork();
+            steps = cap.getSteps().copy();
 
-                workingTarget = cachedAnvilRecipe.getWorkingTarget(world.getSeed());
-                rules = cachedAnvilRecipe.getRules();
-            }
+            workingTarget = cachedAnvilRecipe.getWorkingTarget(world.getSeed());
+            rules = cachedAnvilRecipe.getRules();
 
-            // Since cachedAnvilRecipe is only valid on server, this should only reset serverside
             cap.setRecipe(cachedAnvilRecipe);
 
             // update stack tag
@@ -127,17 +160,18 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
                 inventory.setStackInSlot(SLOT_DISPLAY, ItemStack.EMPTY);
             }
 
-            // todo: remove
+            /* Only for debugging
             TinkersForging.getLog().info("Update | Recipe: {} | NBT: {} | Display: {} |",
                     (cachedAnvilRecipe == null ? "null" : cachedAnvilRecipe.getName()),
                     stack.hasTagCompound() ? (stack.getTagCompound().getCompoundTag(CapabilityForgeItem.NBT_KEY).getString("recipe")) : "null",
                     inventory.getStackInSlot(SLOT_DISPLAY).getDisplayName());
+            */
         }
         else
         {
             // cap was null, most likely if the slot was empty
             resetFields();
-            cachedAnvilRecipe = null;
+            updateRecipe(null);
             inventory.setStackInSlot(SLOT_DISPLAY, ItemStack.EMPTY);
         }
     }
@@ -227,9 +261,8 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
                     world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 1.0f, 1.0f);
 
                     // Reset forge stuff
-                    // todo: this needs to update client
                     resetFields();
-                    cachedAnvilRecipe = null;
+                    setRecipe(null);
                     inventory.setStackInSlot(SLOT_DISPLAY, ItemStack.EMPTY);
                 }
                 else if (workingProgress < 0 || workingProgress >= 150)
@@ -312,6 +345,13 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
             default:
                 TinkersForging.getLog().warn("Invalid field id {}", ID);
         }
+    }
+
+    private void updateRecipe(@Nullable AnvilRecipe recipe)
+    {
+        // Called on server
+        setRecipe(recipe);
+        TinkersForging.getNetwork().sendToDimension(new PacketAnvilRecipeUpdate(this), world.provider.getDimension());
     }
 
     private void resetFields()

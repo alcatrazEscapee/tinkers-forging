@@ -19,7 +19,8 @@ import com.alcatrazescapee.tinkersforging.client.ModGuiHandler;
 import com.alcatrazescapee.tinkersforging.common.blocks.ModBlocks;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.items.ModItems;
-import com.alcatrazescapee.tinkersforging.common.network.PacketTinkersAnvilButtonPress;
+import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilButton;
+import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilRecipeUpdate;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
 
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
@@ -56,7 +57,8 @@ public final class TinkersForging
 
         int id = -1;
         network = NetworkRegistry.INSTANCE.newSimpleChannel(MOD_ID);
-        network.registerMessage(PacketTinkersAnvilButtonPress.Handler.class, PacketTinkersAnvilButtonPress.class, ++id, Side.SERVER);
+        network.registerMessage(PacketAnvilButton.Handler.class, PacketAnvilButton.class, ++id, Side.SERVER);
+        network.registerMessage(PacketAnvilRecipeUpdate.Handler.class, PacketAnvilRecipeUpdate.class, ++id, Side.CLIENT);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ModGuiHandler());
 

@@ -14,14 +14,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import com.alcatrazescapee.tinkersforging.common.container.ContainerTinkersAnvil;
 import io.netty.buffer.ByteBuf;
 
-public class PacketTinkersAnvilButtonPress implements IMessage
+public class PacketAnvilButton implements IMessage
 {
     private int buttonId;
 
     // no args constructor required for forge
-    public PacketTinkersAnvilButtonPress() {}
+    public PacketAnvilButton() {}
 
-    public PacketTinkersAnvilButtonPress(int buttonId)
+    public PacketAnvilButton(int buttonId)
     {
         this.buttonId = buttonId;
     }
@@ -38,10 +38,10 @@ public class PacketTinkersAnvilButtonPress implements IMessage
         buf.writeInt(buttonId);
     }
 
-    public static class Handler implements IMessageHandler<PacketTinkersAnvilButtonPress, IMessage>
+    public static class Handler implements IMessageHandler<PacketAnvilButton, IMessage>
     {
         @Override
-        public IMessage onMessage(PacketTinkersAnvilButtonPress message, MessageContext ctx)
+        public IMessage onMessage(PacketAnvilButton message, MessageContext ctx)
         {
             EntityPlayerMP serverPlayer = ctx.getServerHandler().player;
             if (serverPlayer.openContainer instanceof ContainerTinkersAnvil)

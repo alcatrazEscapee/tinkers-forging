@@ -12,6 +12,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -28,6 +31,7 @@ import com.alcatrazescapee.tinkersforging.common.slot.SlotForgeInput;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeStep;
 
+import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
 import static com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil.*;
 
 @ParametersAreNonnullByDefault
@@ -73,14 +77,12 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
 
         if (index < containerSlots)
         {
-            TinkersForging.getLog().info("Transferring from {} out of container", index);
             stack = slot.onTake(player, stack);
             // Transfer out of the container
             if (!this.mergeItemStack(stack, containerSlots, inventorySlots.size(), true))
             {
                 return ItemStack.EMPTY;
             }
-            //tile.setAndUpdateSlots(index);
         }
         else
         {
@@ -151,6 +153,7 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
                 if (tile.getTier() < recipe.getTier())
                 {
                     TinkersForging.getLog().info("Tier is {}, Requires {}.", recipe.getTier(), tile.getTier());
+                    player.sendMessage(new TextComponentString("" + TextFormatting.RED).appendSibling(new TextComponentTranslation(MOD_ID + ".tooltip.tier_too_low")));
                     return false;
                 }
             }
@@ -174,6 +177,7 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
                 return true;
             }
         }
+        player.sendMessage(new TextComponentString("" + TextFormatting.RED).appendSibling(new TextComponentTranslation(MOD_ID + ".tooltip.no_hammer")));
         return false;
     }
 }

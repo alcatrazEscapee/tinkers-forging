@@ -15,7 +15,6 @@ import net.minecraftforge.items.IItemHandler;
 
 import com.alcatrazescapee.alcatrazcore.inventory.slot.SlotTileCore;
 import com.alcatrazescapee.alcatrazcore.tile.TileInventory;
-import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 
 @ParametersAreNonnullByDefault
@@ -33,7 +32,6 @@ public class SlotForgeInput extends SlotTileCore
         // If the item has not been worked, clear the IForgeItem capability (since it only stores recipe info at this point)
         CapabilityForgeItem.clearStackCheckRecipe(stack);
         this.onSlotChanged();
-        TinkersForging.getLog().info("Returning: {}", !stack.hasTagCompound() ? "null" : stack.getTagCompound().toString());
         return stack;
     }
 }

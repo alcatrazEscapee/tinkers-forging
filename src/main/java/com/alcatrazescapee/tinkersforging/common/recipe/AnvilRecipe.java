@@ -11,14 +11,33 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import com.alcatrazescapee.alcatrazcore.inventory.recipe.RecipeCore;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeRule;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeSteps;
+import io.netty.buffer.ByteBuf;
 
 @ParametersAreNonnullByDefault
 public class AnvilRecipe extends RecipeCore
 {
+    public static AnvilRecipe fromSerialized(ByteBuf buffer)
+    {
+        int minTier = buffer.readInt();
+        int seed = buffer.readInt();
+
+        ItemStack output = ByteBufUtils.readItemStack(buffer);
+
+        int numRules = buffer.readInt();
+        ForgeRule[] rules = new ForgeRule[numRules];
+        for (int i = 0; i < numRules; i++)
+        {
+            rules[i] = ForgeRule.valueOf(buffer.readInt());
+        }
+
+        return new AnvilRecipe(output, minTier, rules).withSeed(seed);
+    }
+
     private static final Random RANDOM = new Random();
 
     private final ForgeRule[] rules;
@@ -40,6 +59,14 @@ public class AnvilRecipe extends RecipeCore
 
         this.rules = rules;
         this.minTier = minTier;
+    }
+
+    private AnvilRecipe(ItemStack outputStack, int minTier, ForgeRule... rules)
+    {
+        super(outputStack, ItemStack.EMPTY);
+
+        this.minTier = minTier;
+        this.rules = rules;
     }
 
     @Override
@@ -74,6 +101,21 @@ public class AnvilRecipe extends RecipeCore
                 return false;
         }
         return true;
+    }
+
+    public void serialize(ByteBuf buffer)
+    {
+        // Numbers
+        buffer.writeInt(minTier);
+        buffer.writeInt(workingSeed);
+
+        // Output
+        ByteBufUtils.writeItemStack(buffer, outputStack);
+
+        // Rules
+        buffer.writeInt(rules.length);
+        for (ForgeRule rule : rules)
+            buffer.writeInt(ForgeRule.getID(rule));
     }
 
     @Nonnull
