@@ -15,33 +15,25 @@ import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
 public final class ModConfig
 {
     public static final GeneralConfig GENERAL = new GeneralConfig();
-    public static final CompatConfig COMPAT = new CompatConfig();
     public static final ToolsConfig TOOLS = new ToolsConfig();
 
     public static class GeneralConfig
     {
+        @Config.RequiresMcRestart
+        @Config.Comment({"Should this mod default to using Tinker's Construct metals, if they are enabled?",
+                "If true and Tinker's Construct is found, no new tool parts will be registered, and all tool part recipes will use Tinker's Materials",
+                "If false, or if Tinker's Construct is not found, Tinker's Forging will use its own tool parts for recipes."})
         public boolean useTinkersConstruct = true;
 
+        @Config.RequiresMcRestart
+        @Config.Comment("If this is true, you will not be able to use a lower tier anvil to make a higher tier item. Tiers of different anvils types are configurable.")
+        public boolean respectTiers = true;
+
+        @Config.RequiresMcRestart
+        @Config.Comment("If this is true, any recipes that are added to the anvil that have a crafting equivalent (i.e. a shovel) will have their normal crafting recipes removed")
+        public boolean removeCraftingRecipes = true;
+
         private GeneralConfig() {}
-    }
-
-    public static class CompatConfig
-    {
-        public boolean enableIron = true;
-        public boolean enableGold = true;
-        public boolean enableCopper = true;
-        public boolean enableTin = true;
-        public boolean enableBronze = true;
-        public boolean enableSteel = true;
-        public boolean enableSilver = true;
-        public boolean enableLead = true;
-        public boolean enableAluminium = true;
-        public boolean enableAluminiumBrass = true;
-        public boolean enableCobalt = true;
-        public boolean enableArdite = true;
-        public boolean enableManyullyn = true;
-
-        private CompatConfig() {}
     }
 
     public static class ToolsConfig
@@ -55,10 +47,15 @@ public final class ModConfig
         public int tierSilver = 1;
         public int tierLead = 0;
         public int tierAluminium = 0;
-        public int tierAluminiumBrass = 1;
         public int tierCobalt = 3;
         public int tierArdite = 3;
         public int tierManyullyn = 4;
+        public int tierDiamond = 3;
+        public int tierInvar = 3;
+        public int tierBrass = 1;
+        public int tierMithril = 4;
+        public int tierElectrum = 1;
+        public int tierPigiron = 2;
 
         private ToolsConfig() {}
     }

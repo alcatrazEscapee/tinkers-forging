@@ -22,7 +22,7 @@ public enum ForgeStep
     UPSET(13, 126, 88, 216, 20),
     SHRINK(16, 148, 88, 236, 20);
 
-    private static ForgeStep[] values = values();
+    private static final ForgeStep[] values = values();
 
     @Nullable
     public static ForgeStep valueOf(int id)

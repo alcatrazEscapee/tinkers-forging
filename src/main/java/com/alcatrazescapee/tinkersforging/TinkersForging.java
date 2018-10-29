@@ -23,8 +23,9 @@ import com.alcatrazescapee.tinkersforging.common.network.PacketTinkersAnvilButto
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
 
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_NAME;
 
-@Mod(modid = MOD_ID, version = ModConstants.VERSION, dependencies = ModConstants.DEPENDENCIES, useMetadata = true)
+@Mod(modid = MOD_ID, version = ModConstants.VERSION, dependencies = ModConstants.DEPENDENCIES, name = MOD_NAME, useMetadata = true)
 public final class TinkersForging
 {
     @Mod.Instance
@@ -57,20 +58,20 @@ public final class TinkersForging
         network = NetworkRegistry.INSTANCE.newSimpleChannel(MOD_ID);
         network.registerMessage(PacketTinkersAnvilButtonPress.Handler.class, PacketTinkersAnvilButtonPress.class, ++id, Side.SERVER);
 
-
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ModGuiHandler());
 
         // Pre-Init Managers
         CapabilityForgeItem.preInit();
         ModBlocks.preInit();
         ModItems.preInit();
-        //ModSounds.preInit();
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
         // Init Managers
+        ModItems.init();
+        ModBlocks.init();
         ModRecipes.init();
     }
 

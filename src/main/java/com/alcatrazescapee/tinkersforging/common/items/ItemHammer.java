@@ -22,25 +22,25 @@ import com.alcatrazescapee.tinkersforging.util.Metal;
 @ParametersAreNonnullByDefault
 public class ItemHammer extends ItemToolCore
 {
-    private static final Map<Metal, ItemHammer> MAP = new HashMap<>();
-
-    @Nonnull
-    public static Collection<ItemHammer> getAll()
-    {
-        return MAP.values();
-    }
-
     @Nullable
     public static ItemHammer get(Metal metal)
     {
         return MAP.get(metal);
     }
 
+    private static final Map<Metal, ItemHammer> MAP = new HashMap<>();
+
     @Nonnull
     public static ItemStack get(Metal metal, int amount)
     {
         ItemHammer item = get(metal);
-        return item != null ? new ItemStack(item, amount) : ItemStack.EMPTY;
+        return item == null ? ItemStack.EMPTY : new ItemStack(item, amount);
+    }
+
+    @Nonnull
+    public static Collection<ItemHammer> getAll()
+    {
+        return MAP.values();
     }
 
     private final Metal metal;
@@ -49,14 +49,14 @@ public class ItemHammer extends ItemToolCore
     {
         super(material, 2.0f, -3.0f);
 
-        this.metal = metal;
         this.efficiency = Math.min(efficiency - 2.0f, 1.0f);
         addToolClass(ToolClass.PICKAXE);
 
+        this.metal = metal;
         MAP.put(metal, this);
 
         OreDictionaryHelper.register(this, "hammer");
-        OreDictionaryHelper.register(this, "hammer", metal.name());
+        OreDictionaryHelper.register(this, "hammer");
     }
 
     public ItemHammer(ToolMaterial material)
@@ -66,10 +66,10 @@ public class ItemHammer extends ItemToolCore
         this.efficiency = Math.min(efficiency - 2.0f, 1.0f);
         addToolClass(ToolClass.PICKAXE);
 
+        this.metal = null;
+
         OreDictionaryHelper.register(this, "hammer");
         OreDictionaryHelper.register(this, "hammer", material.name());
-
-        this.metal = null;
     }
 
     @Nullable

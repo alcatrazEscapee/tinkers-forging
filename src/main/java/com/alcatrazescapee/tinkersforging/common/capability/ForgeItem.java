@@ -14,7 +14,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
-import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeStep;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeSteps;
@@ -29,11 +28,6 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     {
         steps = new ForgeSteps();
         deserializeNBT(nbt);
-    }
-
-    ForgeItem()
-    {
-        this(null);
     }
 
     @Override
@@ -58,14 +52,13 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     @Override
     public void setRecipe(@Nullable AnvilRecipe recipe)
     {
-        this.recipeName = recipe == null ? null : recipe.getName();
+        recipeName = (recipe == null ? null : recipe.getName());
     }
 
     @Override
     @Nonnull
     public ForgeSteps getSteps()
     {
-        TinkersForging.getLog().info("Getting steps: {} {} {}", steps.getStepByID(2), steps.getStepByID(3), steps.getStepByID(4));
         return steps;
     }
 
@@ -74,6 +67,14 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     {
         steps.addStep(step);
         work += step.getStepAmount();
+    }
+
+    @Override
+    public void reset()
+    {
+        steps = new ForgeSteps();
+        recipeName = null;
+        work = 0;
     }
 
     @Override
@@ -93,8 +94,9 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     @Override
     public NBTTagCompound serializeNBT()
     {
-        NBTTagCompound nbt = steps.serializeNBT();
+        NBTTagCompound nbt = new NBTTagCompound();
         nbt.setInteger("work", work);
+        nbt.setTag("steps", steps.serializeNBT());
         if (recipeName != null)
         {
             nbt.setString("recipe", recipeName);
@@ -107,13 +109,13 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     {
         if (nbt != null)
         {
-            if (nbt.hasKey(CapabilityForgeItem.KEY.toString()))
+            if (nbt.hasKey(CapabilityForgeItem.NBT_KEY))
             {
-                nbt = nbt.getCompoundTag(CapabilityForgeItem.KEY.toString());
+                nbt = nbt.getCompoundTag(CapabilityForgeItem.NBT_KEY);
             }
             work = nbt.getInteger("work");
-            recipeName = nbt.getString("recipe");
-            steps.deserializeNBT(nbt);
+            recipeName = nbt.hasKey("recipe") ? nbt.getString("recipe") : null; // stops defaulting to empty string
+            steps.deserializeNBT(nbt.getCompoundTag("steps"));
         }
     }
 }

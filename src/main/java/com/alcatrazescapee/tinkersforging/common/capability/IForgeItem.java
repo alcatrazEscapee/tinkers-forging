@@ -31,4 +31,6 @@ public interface IForgeItem extends INBTSerializable<NBTTagCompound>
     ForgeSteps getSteps();
 
     void addStep(ForgeStep step);
+
+    void reset();
 }

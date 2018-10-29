@@ -14,14 +14,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
-import com.alcatrazescapee.tinkersforging.TinkersForging;
-
 import static com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil.*;
 
 @ParametersAreNonnullByDefault
 public class ForgeSteps implements INBTSerializable<NBTTagCompound>
 {
-    private LinkedList<ForgeStep> steps;
+    private final LinkedList<ForgeStep> steps;
 
     public ForgeSteps()
     {
@@ -91,10 +89,6 @@ public class ForgeSteps implements INBTSerializable<NBTTagCompound>
             addStep(ForgeStep.valueOf(nbt.getInteger("second")));
             addStep(ForgeStep.valueOf(nbt.getInteger("third")));
         }
-        //steps.set(0, ForgeStep.valueOf(nbt.getInteger("last")));
-        //steps.set(1, ForgeStep.valueOf(nbt.getInteger("second")));
-        //steps.set(2, ForgeStep.valueOf(nbt.getInteger("third")));
-        TinkersForging.getLog().info("Deseralizing steps: {] {} {}", steps.get(0), steps.get(1), steps.get(2));
     }
 
     @Nullable

@@ -66,15 +66,22 @@ public class BlockTinkersAnvil extends BlockTileCore
     }
 
     private final Metal metal;
+    private final int tier;
 
     public BlockTinkersAnvil(Metal metal)
     {
         super(Material.IRON);
 
         this.metal = metal;
+        this.tier = metal.getTier();
         MAP.put(metal, this);
 
         setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+    }
+
+    public int getTier()
+    {
+        return tier;
     }
 
     @SideOnly(Side.CLIENT)
@@ -92,6 +99,7 @@ public class BlockTinkersAnvil extends BlockTileCore
         return new TileTinkersAnvil();
     }
 
+    @Nonnull
     public Metal getMetal()
     {
         return metal;

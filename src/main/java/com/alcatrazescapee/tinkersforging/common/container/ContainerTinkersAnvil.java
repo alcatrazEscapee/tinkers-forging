@@ -6,6 +6,7 @@
 
 package com.alcatrazescapee.tinkersforging.common.container;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +18,13 @@ import net.minecraftforge.items.IItemHandler;
 import com.alcatrazescapee.alcatrazcore.inventory.container.ContainerTileInventory;
 import com.alcatrazescapee.alcatrazcore.inventory.slot.SlotOutput;
 import com.alcatrazescapee.alcatrazcore.inventory.slot.SlotTileCore;
+import com.alcatrazescapee.tinkersforging.TinkersForging;
+import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
+import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
+import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
+import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
 import com.alcatrazescapee.tinkersforging.common.slot.SlotDisplay;
+import com.alcatrazescapee.tinkersforging.common.slot.SlotForgeInput;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeStep;
 
@@ -45,10 +52,67 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
                 tile.cycleForgeRecipe(true);
                 break;
             default:
-                if (damageHammer())
+                if (canWork(buttonID % 4))
                     tile.addStep(ForgeStep.valueOf(buttonID));
                 break;
         }
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int index)
+    {
+        // Slot that was clicked
+        Slot slot = inventorySlots.get(index);
+        if (slot == null || !slot.getHasStack())
+            return ItemStack.EMPTY;
+
+        ItemStack stack = slot.getStack().copy();
+        ItemStack stackCopy = stack.copy();
+        int containerSlots = inventorySlots.size() - player.inventory.mainInventory.size(); // number of slots in the container
+
+        if (index < containerSlots)
+        {
+            TinkersForging.getLog().info("Transferring from {} out of container", index);
+            stack = slot.onTake(player, stack);
+            // Transfer out of the container
+            if (!this.mergeItemStack(stack, containerSlots, inventorySlots.size(), true))
+            {
+                return ItemStack.EMPTY;
+            }
+            //tile.setAndUpdateSlots(index);
+        }
+        else
+        {
+            // Transfer into the container
+            for (int i = 0; i < containerSlots; i++)
+            {
+                if (inventorySlots.get(i).isItemValid(stack))
+                {
+                    if (this.mergeItemStack(stack, i, i + 1, false))
+                    {
+                        tile.setAndUpdateSlots(i);
+                    }
+                }
+            }
+        }
+
+        // Required
+        if (stack.getCount() == 0)
+        {
+            slot.putStack(ItemStack.EMPTY);
+        }
+        else
+        {
+            slot.putStack(stack);
+            slot.onSlotChanged();
+        }
+        if (stack.getCount() == stackCopy.getCount())
+        {
+            return ItemStack.EMPTY;
+        }
+        slot.onTake(player, stack);
+        return stackCopy;
     }
 
     @Override
@@ -58,25 +122,47 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
         if (cap != null)
         {
             // Forging Slots
-            addSlotToContainer(new SlotTileCore(cap, SLOT_INPUT, 21, 25, tile));
+            addSlotToContainer(new SlotForgeInput(cap, SLOT_INPUT, 21, 25, tile));
             addSlotToContainer(new SlotOutput(cap, SLOT_OUTPUT, 21, 45));
 
             // Hammer Slot
             addSlotToContainer(new SlotTileCore(cap, SLOT_HAMMER, 138, 35, tile));
+
+            // Display Slot
+            addSlotToContainer(new SlotDisplay(cap, SLOT_DISPLAY, 80, 20));
         }
-        // Special Display Slot
-        addSlotToContainer(new SlotDisplay(tile.getDisplayInventory(), SLOT_DISPLAY, 80, 20));
     }
 
-    private boolean damageHammer()
+    private boolean canWork(int amount)
     {
+        Slot slotInput = inventorySlots.get(SLOT_INPUT);
+        if (slotInput != null)
+        {
+            ItemStack stack = slotInput.getStack();
+            IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);
+
+            if (cap != null)
+            {
+                AnvilRecipe recipe = ModRecipes.ANVIL.getByName(cap.getRecipeName());
+                if (recipe == null)
+                {
+                    return false;
+                }
+                if (tile.getTier() < recipe.getTier())
+                {
+                    TinkersForging.getLog().info("Tier is {}, Requires {}.", recipe.getTier(), tile.getTier());
+                    return false;
+                }
+            }
+        }
+
         Slot slot = inventorySlots.get(SLOT_HAMMER);
         if (slot != null)
         {
             ItemStack stack = slot.getStack();
             if (!stack.isEmpty())
             {
-                stack.damageItem(1, player);
+                stack.damageItem(amount, player);
                 if (stack.getCount() <= 0)
                 {
                     slot.putStack(ItemStack.EMPTY);

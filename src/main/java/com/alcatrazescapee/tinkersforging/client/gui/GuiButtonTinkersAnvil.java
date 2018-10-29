@@ -20,7 +20,7 @@ import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
 import static com.alcatrazescapee.tinkersforging.client.gui.GuiTinkersAnvil.BACKGROUND;
 
 @SideOnly(Side.CLIENT)
-public class GuiButtonTinkersAnvil extends GuiButton
+class GuiButtonTinkersAnvil extends GuiButton
 {
     private final int textureU;
     private final int textureV;

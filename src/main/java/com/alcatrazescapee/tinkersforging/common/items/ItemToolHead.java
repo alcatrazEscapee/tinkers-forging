@@ -29,6 +29,7 @@ public class ItemToolHead extends ItemCore
         return TABLE.get(type, metal);
     }
 
+    @Nonnull
     public static Set<ItemToolHead> getAll()
     {
         return TABLE.values();
@@ -41,21 +42,15 @@ public class ItemToolHead extends ItemCore
         return item == null ? ItemStack.EMPTY : new ItemStack(item, amount);
     }
 
-    private final ItemType type;
     private final Metal metal;
 
     public ItemToolHead(ItemType type, Metal metal)
     {
-        this.type = type;
         this.metal = metal;
         TABLE.put(type, metal, this);
     }
 
-    public ItemType getType()
-    {
-        return type;
-    }
-
+    @Nonnull
     public Metal getMetal()
     {
         return metal;

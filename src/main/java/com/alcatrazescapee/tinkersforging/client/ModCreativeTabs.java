@@ -14,26 +14,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
-import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
-import com.alcatrazescapee.tinkersforging.util.ItemType;
 import com.alcatrazescapee.tinkersforging.util.Metal;
 
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
 
 public final class ModCreativeTabs
 {
-    public static final CreativeTabs TAB_ITEMS = new CreativeTabs(MOD_ID)
-    {
-        @SideOnly(Side.CLIENT)
-        @Override
-        @Nonnull
-        public ItemStack createIcon()
-        {
-            return ItemToolHead.get(ItemType.PICKAXE_HEAD, Metal.IRON, 1);
-        }
-    };
-
-    public static final CreativeTabs TAB_STUFF = new CreativeTabs(MOD_ID)
+    public static final CreativeTabs TAB_ITEMS = new CreativeTabs(MOD_ID + ".stuff")
     {
         @SideOnly(Side.CLIENT)
         @Override

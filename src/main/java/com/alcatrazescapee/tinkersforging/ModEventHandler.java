@@ -17,6 +17,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
@@ -37,7 +38,7 @@ public final class ModEventHandler
         RegistryHelper.get(MOD_ID).initItems(event);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void registerRecipes(RegistryEvent.Register<IRecipe> event)
     {
         ModRecipes.registerRecipes(event);
@@ -71,7 +72,7 @@ public final class ModEventHandler
 
         if (!stack.hasCapability(CapabilityForgeItem.CAPABILITY, null))
         {
-            if (CoreHelpers.doesStackMatchOrePrefix(stack, "ingot"))
+            if (CoreHelpers.doesStackMatchOrePrefix(stack, "ingot") || ModRecipes.ANVIL.isRecipe(stack))
             {
                 event.addCapability(CapabilityForgeItem.KEY, new ForgeItem(stack.getTagCompound()));
             }

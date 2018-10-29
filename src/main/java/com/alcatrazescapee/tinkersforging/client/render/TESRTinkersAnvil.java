@@ -6,18 +6,42 @@
 
 package com.alcatrazescapee.tinkersforging.client.render;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
+
+import static com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil.SLOT_HAMMER;
 
 public class TESRTinkersAnvil extends TileEntitySpecialRenderer<TileTinkersAnvil>
 {
     @Override
-    public void render(TileTinkersAnvil te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
+    public void render(TileTinkersAnvil tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
     {
-        super.render(te, x, y, z, partialTicks, destroyStage, alpha);
+        super.render(tile, x, y, z, partialTicks, destroyStage, alpha);
 
-        // todo: render the item on top of the anvil?
+        IItemHandler cap = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+        if (cap != null)
+        {
+            int rotation = tile.getBlockMetadata();
+
+            // Current Item
+            ItemStack stack = cap.getStackInSlot(SLOT_HAMMER);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x + 0.5, y + 0.03125D + 0.6875, z + 0.5);
+            GlStateManager.scale(0.35f, 0.35f, 0.35f);
+            GlStateManager.rotate(90f, 1f, 0f, 0f);
+            GlStateManager.rotate(90f * (float) rotation, 0f, 0f, 1f);
+            GlStateManager.translate(-0.7, 0, 0);
+            Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
+            GlStateManager.popMatrix();
+
+        }
     }
 
     @Override

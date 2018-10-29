@@ -8,6 +8,7 @@ package com.alcatrazescapee.tinkersforging.common.recipe;
 
 import java.util.Random;
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.item.ItemStack;
 
@@ -15,32 +16,34 @@ import com.alcatrazescapee.alcatrazcore.inventory.recipe.RecipeCore;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeRule;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeSteps;
 
+@ParametersAreNonnullByDefault
 public class AnvilRecipe extends RecipeCore
 {
     private static final Random RANDOM = new Random();
 
-    private ForgeRule[] rules;
+    private final ForgeRule[] rules;
+    private final int minTier;
 
     private int workingSeed = 0;
 
-    public AnvilRecipe(ItemStack outputStack, String inputOre, int inputAmount, ForgeRule... rules)
+    public AnvilRecipe(ItemStack outputStack, String inputOre, int inputAmount, int minTier, ForgeRule... rules)
     {
         super(outputStack, inputOre, inputAmount);
 
         this.rules = rules;
+        this.minTier = minTier;
     }
 
-    public AnvilRecipe(ItemStack outputStack, ItemStack inputStack)
+    public AnvilRecipe(ItemStack outputStack, ItemStack inputStack, int minTier, ForgeRule... rules)
     {
         super(outputStack, inputStack);
-    }
 
-    public AnvilRecipe(ItemStack outputStack, String inputOre, int inputAmount)
-    {
-        super(outputStack, inputOre, inputAmount);
+        this.rules = rules;
+        this.minTier = minTier;
     }
 
     @Override
+    @Nonnull
     public String getName()
     {
         return outputStack.getDisplayName();
@@ -50,6 +53,11 @@ public class AnvilRecipe extends RecipeCore
     public ForgeRule[] getRules()
     {
         return rules;
+    }
+
+    public int getTier()
+    {
+        return minTier;
     }
 
     public int getWorkingTarget(long seed)
@@ -68,6 +76,7 @@ public class AnvilRecipe extends RecipeCore
         return true;
     }
 
+    @Nonnull
     AnvilRecipe withSeed(int seed)
     {
         this.workingSeed = seed;

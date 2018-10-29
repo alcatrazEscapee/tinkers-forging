@@ -42,13 +42,14 @@ public final class ClientEventHandler
     public static void onItemTooltipEvent(ItemTooltipEvent event)
     {
         IForgeItem cap = event.getItemStack().getCapability(CapabilityForgeItem.CAPABILITY, null);
-        if (cap != null && cap.getWork() != 0)
+        if (cap != null && (cap.getWork() != 0 || cap.getRecipeName() != null))
         {
             event.getToolTip().add(GREEN + I18n.format(MOD_ID + ".tooltip.has_been_worked"));
         }
     }
 
     @SubscribeEvent
+    @SuppressWarnings("ConstantConditions")
     @SideOnly(Side.CLIENT)
     public static void registerModels(ModelRegistryEvent event)
     {
@@ -64,21 +65,21 @@ public final class ClientEventHandler
         ItemColors itemColors = event.getItemColors();
         BlockColors blockColors = event.getBlockColors();
 
+        // Tool Heads
         itemColors.registerItemColorHandler((stack, tintIndex) -> {
             if (stack.getItem() instanceof ItemToolHead)
             {
-                ItemToolHead item = (ItemToolHead) stack.getItem();
-                return item.getMetal().getColor();
+                return ((ItemToolHead) stack.getItem()).getMetal().getColor();
             }
-            return 0;
+            return 0xffffff;
         }, ItemToolHead.getAll().toArray(new ItemToolHead[0]));
 
+        // Hammers
         itemColors.registerItemColorHandler((stack, tintIndex) -> {
             if (stack.getItem() instanceof ItemHammer && tintIndex == 1)
             {
-                ItemHammer item = (ItemHammer) stack.getItem();
-                Metal metal = item.getMetal();
-                return metal != null ? metal.getColor() : 0;
+                Metal metal = ((ItemHammer) stack.getItem()).getMetal();
+                return metal != null ? metal.getColor() : 0xffffff;
             }
             return 0xffffff;
         }, ItemHammer.getAll().toArray(new ItemHammer[0]));
@@ -89,7 +90,7 @@ public final class ClientEventHandler
                 BlockTinkersAnvil block = (BlockTinkersAnvil) ((ItemBlock) stack.getItem()).getBlock();
                 return block.getMetal().getColor();
             }
-            return 0;
+            return 0xffffff;
         }, BlockTinkersAnvil.getAll().toArray(new BlockTinkersAnvil[0]));
 
         blockColors.registerBlockColorHandler((state, world, pos, tintIndex) -> {
@@ -97,7 +98,7 @@ public final class ClientEventHandler
             {
                 return ((BlockTinkersAnvil) state.getBlock()).getMetal().getColor();
             }
-            return 0;
+            return 0xffffff;
         }, BlockTinkersAnvil.getAll().toArray(new BlockTinkersAnvil[0]));
     }
 }

@@ -16,10 +16,10 @@ import com.alcatrazescapee.alcatrazcore.inventory.recipe.IRecipeManager;
 
 public class AnvilRecipeManager implements IRecipeManager<AnvilRecipe>
 {
-    private List<AnvilRecipe> recipes;
+    private final List<AnvilRecipe> recipes;
     private int seedCounter;
 
-    public AnvilRecipeManager()
+    AnvilRecipeManager()
     {
         recipes = new ArrayList<>();
         seedCounter = 0;
@@ -28,6 +28,11 @@ public class AnvilRecipeManager implements IRecipeManager<AnvilRecipe>
     @Override
     public void add(AnvilRecipe recipe)
     {
+        for (AnvilRecipe r : recipes)
+        {
+            if (r.getName().equals(recipe.getName()))
+                return;
+        }
         recipes.add(recipe.withSeed(++seedCounter));
     }
 
@@ -39,6 +44,7 @@ public class AnvilRecipeManager implements IRecipeManager<AnvilRecipe>
     }
 
     @Nullable
+    @Deprecated
     @Override
     public AnvilRecipe get(Object... inputs)
     {
@@ -52,10 +58,10 @@ public class AnvilRecipeManager implements IRecipeManager<AnvilRecipe>
         return recipes.stream().filter(x -> x.test(input)).findFirst().orElse(null);
     }
 
+    @Deprecated
     @Override
-    public void remove(Object... inputs)
+    public void remove(Object... objects)
     {
-        for (Object input : inputs) remove(input);
     }
 
     @Override
@@ -65,19 +71,20 @@ public class AnvilRecipeManager implements IRecipeManager<AnvilRecipe>
     }
 
     @Nullable
-    public AnvilRecipe getByName(Object input, String name)
+    public AnvilRecipe getByName(@Nullable String name)
     {
-        return recipes.stream().filter(x -> x.test(input) && x.getName().equals(name)).findFirst().orElse(null);
+        return recipes.stream().filter(x -> x.getName().equals(name)).findFirst().orElse(null);
     }
 
     @Nullable
     public AnvilRecipe getPrevious(@Nullable AnvilRecipe recipe, Object input)
     {
         List<AnvilRecipe> list = getAllMatching(input);
-        int idx = list.indexOf(recipe);
         if (list.size() == 0)
             return null;
-        else if (idx == -1)
+
+        int idx = list.indexOf(recipe);
+        if (idx == -1)
             return recipe;
         else if (idx == 0)
             return list.get(list.size() - 1);
@@ -89,9 +96,10 @@ public class AnvilRecipeManager implements IRecipeManager<AnvilRecipe>
     public AnvilRecipe getNext(@Nullable AnvilRecipe recipe, Object input)
     {
         List<AnvilRecipe> list = getAllMatching(input);
-        int idx = list.indexOf(recipe);
         if (list.size() == 0)
             return null;
+
+        int idx = list.indexOf(recipe);
         if (idx == -1)
             return recipe;
         else if (idx + 1 >= list.size())

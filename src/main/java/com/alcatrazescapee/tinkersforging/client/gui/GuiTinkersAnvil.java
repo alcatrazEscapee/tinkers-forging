@@ -21,6 +21,7 @@ import com.alcatrazescapee.alcatrazcore.client.gui.GuiContainerTileCore;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.network.PacketTinkersAnvilButtonPress;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
+import com.alcatrazescapee.tinkersforging.integration.jei.JEIIntegration;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeRule;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeStep;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeSteps;
@@ -101,6 +102,10 @@ public class GuiTinkersAnvil extends GuiContainerTileCore<TileTinkersAnvil>
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
+        // JEI Question Mark Icon
+        if (JEIIntegration.isEnabled())
+            drawTexturedModalRect(x + 165, y + 6, 246, 40, 5, 7);
+
         // Progress + Target
         int progress = tile.getField(TileTinkersAnvil.FIELD_PROGRESS);
         drawTexturedModalRect(x + 10 + progress, y + 112, 196, 40, 7, 6);
@@ -144,6 +149,14 @@ public class GuiTinkersAnvil extends GuiContainerTileCore<TileTinkersAnvil>
         if (button instanceof GuiButtonTinkersAnvil)
         {
             TinkersForging.getNetwork().sendToServer(new PacketTinkersAnvilButtonPress(button.id));
+            if (button.id == 8)
+            {
+                tile.cycleForgeRecipe(false);
+            }
+            else if (button.id == 9)
+            {
+                tile.cycleForgeRecipe(true);
+            }
         }
         super.actionPerformed(button);
     }

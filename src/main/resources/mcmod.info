@@ -1,16 +1,16 @@
 [
   {
-    "modid": "examplemod",
-    "name": "Example Mod",
-    "description": "Example placeholder mod.",
+    "modid": "tinkersforging",
+    "name": "Tinker's Forging",
+    "description": "Adds Simple TFC-style Forging to 1.12+",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "",
     "updateUrl": "",
     "authorList": [
-      "ExampleDude"
+      "alcatrazEscapee"
     ],
-    "credits": "The Forge and FML guys, for making this example",
+    "credits": "",
     "logoFile": "",
     "screenshots": [],
     "dependencies": []
