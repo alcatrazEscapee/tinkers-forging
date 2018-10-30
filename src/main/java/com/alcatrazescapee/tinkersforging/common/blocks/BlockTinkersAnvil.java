@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -76,6 +77,9 @@ public class BlockTinkersAnvil extends BlockTileCore
         this.tier = metal.getTier();
         MAP.put(metal, this);
 
+        // todo: tier based harvest level
+        setSoundType(SoundType.ANVIL);
+        setHardness(3.0f + 1.0f * metal.getTier());
         setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 

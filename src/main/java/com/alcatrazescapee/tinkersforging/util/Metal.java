@@ -45,8 +45,6 @@ public enum Metal
     MITHRIL("ingotMithril", new Color(230, 250, 240)),
     INVAR("ingotInvar", new Color(160, 173, 189));
 
-    public static final String TINKERS_NBT_KEY = "Material";
-
     private final int color;
     private final Item.ToolMaterial material;
     private final BooleanSupplier precondition;

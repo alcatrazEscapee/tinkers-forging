@@ -38,23 +38,76 @@ public final class ModConfig
 
     public static class ToolsConfig
     {
+        @Config.Comment("Tier of the Iron Anvil")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierIron = 2;
+
+        @Config.Comment("Tier of the Gold Anvil")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierGold = 1;
+
+        @Config.Comment("Tier of the Copper Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierCopper = 0;
+
+        @Config.Comment("Tier of the Tin Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierTin = 0;
+
+        @Config.Comment("Tier of the Bronze Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierBronze = 1;
+
+        @Config.Comment("Tier of the Steel Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierSteel = 3;
+
+        @Config.Comment("Tier of the Silver Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierSilver = 1;
+
+        @Config.Comment("Tier of the Lead Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierLead = 0;
+
+        @Config.Comment("Tier of the Aluminium Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierAluminium = 0;
+
+        @Config.Comment("Tier of the Cobalt Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierCobalt = 3;
+
+        @Config.Comment("Tier of the Ardite Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierArdite = 3;
+
+        @Config.Comment("Tier of the Manyullyn Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierManyullyn = 4;
+
+        @Config.Comment("Tier of the Diamond Anvil")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierDiamond = 3;
+
+        @Config.Comment("Tier of the Invar Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierInvar = 3;
+
+        @Config.Comment("Tier of the Brass Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierBrass = 1;
+
+        @Config.Comment("Tier of the Mithril Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierMithril = 4;
+
+        @Config.Comment("Tier of the Electrum Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierElectrum = 1;
+
+        @Config.Comment("Tier of the Pig Iron  Anvil (if enabled)")
+        @Config.RangeInt(min = 0, max = 5)
         public int tierPigiron = 2;
 
         private ToolsConfig() {}

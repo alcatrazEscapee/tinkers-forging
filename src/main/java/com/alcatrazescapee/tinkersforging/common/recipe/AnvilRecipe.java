@@ -11,9 +11,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StringUtils;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import com.alcatrazescapee.alcatrazcore.inventory.recipe.RecipeCore;
+import com.alcatrazescapee.tinkersforging.ModConfig;
+import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeRule;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeSteps;
 import io.netty.buffer.ByteBuf;
@@ -21,6 +24,26 @@ import io.netty.buffer.ByteBuf;
 @ParametersAreNonnullByDefault
 public class AnvilRecipe extends RecipeCore
 {
+    static boolean assertValid(AnvilRecipe recipe)
+    {
+        if (StringUtils.isNullOrEmpty(recipe.recipeName))
+        {
+            TinkersForging.getLog().warn("Recipe is invalid with empty name");
+            return false;
+        }
+        if (recipe.outputStack.isEmpty())
+        {
+            TinkersForging.getLog().warn("Output is empty!");
+            return false;
+        }
+        if (recipe.rules.length == 0 || recipe.rules.length > 3)
+        {
+            TinkersForging.getLog().warn("Rules are invalid length!");
+            return false;
+        }
+        return true;
+    }
+
     public static AnvilRecipe fromSerialized(ByteBuf buffer)
     {
         int minTier = buffer.readInt();
@@ -42,6 +65,7 @@ public class AnvilRecipe extends RecipeCore
 
     private final ForgeRule[] rules;
     private final int minTier;
+    private final String recipeName;
 
     private int workingSeed = 0;
 
@@ -51,6 +75,7 @@ public class AnvilRecipe extends RecipeCore
 
         this.rules = rules;
         this.minTier = minTier;
+        this.recipeName = outputStack.serializeNBT().toString();
     }
 
     public AnvilRecipe(ItemStack outputStack, ItemStack inputStack, int minTier, ForgeRule... rules)
@@ -58,22 +83,25 @@ public class AnvilRecipe extends RecipeCore
         super(outputStack, inputStack);
 
         this.rules = rules;
-        this.minTier = minTier;
+        this.minTier = ModConfig.GENERAL.respectTiers ? minTier : Integer.MIN_VALUE;
+        this.recipeName = outputStack.serializeNBT().toString();
     }
 
     private AnvilRecipe(ItemStack outputStack, int minTier, ForgeRule... rules)
     {
+        // Only created on client
         super(outputStack, ItemStack.EMPTY);
 
-        this.minTier = minTier;
+        this.minTier = ModConfig.GENERAL.respectTiers ? minTier : Integer.MIN_VALUE;
         this.rules = rules;
+        this.recipeName = "client:" + outputStack.serializeNBT().toString();
     }
 
     @Override
     @Nonnull
     public String getName()
     {
-        return outputStack.getDisplayName();
+        return recipeName;
     }
 
     @Nonnull

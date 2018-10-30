@@ -28,7 +28,7 @@ public enum ItemType
     LEGGINGS(false, true, true, 7, HIT_ANY, BEND_ANY, DRAW_ANY),
     BOOTS(false, true, true, 4, BEND_LAST, BEND_SECOND_LAST, SHRINK_THIRD_LAST),
     // Tinkers Construct Tool Heads
-    TC_PICKAXE_HEAD(false, false, false, 2, PUNCH_LAST, BEND_NOT_LAST, DRAW_NOT_LAST),
+    TC_PICK_HEAD(false, false, false, 2, PUNCH_LAST, BEND_NOT_LAST, DRAW_NOT_LAST),
     TC_AXE_HEAD(false, false, false, 2, PUNCH_LAST, HIT_SECOND_LAST, UPSET_THIRD_LAST),
     TC_HOE_HEAD(false, false, false, 2, PUNCH_LAST, HIT_NOT_LAST, BEND_NOT_LAST),
     TC_SWORD_BLADE(false, false, false, 2, HIT_LAST, BEND_SECOND_LAST, BEND_THIRD_LAST),

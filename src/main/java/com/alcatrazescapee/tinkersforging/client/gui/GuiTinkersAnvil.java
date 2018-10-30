@@ -54,8 +54,8 @@ public class GuiTinkersAnvil extends GuiContainerTileCore<TileTinkersAnvil>
             addButton(new GuiButtonTinkersAnvil(++id, bx, by, step));
         }
 
-        addButton(new GuiButtonTinkersAnvil(++id, bx + 63, by + 21, 10, 14, 176, 40));
-        addButton(new GuiButtonTinkersAnvil(++id, bx + 103, by + 21, 10, 14, 186, 40));
+        addButton(new GuiButtonTinkersAnvil(++id, bx + 63, by + 21, false));
+        addButton(new GuiButtonTinkersAnvil(++id, bx + 103, by + 21, true));
 
         super.initGui();
     }

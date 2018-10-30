@@ -29,6 +29,7 @@ import com.alcatrazescapee.alcatrazcore.inventory.crafting.InventoryCraftingEmpt
 import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
 import com.alcatrazescapee.alcatrazcore.util.collections.ImmutablePair;
 import com.alcatrazescapee.tinkersforging.ModConfig;
+import com.alcatrazescapee.tinkersforging.ModConstants;
 import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.items.ItemHammer;
 import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
@@ -113,7 +114,11 @@ public final class ModRecipes
                 // Try with each ingot to create a tool of each type
                 for (ItemType type : ItemType.values())
                 {
+                    // Ignore types that don't have an associated recipe
                     if (!type.isRecipeType()) continue;
+                    // Ignore types that were not added due to Tinker Construct compat
+                    if (type.isItemType() && ModConfig.GENERAL.useTinkersConstruct && Loader.isModLoaded("tconstruct"))
+                        continue;
 
                     ImmutablePair<IRecipe, ItemStack> result = getToolRecipeFor(recipes, type, ingots);
                     if (result != null)
@@ -195,7 +200,7 @@ public final class ModRecipes
             if (!stack.isEmpty())
             {
                 NBTTagCompound nbt = new NBTTagCompound();
-                nbt.setString(Metal.TINKERS_NBT_KEY, metalName);
+                nbt.setString(ModConstants.MATERIAL_NBT_KEY, metalName);
                 stack.setTagCompound(nbt);
             }
             return stack;

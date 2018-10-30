@@ -22,7 +22,6 @@ import amerifrance.guideapi.api.impl.Book;
 import amerifrance.guideapi.api.impl.BookBinder;
 import amerifrance.guideapi.category.CategoryItemStack;
 import com.alcatrazescapee.tinkersforging.common.blocks.ModBlocks;
-import com.alcatrazescapee.tinkersforging.common.items.ModItems;
 import com.alcatrazescapee.tinkersforging.integration.guide.utils.CategoryBuilder;
 import com.alcatrazescapee.tinkersforging.integration.guide.utils.ILazyLoader;
 
@@ -39,14 +38,17 @@ public class GuideIntegration implements IGuideBook
     @Override
     public Book buildBook()
     {
+        // todo: write guide book info
         return book = new BookBinder(new ResourceLocation(MOD_ID, "guide_book"))
                 .addCategory(new CategoryBuilder(new CategoryItemStack(MOD_ID + ".guide.category.intro", new ItemStack(ModBlocks.IRON_ANVIL)).withKeyBase("intro"))
                         .addEntry(MOD_ID + ".guide.intro.overview")
                         .addPage(MOD_ID + ".guide.intro.page.1")
-                        .build())
-                .addCategory(new CategoryBuilder(new CategoryItemStack(MOD_ID + ".guide.category.hammer", new ItemStack(ModItems.IRON_HAMMER)).withKeyBase("hammer"))
-                        .addEntry(MOD_ID + ".guide.hammer.overview")
-                        .addPage(MOD_ID + ".guide.hammer.page.1")
+                        .addEntry(MOD_ID + ".guide.intro.hammer")
+                        .addPage(MOD_ID + ".guide.intro.page.2")
+                        .addEntry(MOD_ID + ".guide.intro.anvils")
+                        .addPage(MOD_ID + ".guide.intro.page.3")
+                        .addEntry(MOD_ID + ".guide.intro.smithing")
+                        .addPage(MOD_ID + ".guide.intro.page.4")
                         .build())
                 .setGuideTitle(MOD_ID + ".guide.title")
                 .setHeader(MOD_ID + ".guide.title")

@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
-import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 import io.netty.buffer.ByteBuf;
@@ -59,7 +58,6 @@ public class PacketAnvilRecipeUpdate implements IMessage
         @Override
         public IMessage onMessage(PacketAnvilRecipeUpdate message, MessageContext context)
         {
-            TinkersForging.getLog().info("Recieved recipe update!");
             Minecraft.getMinecraft().addScheduledTask(() ->
             {
                 TileTinkersAnvil tile = CoreHelpers.getTE(Minecraft.getMinecraft().world, message.pos, TileTinkersAnvil.class);

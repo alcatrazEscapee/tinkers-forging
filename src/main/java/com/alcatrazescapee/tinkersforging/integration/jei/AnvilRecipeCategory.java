@@ -43,7 +43,7 @@ public class AnvilRecipeCategory implements IRecipeCategory<AnvilRecipeCategory.
     private final IDrawable background;
     private final IDrawable icon;
 
-    public AnvilRecipeCategory(IGuiHelper guiHelper)
+    AnvilRecipeCategory(IGuiHelper guiHelper)
     {
         background = guiHelper.createDrawable(BACKGROUND_LOCATION, 0, 0, 135, 50);
         icon = guiHelper.createDrawable(BACKGROUND_LOCATION, 215, 0, 16, 16);

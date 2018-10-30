@@ -26,15 +26,17 @@ class GuiButtonTinkersAnvil extends GuiButton
     private final int textureV;
     private final String tooltip;
 
-    GuiButtonTinkersAnvil(int id, int x, int y, int width, int height, int textureU, int textureV)
+    // Left / Right Buttons
+    GuiButtonTinkersAnvil(int id, int x, int y, boolean isRightButton)
     {
-        super(id, x, y, width, height, "");
-        this.textureU = textureU;
-        this.textureV = textureV;
+        super(id, x, y, 10, 14, "");
+        this.textureU = 176 + (isRightButton ? 10 : 0);
+        this.textureV = 40;
 
         tooltip = null;
     }
 
+    // Step buttons
     GuiButtonTinkersAnvil(int id, int backgroundX, int backgroundY, ForgeStep step)
     {
         super(id, backgroundX + step.getX(), backgroundY + step.getY(), 20, 20, "");

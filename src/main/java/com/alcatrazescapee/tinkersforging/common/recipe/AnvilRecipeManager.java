@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.alcatrazescapee.alcatrazcore.inventory.recipe.IRecipeManager;
+import com.alcatrazescapee.tinkersforging.TinkersForging;
 
 public class AnvilRecipeManager implements IRecipeManager<AnvilRecipe>
 {
@@ -31,9 +32,15 @@ public class AnvilRecipeManager implements IRecipeManager<AnvilRecipe>
         for (AnvilRecipe r : recipes)
         {
             if (r.getName().equals(recipe.getName()))
-                return;
+            {
+                TinkersForging.getLog().warn("Duplicate recipe name '{}' found. This may cause problems!", recipe.getName());
+                break;
+            }
         }
-        recipes.add(recipe.withSeed(++seedCounter));
+        if (AnvilRecipe.assertValid(recipe))
+        {
+            recipes.add(recipe.withSeed(++seedCounter));
+        }
     }
 
     @Override

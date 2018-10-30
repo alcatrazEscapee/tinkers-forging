@@ -20,9 +20,9 @@ import com.alcatrazescapee.tinkersforging.util.forge.ForgeSteps;
 
 public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagCompound>
 {
+    private final ForgeSteps steps;
     private int work;
     private String recipeName;
-    private ForgeSteps steps;
 
     public ForgeItem(@Nullable NBTTagCompound nbt)
     {
@@ -72,7 +72,7 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     @Override
     public void reset()
     {
-        steps = new ForgeSteps();
+        steps.reset();
         recipeName = null;
         work = 0;
     }

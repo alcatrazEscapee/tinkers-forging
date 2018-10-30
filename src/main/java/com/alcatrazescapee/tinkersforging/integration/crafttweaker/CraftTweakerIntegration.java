@@ -28,11 +28,11 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
 @SuppressWarnings("unused")
-@ZenClass("mods.tinkersforging.TinkersForging")
+@ZenClass("mods.tinkersforging.Anvil")
 public class CraftTweakerIntegration
 {
     @ZenMethod
-    public static void addAnvil(IIngredient input, IItemStack output, int tier, String... ruleNames)
+    public static void add(IIngredient input, IItemStack output, int tier, String... ruleNames)
     {
         AnvilRecipe recipe;
         ItemStack outputStack = toStack(output);
@@ -41,7 +41,7 @@ public class CraftTweakerIntegration
         {
             try
             {
-                ForgeRule rule = ForgeRule.valueOf(ruleName);
+                ForgeRule rule = ForgeRule.valueOf(ruleName.toUpperCase());
                 rules.add(rule);
             }
             catch (IllegalArgumentException e)
@@ -75,7 +75,7 @@ public class CraftTweakerIntegration
     }
 
     @ZenMethod
-    public static void removeAnvil(IItemStack output)
+    public static void remove(IItemStack output)
     {
         ItemStack stack = toStack(output);
         CraftTweakerAPI.apply(new IAction()

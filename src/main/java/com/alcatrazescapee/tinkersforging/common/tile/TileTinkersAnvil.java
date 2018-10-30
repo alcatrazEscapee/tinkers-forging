@@ -193,6 +193,7 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
     @Override
     public void onBreakBlock()
     {
+        // todo: clear NBT of stack in input slot
         for (int i = 0; i < inventory.getSlots(); ++i)
         {
             if (i != SLOT_DISPLAY)
