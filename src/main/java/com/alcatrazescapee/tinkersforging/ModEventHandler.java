@@ -17,14 +17,19 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
 import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.ForgeItem;
+import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
+import com.alcatrazescapee.tinkersforging.util.TickTimer;
+import slimeknights.tconstruct.smeltery.events.TinkerCastingEvent;
 
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
 
@@ -76,6 +81,27 @@ public final class ModEventHandler
             {
                 event.addCapability(CapabilityForgeItem.KEY, new ForgeItem(stack.getTagCompound()));
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onTickWorldTick(TickEvent.WorldTickEvent event)
+    {
+        if (event.phase == TickEvent.Phase.END)
+        {
+            TickTimer.update(event.world.getTotalWorldTime());
+        }
+    }
+
+    @SubscribeEvent
+    @Optional.Method(modid = "tconstruct")
+    public static void onTinkersCastingEvent(TinkerCastingEvent.OnCasted event)
+    {
+        IForgeItem cap = event.output.getCapability(CapabilityForgeItem.CAPABILITY, null);
+        if (cap != null && ModConfig.GENERAL.enableTemperatureMechanics)
+        {
+            cap.setTemperature(cap.getMeltingTemperature() - 1f);
+            event.output.setTagInfo(CapabilityForgeItem.NBT_KEY, cap.serializeNBT());
         }
     }
 }

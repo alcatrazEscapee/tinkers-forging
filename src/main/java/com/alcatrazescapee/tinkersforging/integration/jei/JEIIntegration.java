@@ -9,8 +9,10 @@ package com.alcatrazescapee.tinkersforging.integration.jei;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 
+import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.client.gui.GuiTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
+import com.alcatrazescapee.tinkersforging.common.blocks.ModBlocks;
 import com.alcatrazescapee.tinkersforging.common.items.ItemHammer;
 import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
@@ -75,6 +77,11 @@ public final class JEIIntegration implements IModPlugin
             Metal metal = item.getMetal();
             if (metal != null && !metal.isEnabled())
                 blacklist.addIngredientToBlacklist(new ItemStack(item));
+        }
+
+        if (!ModConfig.GENERAL.enableTemperatureMechanics)
+        {
+            blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.FORGE));
         }
 
         // Anvil Recipes

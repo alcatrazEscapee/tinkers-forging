@@ -18,6 +18,8 @@ import com.alcatrazescapee.tinkersforging.util.forge.ForgeSteps;
 
 public interface IForgeItem extends INBTSerializable<NBTTagCompound>
 {
+    // Work / Forging Related
+
     int getWork();
 
     void setWork(int work);
@@ -33,4 +35,24 @@ public interface IForgeItem extends INBTSerializable<NBTTagCompound>
     void addStep(ForgeStep step);
 
     void reset();
+
+    // Temperature Mechanics
+
+    float getTemperature();
+
+    void setTemperature(float temperature);
+
+    float getMeltingTemperature();
+
+    float getWorkableTemperature();
+
+    default boolean isMolten()
+    {
+        return getMeltingTemperature() < getTemperature();
+    }
+
+    default boolean isWorkable()
+    {
+        return getWorkableTemperature() < getTemperature() && !isMolten();
+    }
 }

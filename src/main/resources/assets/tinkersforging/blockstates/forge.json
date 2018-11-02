@@ -1,0 +1,40 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "top": "tinkersforging:blocks/forge/top",
+      "front": "tinkersforging:blocks/forge/front",
+      "side": "tinkersforging:blocks/forge/side"
+    },
+    "model": "orientable"
+  },
+  "variants": {
+    "facing": {
+      "north": {
+        "y": 0
+      },
+      "south": {
+        "y": 180
+      },
+      "east": {
+        "y": 90
+      },
+      "west": {
+        "y": 270
+      }
+    },
+    "lit": {
+      "true": {
+        "textures": {
+          "front": "tinkersforging:blocks/forge/front_lit",
+          "top": "tinkersforging:blocks/forge/top_lit"
+        }
+      },
+      "false": {
+      }
+    },
+    "normal": [
+      {}
+    ]
+  }
+}

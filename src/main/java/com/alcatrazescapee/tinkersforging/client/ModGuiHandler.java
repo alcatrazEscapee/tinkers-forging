@@ -16,13 +16,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
+import com.alcatrazescapee.tinkersforging.client.gui.GuiForge;
 import com.alcatrazescapee.tinkersforging.client.gui.GuiTinkersAnvil;
+import com.alcatrazescapee.tinkersforging.common.container.ContainerForge;
 import com.alcatrazescapee.tinkersforging.common.container.ContainerTinkersAnvil;
+import com.alcatrazescapee.tinkersforging.common.tile.TileForge;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 
 public final class ModGuiHandler implements IGuiHandler
 {
     public static final int TINKERS_ANVIL = 0;
+    public static final int FORGE = 1;
 
     @Nullable
     @Override
@@ -34,6 +38,8 @@ public final class ModGuiHandler implements IGuiHandler
         {
             case TINKERS_ANVIL:
                 return new ContainerTinkersAnvil(player, CoreHelpers.getTE(world, pos, TileTinkersAnvil.class));
+            case FORGE:
+                return new ContainerForge(player.inventory, CoreHelpers.getTE(world, pos, TileForge.class));
             default:
                 return null;
         }
@@ -51,6 +57,8 @@ public final class ModGuiHandler implements IGuiHandler
             case TINKERS_ANVIL:
                 Block block = world.getBlockState(pos).getBlock();
                 return new GuiTinkersAnvil(CoreHelpers.getTE(world, pos, TileTinkersAnvil.class), block.getTranslationKey(), container, player.inventory);
+            case FORGE:
+                return new GuiForge(CoreHelpers.getTE(world, pos, TileForge.class), container, player.inventory);
             default:
                 return null;
         }

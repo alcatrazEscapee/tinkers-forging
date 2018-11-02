@@ -44,6 +44,7 @@ import com.alcatrazescapee.tinkersforging.util.Metal;
 public class BlockTinkersAnvil extends BlockTileCore
 {
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+
     private static final Map<Metal, BlockTinkersAnvil> MAP = new HashMap<>();
     private static final AxisAlignedBB AABB_X = new AxisAlignedBB(0.1875, 0, 0, 0.8125, 0.625, 1);
     private static final AxisAlignedBB AABB_Z = new AxisAlignedBB(0, 0, 0.1875, 1, 0.625, 0.8125);
@@ -77,7 +78,7 @@ public class BlockTinkersAnvil extends BlockTileCore
         this.tier = metal.getTier();
         MAP.put(metal, this);
 
-        // todo: tier based harvest level
+        setHarvestLevel("pickaxe", metal.getTier());
         setSoundType(SoundType.ANVIL);
         setHardness(3.0f + 1.0f * metal.getTier());
         setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));

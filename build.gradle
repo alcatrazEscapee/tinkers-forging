@@ -30,6 +30,11 @@ repositories {
         // GuideAPI
         url 'http://tehnut.info/maven/'
     }
+    maven {
+        // Tinkers Construct
+        name 'DVS1 Maven FS'
+        url 'http://dvs1.progwml6.com/files/maven'
+    }
 }
 
 version = "${mod_version}"
@@ -69,6 +74,10 @@ dependencies {
 
     // Guide API
     deobfCompile "info.amerifrance.guideapi:Guide-API:1.12-2.1.7-62"
+
+    // Tinkers Construct
+    deobfCompile "slimeknights.mantle:Mantle:${mantle_version}"
+    deobfCompile "slimeknights:TConstruct:${tinkers_construct_version}"
 }
 
 processResources {

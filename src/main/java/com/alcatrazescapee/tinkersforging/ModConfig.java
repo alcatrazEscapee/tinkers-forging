@@ -33,6 +33,13 @@ public final class ModConfig
         @Config.Comment("If this is true, any recipes that are added to the anvil that have a crafting equivalent (i.e. a shovel) will have their normal crafting recipes removed")
         public boolean removeCraftingRecipes = true;
 
+        @Config.Comment("Enable temperature mechanics: items can only be worked if they are a certain temperature?")
+        public boolean enableTemperatureMechanics = true;
+
+        @Config.RangeDouble(min = 0, max = 10)
+        @Config.Comment("A modifier for how fast items heat up and cool down. Higher values = faster heat transfer.")
+        public double temperatureModifier = 0.1;
+
         private GeneralConfig() {}
     }
 

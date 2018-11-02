@@ -21,6 +21,7 @@ import net.minecraftforge.items.IItemHandler;
 import com.alcatrazescapee.alcatrazcore.inventory.container.ContainerTileInventory;
 import com.alcatrazescapee.alcatrazcore.inventory.slot.SlotOutput;
 import com.alcatrazescapee.alcatrazcore.inventory.slot.SlotTileCore;
+import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
@@ -56,7 +57,7 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
                 tile.cycleForgeRecipe(true);
                 break;
             default:
-                if (canWork(buttonID % 4))
+                if (attemptWork(buttonID % 4))
                     tile.addStep(ForgeStep.valueOf(buttonID));
                 break;
         }
@@ -135,49 +136,68 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
         }
     }
 
-    private boolean canWork(int amount)
+    private boolean attemptWork(int amount)
     {
-        Slot slotInput = inventorySlots.get(SLOT_INPUT);
-        if (slotInput != null)
-        {
-            ItemStack stack = slotInput.getStack();
-            IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);
+        // This only runs on server
 
-            if (cap != null)
+        // Get the slot for input
+        Slot slotInput = inventorySlots.get(SLOT_INPUT);
+        if (slotInput == null)
+            return false;
+
+        ItemStack stack = slotInput.getStack();
+        IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);
+
+        // The input must have the forge item capability
+        if (cap == null)
+            return false;
+
+        // A recipe must exist
+        AnvilRecipe recipe = ModRecipes.ANVIL.getByName(cap.getRecipeName());
+        if (recipe == null)
+        {
+            // todo: message?
+            return false;
+        }
+        if (tile.getTier() < recipe.getTier())
+        {
+            TinkersForging.getLog().info("Tier is {}, Requires {}.", recipe.getTier(), tile.getTier());
+            player.sendMessage(new TextComponentString("" + TextFormatting.RED).appendSibling(new TextComponentTranslation(MOD_ID + ".tooltip.tier_too_low")));
+            return false;
+        }
+
+        if (ModConfig.GENERAL.enableTemperatureMechanics)
+        {
+            if (!cap.isWorkable())
             {
-                AnvilRecipe recipe = ModRecipes.ANVIL.getByName(cap.getRecipeName());
-                if (recipe == null)
-                {
-                    return false;
-                }
-                if (tile.getTier() < recipe.getTier())
-                {
-                    TinkersForging.getLog().info("Tier is {}, Requires {}.", recipe.getTier(), tile.getTier());
-                    player.sendMessage(new TextComponentString("" + TextFormatting.RED).appendSibling(new TextComponentTranslation(MOD_ID + ".tooltip.tier_too_low")));
-                    return false;
-                }
+                TinkersForging.getLog().info("Can't work due to temperature");
+                // todo: send message
+                return false;
             }
         }
 
         Slot slot = inventorySlots.get(SLOT_HAMMER);
-        if (slot != null)
+        if (slot == null)
+            return false;
+
+        stack = slot.getStack();
+        if (!stack.isEmpty())
         {
-            ItemStack stack = slot.getStack();
-            if (!stack.isEmpty())
+            stack.damageItem(amount, player);
+            if (stack.getCount() <= 0)
             {
-                stack.damageItem(amount, player);
-                if (stack.getCount() <= 0)
-                {
-                    slot.putStack(ItemStack.EMPTY);
-                }
-                else
-                {
-                    slot.putStack(stack);
-                }
-                return true;
+                slot.putStack(ItemStack.EMPTY);
             }
+            else
+            {
+                slot.putStack(stack);
+            }
+            return true;
         }
-        player.sendMessage(new TextComponentString("" + TextFormatting.RED).appendSibling(new TextComponentTranslation(MOD_ID + ".tooltip.no_hammer")));
-        return false;
+        else
+        {
+            player.sendMessage(new TextComponentString("" + TextFormatting.RED).appendSibling(new TextComponentTranslation(MOD_ID + ".tooltip.no_hammer")));
+            return false;
+        }
     }
 }

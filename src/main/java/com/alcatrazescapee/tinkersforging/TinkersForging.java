@@ -22,6 +22,7 @@ import com.alcatrazescapee.tinkersforging.common.items.ModItems;
 import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilButton;
 import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilRecipeUpdate;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
+import com.alcatrazescapee.tinkersforging.util.TickTimer;
 
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_NAME;
@@ -71,6 +72,8 @@ public final class TinkersForging
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
+        TickTimer.reset();
+
         // Init Managers
         ModItems.init();
         ModBlocks.init();

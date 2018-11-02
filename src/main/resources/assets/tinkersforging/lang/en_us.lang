@@ -2,9 +2,11 @@
 
 itemGroup.tinkersforging.stuff=Tinker's Forging
 
-# Gui
+# Gui Tooltips
 
 tinkersforging.tooltip.has_been_worked=This item has been worked.
+tinkersforging.tooltip.temperature=Temperature %.0f °C
+tinkersforging.tooltip.melts_at= (Melts at: %.0f °C)
 tinkersforging.tooltip.tier_too_low=This anvil is too low tier for that item!
 tinkersforging.tooltip.no_hammer=There is no hammer in the anvil!
 tinkersforging.tooltip.tinkers_anvil_title.name=Tinker's Anvil

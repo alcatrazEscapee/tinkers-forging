@@ -22,10 +22,8 @@ public class PacketAnvilRecipeUpdate implements IMessage
     private BlockPos pos;
     private AnvilRecipe recipe;
 
-    public PacketAnvilRecipeUpdate()
-    {
-        // no args constructor required for forge
-    }
+    // no args constructor required for forge
+    public PacketAnvilRecipeUpdate() {}
 
     public PacketAnvilRecipeUpdate(TileTinkersAnvil tile)
     {
