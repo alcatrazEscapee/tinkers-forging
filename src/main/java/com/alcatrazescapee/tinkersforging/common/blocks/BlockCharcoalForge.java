@@ -14,17 +14,18 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
@@ -42,15 +43,12 @@ import com.alcatrazescapee.alcatrazcore.util.compat.FireRegistry;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.client.ModGuiHandler;
 import com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge;
-
-import static com.alcatrazescapee.tinkersforging.common.blocks.BlockCharcoalPile.PILE_AABB;
+import com.alcatrazescapee.tinkersforging.util.property.IBurnBlock;
+import com.alcatrazescapee.tinkersforging.util.property.IPileBlock;
 
 @ParametersAreNonnullByDefault
-public class BlockCharcoalForge extends BlockTileCore
+public class BlockCharcoalForge extends BlockTileCore implements IPileBlock, IBurnBlock
 {
-    public static final PropertyInteger LAYERS = BlockCharcoalPile.LAYERS;
-    public static final PropertyBool LIT = BlockForge.LIT;
-
     public BlockCharcoalForge()
     {
         super(Material.GROUND);
@@ -60,6 +58,12 @@ public class BlockCharcoalForge extends BlockTileCore
         setHarvestLevel("shovel", 0);
         setTickRandomly(true);
         this.setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, 1).withProperty(LIT, true));
+    }
+
+    @Override
+    public IBlockState getStateWithLayers(int layers)
+    {
+        return getDefaultState().withProperty(LAYERS, layers);
     }
 
     @Nullable
@@ -252,13 +256,14 @@ public class BlockCharcoalForge extends BlockTileCore
         return new ItemStack(Items.COAL, 1, 1);
     }
 
-    /*@Override
+    @Override
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
         IBlockState state = worldIn.getBlockState(pos);
-        if (!entityIn.isImmuneToFire() && entityIn instanceof EntityLivingBase && state.getValue(BURNING)) {
+        if (!entityIn.isImmuneToFire() && entityIn instanceof EntityLivingBase && state.getValue(LIT))
+        {
             entityIn.attackEntityFrom(DamageSource.IN_FIRE, 2.0F);
         }
 
         super.onEntityWalk(worldIn, pos, entityIn);
-    }*/
+    }
 }

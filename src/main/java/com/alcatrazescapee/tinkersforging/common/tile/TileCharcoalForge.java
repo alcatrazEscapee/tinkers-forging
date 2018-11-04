@@ -24,14 +24,13 @@ import com.alcatrazescapee.alcatrazcore.tile.TileInventory;
 import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
 import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
-import com.alcatrazescapee.tinkersforging.common.blocks.BlockCharcoalForge;
 import com.alcatrazescapee.tinkersforging.common.blocks.ModBlocks;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
 
-import static com.alcatrazescapee.tinkersforging.common.blocks.BlockCharcoalForge.LAYERS;
-import static com.alcatrazescapee.tinkersforging.common.blocks.BlockCharcoalForge.LIT;
 import static com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem.MAX_TEMPERATURE;
+import static com.alcatrazescapee.tinkersforging.util.property.IBurnBlock.LIT;
+import static com.alcatrazescapee.tinkersforging.util.property.IPileBlock.LAYERS;
 
 @ParametersAreNonnullByDefault
 public class TileCharcoalForge extends TileInventory implements ITickable, ITileFields
@@ -45,25 +44,13 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
 
     public static void lightNearbyForges(World world, BlockPos pos)
     {
-        for (EnumFacing face : EnumFacing.HORIZONTALS)
+        if (tryLight(world, pos))
         {
-            BlockPos pos1 = pos.offset(face);
-            IBlockState state = world.getBlockState(pos1);
-            if (state.getBlock() == ModBlocks.CHARCOAL_FORGE)
+            for (EnumFacing face : EnumFacing.HORIZONTALS)
             {
-                if (!state.getValue(LIT) && updateSideBlocks(world, pos1))
+                BlockPos pos1 = pos.offset(face);
+                if (tryLight(world, pos1))
                 {
-                    world.setBlockState(pos1, ModBlocks.CHARCOAL_FORGE.getDefaultState().withProperty(BlockCharcoalForge.LAYERS, state.getValue(BlockCharcoalForge.LAYERS)));
-                    tryLight(world, pos1);
-                    lightNearbyForges(world, pos1);
-                }
-            }
-            else if (state.getBlock() == ModBlocks.CHARCOAL_PILE)
-            {
-                if (updateSideBlocks(world, pos1))
-                {
-                    world.setBlockState(pos1, ModBlocks.CHARCOAL_FORGE.getDefaultState().withProperty(BlockCharcoalForge.LAYERS, state.getValue(BlockCharcoalForge.LAYERS)));
-                    tryLight(world, pos1);
                     lightNearbyForges(world, pos1);
                 }
             }
@@ -86,16 +73,31 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
         return true;
     }
 
-    private static void tryLight(World world, BlockPos pos)
+    private static boolean tryLight(World world, BlockPos pos)
     {
+        // Replace the block
+        IBlockState state = world.getBlockState(pos);
+        if (state.getBlock() == ModBlocks.CHARCOAL_PILE)
+        {
+            int layers = state.getValue(LAYERS);
+            world.setBlockState(pos, ModBlocks.CHARCOAL_FORGE.getStateWithLayers(layers).withProperty(LIT, true));
+        }
+        else if (state.getBlock() == ModBlocks.CHARCOAL_FORGE && !state.getValue(LIT))
+        {
+            int layers = state.getValue(LAYERS);
+            world.setBlockState(pos, ModBlocks.CHARCOAL_FORGE.getStateWithLayers(layers).withProperty(LIT, true));
+        }
+        else
+        {
+            return false;
+        }
+        // Light the TE
         TileCharcoalForge tile = CoreHelpers.getTE(world, pos, TileCharcoalForge.class);
         if (tile != null)
         {
-            if (tile.fuelTicksRemaining == 0)
-            {
-                tile.consumeFuel();
-            }
+            tile.consumeFuel();
         }
+        return true;
     }
 
     private static boolean isValidSideBlock(IBlockState state)
@@ -116,7 +118,15 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
 
     public void updateClosedState(World world, BlockPos pos)
     {
-        this.isClosed = updateSideBlocks(world, pos);
+        for (EnumFacing face : EnumFacing.HORIZONTALS)
+        {
+            if (isValidSideBlock(world.getBlockState(pos.offset(face))))
+                continue;
+
+            isClosed = false;
+            return;
+        }
+        isClosed = true;
     }
 
     @Override
@@ -150,7 +160,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
                     temperature = actualMaxTemp;
             }
 
-            for (int i = SLOT_INPUT_MIN; i <= SLOT_INPUT_MAX; i++)
+            for (int i = SLOT_INPUT_MIN; i < SLOT_INPUT_MAX; i++)
             {
                 ItemStack stack = inventory.getStackInSlot(i);
                 IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);

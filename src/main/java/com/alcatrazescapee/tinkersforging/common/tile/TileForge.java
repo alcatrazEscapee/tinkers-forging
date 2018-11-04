@@ -27,8 +27,8 @@ import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
 
-import static com.alcatrazescapee.tinkersforging.common.blocks.BlockForge.LIT;
 import static com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem.MAX_TEMPERATURE;
+import static com.alcatrazescapee.tinkersforging.util.property.IBurnBlock.LIT;
 
 @ParametersAreNonnullByDefault
 public class TileForge extends TileInventory implements ITickable, ITileFields

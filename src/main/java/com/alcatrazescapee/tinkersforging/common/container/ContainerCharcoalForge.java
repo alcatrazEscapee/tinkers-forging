@@ -31,7 +31,7 @@ public class ContainerCharcoalForge extends ContainerTileInventory<TileCharcoalF
         if (cap != null)
         {
             for (int i = SLOT_INPUT_MIN; i < SLOT_INPUT_MAX; i++)
-                addSlotToContainer(new SlotTileCore(cap, i, 62 + 18 * (i - SLOT_INPUT_MIN), 23, tile));
+                addSlotToContainer(new SlotTileCore(cap, i, 44 + 18 * (i - SLOT_INPUT_MIN), 23, tile));
         }
     }
 }

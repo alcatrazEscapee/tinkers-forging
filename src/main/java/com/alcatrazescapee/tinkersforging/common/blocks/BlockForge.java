@@ -12,7 +12,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -31,12 +30,12 @@ import com.alcatrazescapee.alcatrazcore.util.compat.FireRegistry;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.client.ModGuiHandler;
 import com.alcatrazescapee.tinkersforging.common.tile.TileForge;
+import com.alcatrazescapee.tinkersforging.util.property.IBurnBlock;
 
 @ParametersAreNonnullByDefault
-public class BlockForge extends BlockTileCore
+public class BlockForge extends BlockTileCore implements IBurnBlock
 {
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    public static final PropertyBool LIT = PropertyBool.create("lit");
 
     public BlockForge()
     {

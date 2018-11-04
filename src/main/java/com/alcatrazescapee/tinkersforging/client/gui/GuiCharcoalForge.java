@@ -54,7 +54,7 @@ public class GuiCharcoalForge extends GuiContainerTileCore<TileCharcoalForge>
         int charcoalLayers = (tile.getBlockMetadata() % 8 + 1) * 2;
         if (charcoalLayers > 0)
         {
-            drawTexturedModalRect(x + 80, y + 75 - charcoalLayers, 223, 16 - charcoalLayers, 16, charcoalLayers);
+            drawTexturedModalRect(x + 80, y + 75 - charcoalLayers, 200, 16 - charcoalLayers, 16, charcoalLayers);
         }
     }
 }

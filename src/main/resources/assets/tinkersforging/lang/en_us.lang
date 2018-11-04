@@ -73,6 +73,13 @@ tinkersforging.tooltip.shrink_third_last=Shrink Third Last
 
 tinkersforging.jei.category.anvil=Forging
 
+# Blocks
+tile.tinkersforging:charcoal_pile.name=Charcoal Pile
+tile.tinkersforging:charcoal_forge.name=Charcoal Forge
+tile.tinkersforging:forge.name=Brick Forge
+
+### Below this line is generated via python script ###
+
 # Items: Tool Parts
 
 item.tinkersforging:pickaxe_head.iron.name=Iron Pickaxe Head

@@ -14,7 +14,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -35,25 +34,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.alcatrazescapee.alcatrazcore.block.BlockCore;
 import com.alcatrazescapee.alcatrazcore.util.compat.FireRegistry;
 import com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge;
+import com.alcatrazescapee.tinkersforging.util.property.IPileBlock;
 
 @ParametersAreNonnullByDefault
-public class BlockCharcoalPile extends BlockCore
+public class BlockCharcoalPile extends BlockCore implements IPileBlock
 {
-    public static final PropertyInteger LAYERS = PropertyInteger.create("type", 1, 8);
-
-    protected static final AxisAlignedBB[] PILE_AABB = new AxisAlignedBB[]
-            {
-                    new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 1.0D),
-                    new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D),
-                    new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D),
-                    new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D),
-                    new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D),
-                    new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D),
-                    new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D),
-                    new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D),
-                    new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)
-            };
-
     public BlockCharcoalPile()
     {
         super(Material.GROUND);
@@ -69,6 +54,12 @@ public class BlockCharcoalPile extends BlockCore
     public void registerModel()
     {
         // No Item Block Model
+    }
+
+    @Override
+    public IBlockState getStateWithLayers(int layers)
+    {
+        return getDefaultState().withProperty(LAYERS, layers);
     }
 
     @Override
@@ -189,11 +180,7 @@ public class BlockCharcoalPile extends BlockCore
         {
             if (!world.isRemote)
             {
-                if (TileCharcoalForge.updateSideBlocks(world, pos))
-                {
-                    world.setBlockState(pos, ModBlocks.CHARCOAL_FORGE.getDefaultState().withProperty(BlockCharcoalForge.LAYERS, state.getValue(LAYERS)));
-                    TileCharcoalForge.lightNearbyForges(world, pos);
-                }
+                TileCharcoalForge.lightNearbyForges(world, pos);
             }
             return true;
         }
