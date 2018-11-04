@@ -13,7 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -24,51 +24,107 @@ import com.alcatrazescapee.alcatrazcore.tile.TileInventory;
 import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
 import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
+import com.alcatrazescapee.tinkersforging.common.blocks.BlockCharcoalForge;
+import com.alcatrazescapee.tinkersforging.common.blocks.ModBlocks;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
 
-import static com.alcatrazescapee.tinkersforging.common.blocks.BlockForge.LIT;
+import static com.alcatrazescapee.tinkersforging.common.blocks.BlockCharcoalForge.LAYERS;
+import static com.alcatrazescapee.tinkersforging.common.blocks.BlockCharcoalForge.LIT;
 import static com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem.MAX_TEMPERATURE;
 
 @ParametersAreNonnullByDefault
-public class TileForge extends TileInventory implements ITickable, ITileFields
+public class TileCharcoalForge extends TileInventory implements ITickable, ITileFields
 {
-    public static final int SLOT_FUEL = 0;
-    public static final int SLOT_INPUT_MIN = 1;
-    public static final int SLOT_INPUT_MAX = 3;
+    public static final int SLOT_INPUT_MIN = 0;
+    public static final int SLOT_INPUT_MAX = 5;
 
     public static final int FIELD_FUEL = 0;
-    public static final int FIELD_FUEL_MAX = 1;
-    public static final int FIELD_TEMPERATURE = 2;
+    public static final int FIELD_TEMPERATURE = 1;
+    public static final int FUEL_TICKS_MAX = 1600;
 
-    private int fuelTicksRemaining;
-    private int fuelTicksMax;
-    private float temperature;
-
-    public TileForge()
+    public static void lightNearbyForges(World world, BlockPos pos)
     {
-        super(4);
-
-        markDirty();
+        for (EnumFacing face : EnumFacing.HORIZONTALS)
+        {
+            BlockPos pos1 = pos.offset(face);
+            IBlockState state = world.getBlockState(pos1);
+            if (state.getBlock() == ModBlocks.CHARCOAL_FORGE)
+            {
+                if (!state.getValue(LIT) && updateSideBlocks(world, pos1))
+                {
+                    world.setBlockState(pos1, ModBlocks.CHARCOAL_FORGE.getDefaultState().withProperty(BlockCharcoalForge.LAYERS, state.getValue(BlockCharcoalForge.LAYERS)));
+                    tryLight(world, pos1);
+                    lightNearbyForges(world, pos1);
+                }
+            }
+            else if (state.getBlock() == ModBlocks.CHARCOAL_PILE)
+            {
+                if (updateSideBlocks(world, pos1))
+                {
+                    world.setBlockState(pos1, ModBlocks.CHARCOAL_FORGE.getDefaultState().withProperty(BlockCharcoalForge.LAYERS, state.getValue(BlockCharcoalForge.LAYERS)));
+                    tryLight(world, pos1);
+                    lightNearbyForges(world, pos1);
+                }
+            }
+        }
     }
 
-    public boolean tryLight()
+    public static boolean updateSideBlocks(World world, BlockPos pos)
     {
-        // Returns the lit state
-        if (fuelTicksRemaining > 0)
+        if (!world.isRemote)
         {
-            return true;
+            for (EnumFacing face : EnumFacing.HORIZONTALS)
+            {
+                IBlockState state = world.getBlockState(pos.offset(face));
+                if (!isValidSideBlock(state))
+                {
+                    return false;
+                }
+            }
         }
-        consumeFuel();
-        return fuelTicksRemaining > 0;
+        return true;
+    }
+
+    private static void tryLight(World world, BlockPos pos)
+    {
+        TileCharcoalForge tile = CoreHelpers.getTE(world, pos, TileCharcoalForge.class);
+        if (tile != null)
+        {
+            if (tile.fuelTicksRemaining == 0)
+            {
+                tile.consumeFuel();
+            }
+        }
+    }
+
+    private static boolean isValidSideBlock(IBlockState state)
+    {
+        return (state.isNormalCube() && !state.getMaterial().getCanBurn()) ||
+                state.getBlock() == ModBlocks.CHARCOAL_FORGE ||
+                state.getBlock() == ModBlocks.CHARCOAL_PILE;
+    }
+
+    private int fuelTicksRemaining;
+    private float temperature;
+    private boolean isClosed;
+
+    public TileCharcoalForge()
+    {
+        super(5);
+    }
+
+    public void updateClosedState(World world, BlockPos pos)
+    {
+        this.isClosed = updateSideBlocks(world, pos);
     }
 
     @Override
     public void update()
     {
         // todo: remove
-        //if (world.getTotalWorldTime() % 20 == 0)
-        //    TinkersForging.getLog().info("Forge Tick: Fuel {} | Temp: {}", fuelTicksRemaining, temperature);
+        if (world.getTotalWorldTime() % 20 == 0)
+            TinkersForging.getLog().info("Charcoal Forge Tick: Fuel {} | Temp: {}", fuelTicksRemaining, temperature);
         if (fuelTicksRemaining > 0)
         {
             // Consume fuel ticks
@@ -86,11 +142,12 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
             }
 
             // Update temperature
-            if (temperature < MAX_TEMPERATURE)
+            float actualMaxTemp = isClosed ? MAX_TEMPERATURE : MAX_TEMPERATURE * 0.6f;
+            if (temperature < actualMaxTemp)
             {
-                temperature += (float) ModConfig.GENERAL.temperatureModifierForge;
-                if (temperature > MAX_TEMPERATURE)
-                    temperature = MAX_TEMPERATURE;
+                temperature += (float) ModConfig.GENERAL.temperatureModifierCharcoalForge;
+                if (temperature > actualMaxTemp)
+                    temperature = actualMaxTemp;
             }
 
             for (int i = SLOT_INPUT_MIN; i <= SLOT_INPUT_MAX; i++)
@@ -103,7 +160,7 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
                     // Add temperature
                     if (cap.getTemperature() < temperature)
                     {
-                        CapabilityForgeItem.addTemp(stack, cap, 1.0f + (float) ModConfig.GENERAL.temperatureModifierForge);
+                        CapabilityForgeItem.addTemp(stack, cap, 2.0f);
                     }
 
                     if (cap.isMolten())
@@ -118,7 +175,7 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
         else if (temperature > 0)
         {
             // When it is not burning fuel, then decrease the temperature until it reaches zero
-            temperature -= (float) ModConfig.GENERAL.temperatureModifierForge;
+            temperature -= (float) ModConfig.GENERAL.temperatureModifierCharcoalForge;
             if (temperature < 0)
                 temperature = 0;
         }
@@ -127,13 +184,7 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
     @Override
     public boolean isItemValid(int slot, ItemStack stack)
     {
-        switch (slot)
-        {
-            case SLOT_FUEL:
-                return TileEntityFurnace.isItemFuel(stack);
-            default:
-                return stack.hasCapability(CapabilityForgeItem.CAPABILITY, null);
-        }
+        return stack.hasCapability(CapabilityForgeItem.CAPABILITY, null);
     }
 
     @Override
@@ -141,7 +192,6 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
     {
         temperature = nbt.getFloat("temp");
         fuelTicksRemaining = nbt.getInteger("ticks");
-        fuelTicksMax = nbt.getInteger("maxTicks");
 
         super.readFromNBT(nbt);
     }
@@ -152,7 +202,6 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
     {
         nbt.setFloat("temp", temperature);
         nbt.setInteger("ticks", fuelTicksRemaining);
-        nbt.setInteger("maxTicks", fuelTicksMax);
 
         return super.writeToNBT(nbt);
     }
@@ -166,7 +215,7 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
     @Override
     public int getFieldCount()
     {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -176,8 +225,6 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
         {
             case FIELD_FUEL:
                 return fuelTicksRemaining;
-            case FIELD_FUEL_MAX:
-                return fuelTicksMax;
             case FIELD_TEMPERATURE:
                 return (int) temperature;
             default:
@@ -194,9 +241,6 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
             case FIELD_FUEL:
                 fuelTicksRemaining = value;
                 break;
-            case FIELD_FUEL_MAX:
-                fuelTicksMax = value;
-                break;
             case FIELD_TEMPERATURE:
                 temperature = (float) value;
                 break;
@@ -209,13 +253,15 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
     private void consumeFuel()
     {
         // Consume fuel
-        ItemStack stack = inventory.getStackInSlot(SLOT_FUEL);
-        int ticks = TileEntityFurnace.getItemBurnTime(stack);
-        if (ticks > 0)
+        IBlockState state = world.getBlockState(pos);
+        if (state.getValue(LAYERS) == 1)
         {
-            inventory.setStackInSlot(SLOT_FUEL, CoreHelpers.consumeItem(stack));
-            fuelTicksRemaining += ticks;
-            fuelTicksMax = fuelTicksRemaining;
+            world.setBlockToAir(pos);
+        }
+        else
+        {
+            world.setBlockState(pos, state.withProperty(LAYERS, state.getValue(LAYERS) - 1));
+            fuelTicksRemaining = FUEL_TICKS_MAX;
         }
     }
 }

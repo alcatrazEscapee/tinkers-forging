@@ -20,7 +20,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
-import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.client.render.TESRTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
@@ -32,7 +31,6 @@ import com.alcatrazescapee.tinkersforging.util.Metal;
 
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
 import static net.minecraft.util.text.TextFormatting.GREEN;
-import static net.minecraft.util.text.TextFormatting.RED;
 
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("unused")
@@ -46,17 +44,15 @@ public final class ClientEventHandler
         IForgeItem cap = event.getItemStack().getCapability(CapabilityForgeItem.CAPABILITY, null);
         if (cap != null)
         {
-            if (cap.getWork() != 0 || cap.getRecipeName() != null)
+            if (cap.getWork() != 0 || cap.getRecipeName() != null || cap.getTemperature() >= 1f)
             {
                 event.getToolTip().add(GREEN + I18n.format(MOD_ID + ".tooltip.has_been_worked"));
+                cap.addTooltipInfo(event.getToolTip());
             }
-            if (ModConfig.GENERAL.enableTemperatureMechanics && cap.getTemperature() != 0)
+            else
             {
-                String tempToolTip = RED + I18n.format(MOD_ID + ".tooltip.temperature", cap.getTemperature());
-                if (cap.getMeltingTemperature() * 0.75 >= cap.getTemperature())
-                    tempToolTip += I18n.format(MOD_ID + ".tooltip.melts_at", cap.getMeltingTemperature());
-
-                event.getToolTip().add(tempToolTip);
+                // If the work == 0, recipe == null, temperature <= 1, then it is safe to reset in interest of better stack-ability
+                CapabilityForgeItem.clearStack(event.getItemStack());
             }
         }
     }

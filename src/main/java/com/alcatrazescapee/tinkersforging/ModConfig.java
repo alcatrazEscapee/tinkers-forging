@@ -36,9 +36,21 @@ public final class ModConfig
         @Config.Comment("Enable temperature mechanics: items can only be worked if they are a certain temperature?")
         public boolean enableTemperatureMechanics = true;
 
+        // todo: use this!
+        @Config.Comment("If this is true, you will be able to see the exact temperature (in °C) of any items - including their exact workable and melting temperatures")
+        public boolean enableAdvancedTemperatureTooltips = false;
+
         @Config.RangeDouble(min = 0, max = 10)
         @Config.Comment("A modifier for how fast items heat up and cool down. Higher values = faster heat transfer.")
-        public double temperatureModifier = 0.1;
+        public double temperatureModifier = 0.4;
+
+        @Config.RangeDouble(min = 0, max = 10)
+        @Config.Comment("The modifier for how effective the charcoal forge is at heating up items. Higher values = faster heating")
+        public double temperatureModifierCharcoalForge = 0.8f;
+
+        @Config.RangeDouble(min = 0, max = 10)
+        @Config.Comment("The modifier for how effective the forge block is at heating up items. Higher values = faster heating")
+        public double temperatureModifierForge = 1.4f;
 
         private GeneralConfig() {}
     }

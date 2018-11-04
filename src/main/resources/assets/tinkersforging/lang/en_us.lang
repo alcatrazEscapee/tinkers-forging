@@ -5,10 +5,27 @@ itemGroup.tinkersforging.stuff=Tinker's Forging
 # Gui Tooltips
 
 tinkersforging.tooltip.has_been_worked=This item has been worked.
-tinkersforging.tooltip.temperature=Temperature %.0f °C
-tinkersforging.tooltip.melts_at= (Melts at: %.0f °C)
+tinkersforging.tooltip.too_cold=The item is not hot enough to work!
 tinkersforging.tooltip.tier_too_low=This anvil is too low tier for that item!
 tinkersforging.tooltip.no_hammer=There is no hammer in the anvil!
+
+tinkersforging.tooltip.temperature_advanced=%0.0f °C
+tinkersforging.tooltip.temperature_works_at_advanced= - Works at %.0f °C
+tinkersforging.tooltip.temperature_melts_at_advanced= - Melts at %.0f °C
+
+tinkersforging.tooltip.temperature_can_work= - Can Work
+tinkersforging.tooltip.temperature_danger= - Danger!!
+
+tinkersforging.tooltip.temperature_hot=Hot
+tinkersforging.tooltip.temperature_very_hot=Very Hot
+tinkersforging.tooltip.temperature_dark_red=Dark Red
+tinkersforging.tooltip.temperature_red=Red
+tinkersforging.tooltip.temperature_bright_red=Bright Red
+tinkersforging.tooltip.temperature_orange=Orange
+tinkersforging.tooltip.temperature_yellow=Yellow
+tinkersforging.tooltip.temperature_yellow_white=Yellow White
+tinkersforging.tooltip.temperature_white=White
+
 tinkersforging.tooltip.tinkers_anvil_title.name=Tinker's Anvil
 
 tinkersforging.tooltip.hit_light=Light Hit

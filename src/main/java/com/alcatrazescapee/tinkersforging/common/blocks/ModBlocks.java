@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
 import com.alcatrazescapee.tinkersforging.ModConfig;
+import com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge;
 import com.alcatrazescapee.tinkersforging.common.tile.TileForge;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.util.Metal;
@@ -25,13 +26,16 @@ public final class ModBlocks
     public static final BlockTinkersAnvil IRON_ANVIL = getNull();
 
     public static final BlockForge FORGE = getNull();
+    public static final BlockCharcoalForge CHARCOAL_FORGE = getNull();
+    public static final BlockCharcoalPile CHARCOAL_PILE = getNull();
 
     public static void preInit()
     {
         RegistryHelper r = RegistryHelper.get(MOD_ID);
 
         r.registerBlock(new BlockForge(), "forge");
-        // todo: more heat blocks? (charcoal pile / log pile / charcoal forge OR induction forge OR magmatic forge?)
+        r.registerBlock(new BlockCharcoalForge(), null, "charcoal_forge");
+        r.registerBlock(new BlockCharcoalPile(), null, "charcoal_pile");
 
         for (Metal metal : Metal.values())
         {
@@ -40,6 +44,7 @@ public final class ModBlocks
 
         r.registerTile(TileTinkersAnvil.class, "tinkers_anvil");
         r.registerTile(TileForge.class, "forge");
+        r.registerTile(TileCharcoalForge.class, "charcoal_forge");
     }
 
     public static void init()

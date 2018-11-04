@@ -9,6 +9,7 @@ package com.alcatrazescapee.tinkersforging.common.capability;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -33,11 +34,13 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     private float temperature;
     private long lastUpdateTick;
 
-    public ForgeItem(@Nullable NBTTagCompound nbt)
+    public ForgeItem(@Nullable ItemStack stack, @Nullable NBTTagCompound nbt)
     {
         steps = new ForgeSteps();
-        this.meltingTemperature = 1500f;
-        this.workingTemperature = 1100f;
+
+        this.meltingTemperature = CapabilityForgeItem.getMeltingTemperature(stack);
+        this.workingTemperature = CapabilityForgeItem.getWorkingTemperature(stack);
+
         deserializeNBT(nbt);
     }
 

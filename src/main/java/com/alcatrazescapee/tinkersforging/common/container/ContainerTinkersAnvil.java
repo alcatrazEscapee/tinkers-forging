@@ -22,7 +22,6 @@ import com.alcatrazescapee.alcatrazcore.inventory.container.ContainerTileInvento
 import com.alcatrazescapee.alcatrazcore.inventory.slot.SlotOutput;
 import com.alcatrazescapee.alcatrazcore.inventory.slot.SlotTileCore;
 import com.alcatrazescapee.tinkersforging.ModConfig;
-import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
@@ -156,12 +155,10 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
         AnvilRecipe recipe = ModRecipes.ANVIL.getByName(cap.getRecipeName());
         if (recipe == null)
         {
-            // todo: message?
             return false;
         }
         if (tile.getTier() < recipe.getTier())
         {
-            TinkersForging.getLog().info("Tier is {}, Requires {}.", recipe.getTier(), tile.getTier());
             player.sendMessage(new TextComponentString("" + TextFormatting.RED).appendSibling(new TextComponentTranslation(MOD_ID + ".tooltip.tier_too_low")));
             return false;
         }
@@ -170,8 +167,7 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
         {
             if (!cap.isWorkable())
             {
-                TinkersForging.getLog().info("Can't work due to temperature");
-                // todo: send message
+                player.sendMessage(new TextComponentString("" + TextFormatting.RED).appendSibling(new TextComponentTranslation(MOD_ID + ".tooltip.too_cold")));
                 return false;
             }
         }

@@ -11,18 +11,18 @@ import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 
 import com.alcatrazescapee.alcatrazcore.client.gui.GuiContainerTileCore;
-import com.alcatrazescapee.tinkersforging.common.tile.TileForge;
+import com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge;
 
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
-import static com.alcatrazescapee.tinkersforging.common.blocks.BlockForge.LIT;
+import static com.alcatrazescapee.tinkersforging.common.blocks.BlockCharcoalForge.LIT;
 import static com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem.MAX_TEMPERATURE;
-import static com.alcatrazescapee.tinkersforging.common.tile.TileForge.*;
+import static com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge.*;
 
-public class GuiForge extends GuiContainerTileCore<TileForge>
+public class GuiCharcoalForge extends GuiContainerTileCore<TileCharcoalForge>
 {
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(MOD_ID, "textures/gui/forge.png");
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(MOD_ID, "textures/gui/charcoal_forge.png");
 
-    public GuiForge(TileForge tile, Container container, InventoryPlayer playerInv, String titleKey)
+    public GuiCharcoalForge(TileCharcoalForge tile, Container container, InventoryPlayer playerInv, String titleKey)
     {
         super(tile, container, playerInv, BACKGROUND, titleKey);
     }
@@ -36,19 +36,25 @@ public class GuiForge extends GuiContainerTileCore<TileForge>
         int y = (height - ySize) / 2;
 
         int fuelTicksRemaining = tile.getField(FIELD_FUEL);
-        int fuelTicksMax = tile.getField(FIELD_FUEL_MAX);
-        if (fuelTicksRemaining > 0 && fuelTicksMax != 0 && tile.getWorld().getBlockState(tile.getPos()).getValue(LIT))
+        if (fuelTicksRemaining > 0 && FUEL_TICKS_MAX != 0 && tile.getWorld().getBlockState(tile.getPos()).getValue(LIT))
         {
             // Draw burn time
-            int burnTime = Math.round(14 * fuelTicksRemaining / (float) fuelTicksMax);
+            int burnTime = Math.round(14 * fuelTicksRemaining / (float) FUEL_TICKS_MAX);
             drawTexturedModalRect(x + 80, y + 56 - burnTime, 176, 14 - burnTime, 14, burnTime);
         }
-        // Draw temperature / burn time indicators
+
         int temperature = tile.getField(FIELD_TEMPERATURE);
-        if (temperature != 0)
+        if (temperature > 0)
         {
+            // Draw temperature
             int scaledTemp = Math.round(30 * temperature / MAX_TEMPERATURE);
             drawTexturedModalRect(x + 20, y + 61 - scaledTemp, 190, 30 - scaledTemp, 10, scaledTemp);
+        }
+
+        int charcoalLayers = (tile.getBlockMetadata() % 8 + 1) * 2;
+        if (charcoalLayers > 0)
+        {
+            drawTexturedModalRect(x + 80, y + 75 - charcoalLayers, 223, 16 - charcoalLayers, 16, charcoalLayers);
         }
     }
 }
