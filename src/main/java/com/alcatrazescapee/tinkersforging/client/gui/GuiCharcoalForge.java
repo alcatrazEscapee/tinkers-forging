@@ -11,6 +11,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 
 import com.alcatrazescapee.alcatrazcore.client.gui.GuiContainerTileCore;
+import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge;
 
 import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
@@ -36,10 +37,10 @@ public class GuiCharcoalForge extends GuiContainerTileCore<TileCharcoalForge>
         int y = (height - ySize) / 2;
 
         int fuelTicksRemaining = tile.getField(FIELD_FUEL);
-        if (fuelTicksRemaining > 0 && FUEL_TICKS_MAX != 0 && tile.getWorld().getBlockState(tile.getPos()).getValue(LIT))
+        if (fuelTicksRemaining > 0 && tile.getWorld().getBlockState(tile.getPos()).getValue(LIT))
         {
             // Draw burn time
-            int burnTime = Math.round(14 * fuelTicksRemaining / (float) FUEL_TICKS_MAX);
+            int burnTime = (int) Math.round(14 * fuelTicksRemaining / (FUEL_TICKS_MAX * ModConfig.GENERAL.charcoalForgeFuelModifier));
             drawTexturedModalRect(x + 80, y + 56 - burnTime, 176, 14 - burnTime, 14, burnTime);
         }
 

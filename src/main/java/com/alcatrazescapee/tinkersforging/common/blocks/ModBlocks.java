@@ -6,6 +6,9 @@
 
 package com.alcatrazescapee.tinkersforging.common.blocks;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
@@ -24,6 +27,10 @@ public final class ModBlocks
 {
     @GameRegistry.ObjectHolder("tinkers_anvil/iron")
     public static final BlockTinkersAnvil IRON_ANVIL = getNull();
+
+    @Nonnull
+    @SuppressWarnings("ConstantConditions")
+    public static final Block block = null;
 
     public static final BlockForge FORGE = getNull();
     public static final BlockCharcoalForge CHARCOAL_FORGE = getNull();

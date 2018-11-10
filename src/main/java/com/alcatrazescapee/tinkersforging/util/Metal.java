@@ -24,7 +24,7 @@ public enum Metal
 {
     // Vanilla Materials
     IRON("ingotIron", new Color(255, 255, 255), Item.ToolMaterial.IRON, true),
-    GOLD("ingotGold", new Color(243, 234, 83), Item.ToolMaterial.GOLD, false),
+    GOLD("ingotGold", new Color(255, 248, 53), Item.ToolMaterial.GOLD, false),
     DIAMOND("gemDiamond", new Color(95, 208, 241), Item.ToolMaterial.DIAMOND, false),
     // Common Modded Materials
     COPPER("ingotCopper", new Color(207, 134, 101)),
@@ -34,14 +34,14 @@ public enum Metal
     LEAD("ingotLead", new Color(101, 82, 127)),
     SILVER("ingotSilver", new Color(239, 246, 255)),
     ALUMINIUM("ingotAluminium", new Color(224, 224, 224)),
-    ELECTRUM("ingotElectrum", new Color(253, 254, 153)),
+    ELECTRUM("ingotElectrum", new Color(255, 241, 94)),
     // Tinkers Construct Materials
     ARDITE("ingotArdite", new Color(220, 84, 43)),
     COBALT("ingotCobalt", new Color(35, 118, 221)),
     MANYULLYN("ingotManyullyn", new Color(113, 65, 172)),
     PIGIRON(() -> Loader.isModLoaded("tconstruct") && OreDictionary.doesOreNameExist("ingotPigiron"), new Color(254, 214, 214)),
     // Base Metals
-    BRASS("ingotBrass", new Color(227, 134, 31)),
+    BRASS("ingotBrass", new Color(227, 174, 31)),
     MITHRIL("ingotMithril", new Color(230, 250, 240)),
     INVAR("ingotInvar", new Color(160, 173, 189));
 
@@ -115,11 +115,9 @@ public enum Metal
         switch (this)
         {
             case IRON:
-                return ModConfig.TOOLS.tierIron;
             case GOLD:
-                return ModConfig.TOOLS.tierGold;
             case DIAMOND:
-                return ModConfig.TOOLS.tierDiamond;
+                return material != null ? material.getHarvestLevel() : 1;
             case COPPER:
                 return ModConfig.TOOLS.tierCopper;
             case TIN:

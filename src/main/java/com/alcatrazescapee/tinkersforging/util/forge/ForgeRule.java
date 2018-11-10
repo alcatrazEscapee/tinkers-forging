@@ -78,8 +78,8 @@ public enum ForgeRule
         }
         else
         {
-            iconU = type.getTexU() + 3;
-            iconV = type.getTexV() + 3;
+            iconU = type.textureU + 3;
+            iconV = type.textureV + 3;
         }
     }
 

@@ -9,9 +9,9 @@ tinkersforging.tooltip.too_cold=The item is not hot enough to work!
 tinkersforging.tooltip.tier_too_low=This anvil is too low tier for that item!
 tinkersforging.tooltip.no_hammer=There is no hammer in the anvil!
 
-tinkersforging.tooltip.temperature_advanced=%0.0f °C
-tinkersforging.tooltip.temperature_works_at_advanced= - Works at %.0f °C
-tinkersforging.tooltip.temperature_melts_at_advanced= - Melts at %.0f °C
+tinkersforging.tooltip.temperature_advanced=%d °C
+tinkersforging.tooltip.temperature_works_at_advanced= - Works at %d °C
+tinkersforging.tooltip.temperature_melts_at_advanced= - Melts at %d °C
 
 tinkersforging.tooltip.temperature_can_work= - Can Work
 tinkersforging.tooltip.temperature_danger= - Danger!!

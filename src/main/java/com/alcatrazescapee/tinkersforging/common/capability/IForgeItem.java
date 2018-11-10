@@ -74,7 +74,7 @@ public interface IForgeItem extends INBTSerializable<NBTTagCompound>
         if (ModConfig.GENERAL.enableAdvancedTemperatureTooltips)
         {
             // Temperature number
-            tooltip = I18n.format(MOD_ID + ".tooltip.temperature_advanced", temp);
+            tooltip = Heat.getColorFor(temp) + I18n.format(MOD_ID + ".tooltip.temperature_advanced", (int) temp);
             if (isWorkable())
             {
                 // Danger / Workable tag
@@ -84,12 +84,12 @@ public interface IForgeItem extends INBTSerializable<NBTTagCompound>
                     tooltip += TextFormatting.WHITE + I18n.format(MOD_ID + ".tooltip.temperature_can_work");
 
                 // Melts at number
-                tooltip += I18n.format(MOD_ID + ".tooltip.temperature_melts_at_advanced", getMeltingTemperature());
+                tooltip += I18n.format(MOD_ID + ".tooltip.temperature_melts_at_advanced", (int) getMeltingTemperature());
             }
             else
             {
                 // Workable at number
-                tooltip += TextFormatting.WHITE + I18n.format(MOD_ID + ".tooltip.temperature_melts_at_advanced", getWorkableTemperature());
+                tooltip += TextFormatting.WHITE + I18n.format(MOD_ID + ".tooltip.temperature_works_at_advanced", (int) getWorkableTemperature());
             }
         }
         else

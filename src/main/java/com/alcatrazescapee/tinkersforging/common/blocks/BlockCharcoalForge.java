@@ -42,6 +42,7 @@ import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
 import com.alcatrazescapee.alcatrazcore.util.compat.FireRegistry;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.client.ModGuiHandler;
+import com.alcatrazescapee.tinkersforging.client.particle.ParticleForgeFlame;
 import com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge;
 import com.alcatrazescapee.tinkersforging.util.property.IBurnBlock;
 import com.alcatrazescapee.tinkersforging.util.property.IPileBlock;
@@ -96,9 +97,7 @@ public class BlockCharcoalForge extends BlockTileCore implements IPileBlock, IBu
             TileCharcoalForge tile = CoreHelpers.getTE(worldIn, pos, TileCharcoalForge.class);
             if (tile != null)
             {
-                tile.updateClosedState(worldIn, pos);
-                // todo: this
-                //((TileEntityForge) te).closed = updateSideBlocks(worldIn, pos);
+                tile.updateClosedState();
             }
         }
     }
@@ -174,8 +173,7 @@ public class BlockCharcoalForge extends BlockTileCore implements IPileBlock, IBu
 
             if (rand.nextFloat() <= 0.3)
             {
-                // todo: generate flame particle
-                //NoTreePunching.proxy.generateParticle(worldIn, pos, 1);
+                ParticleForgeFlame.generateCharcoalForge(worldIn, pos, rand);
             }
         }
     }
@@ -209,9 +207,7 @@ public class BlockCharcoalForge extends BlockTileCore implements IPileBlock, IBu
                 TileCharcoalForge tile = CoreHelpers.getTE(world, pos, TileCharcoalForge.class);
                 if (tile != null)
                 {
-                    // todo: this
-                    tile.updateClosedState(world, pos);
-                    //((TileEntityForge) te).closed = updateSideBlocks(world, pos);
+                    tile.updateClosedState();
                 }
             }
             return true;

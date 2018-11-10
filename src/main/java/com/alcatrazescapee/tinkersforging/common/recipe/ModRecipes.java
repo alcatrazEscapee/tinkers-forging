@@ -139,16 +139,13 @@ public final class ModRecipes
                     }
                 }
 
-                // Hammer recipes (if config is set to not remove crafting recipes)
-                if (!ModConfig.GENERAL.removeCraftingRecipes)
+                // Hammer Head -> Hammer recipes
+                ItemStack hammer = ItemHammer.get(metal, 1);
+                ItemStack hammerHead = ItemToolHead.get(ItemType.HAMMER_HEAD, metal, 1);
+                if (!hammer.isEmpty() && !hammerHead.isEmpty())
                 {
-                    ItemStack hammer = ItemHammer.get(metal, 1);
-                    ItemStack hammerHead = ItemToolHead.get(ItemType.HAMMER_HEAD, metal, 1);
-                    if (!hammer.isEmpty() && !hammerHead.isEmpty())
-                    {
-                        ResourceLocation loc = new ResourceLocation(MOD_ID, "hammer_" + metal.name().toLowerCase());
-                        r.register(new ShapedOreRecipe(loc, hammer, "H", "S", 'S', "stickWood", 'H', hammerHead).setRegistryName(loc));
-                    }
+                    ResourceLocation loc = new ResourceLocation(MOD_ID, "hammer_" + metal.name().toLowerCase());
+                    r.register(new ShapedOreRecipe(loc, hammer, "H", "S", 'S', "stickWood", 'H', hammerHead).setRegistryName(loc));
                 }
 
                 // Anvil recipes

@@ -28,6 +28,15 @@ public enum Heat
     YELLOW_WHITE(1200f, 1350f, TextFormatting.YELLOW),
     WHITE(1350f, Float.MAX_VALUE, TextFormatting.WHITE);
 
+    public static String getColorFor(float temperature)
+    {
+        Heat heat = Arrays.stream(Heat.values())
+                .filter(x -> x.min <= temperature && temperature < x.max)
+                .findFirst()
+                .orElse(WHITE);
+        return "" + heat.format;
+    }
+
     @Nonnull
     @SideOnly(Side.CLIENT)
     public static String getTooltipFor(float temperature)

@@ -14,13 +14,12 @@ public final class ModConstants
 
     // Tinkers Construct
     public static final String MATERIAL_NBT_KEY = "Material";
+    public static final String VERSION = "GRADLE:VERSION";
     private static final String FORGE_MAX = "15.0.0.0";
 
+    // Versioning
     private static final String ALC_MIN = "1.0.2";
     private static final String ALC_MAX = "1.2.0";
-
-    public static final String VERSION = "GRADLE:VERSION";
-    // Versioning
     private static final String FORGE_MIN = "14.23.4.2705";
     public static final String DEPENDENCIES = "required-after:forge@[" + FORGE_MIN + "," + FORGE_MAX + ");" +
             "required-after:alcatrazcore@[" + ALC_MIN + "," + ALC_MAX + ");" +

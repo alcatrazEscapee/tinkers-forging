@@ -193,11 +193,19 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
     @Override
     public void onBreakBlock()
     {
-        // todo: clear NBT of stack in input slot
-        for (int i = 0; i < inventory.getSlots(); ++i)
+        // -1 is to skip the display slot
+        for (int i = 0; i < inventory.getSlots() - 1; ++i)
         {
-            if (i != SLOT_DISPLAY)
+            if (i == SLOT_INPUT)
+            {
+                ItemStack input = inventory.getStackInSlot(i);
+                CapabilityForgeItem.clearStackCheckRecipe(input);
+                CoreHelpers.dropItemInWorld(world, pos, input);
+            }
+            else
+            {
                 CoreHelpers.dropItemInWorld(world, pos, inventory.getStackInSlot(i));
+            }
         }
     }
 

@@ -30,12 +30,12 @@ public enum ForgeStep
         return id >= 0 && id < values.length ? values[id] : null;
     }
 
-    private final int stepAmount;
+    final int textureU;
+    final int textureV;
 
+    private final int stepAmount;
     private final int xPos;
     private final int yPos;
-    private final int textureU;
-    private final int textureV;
 
     ForgeStep(int stepAmount, int xPos, int yPos, int textureU, int textureV)
     {

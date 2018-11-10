@@ -57,22 +57,6 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
         }
     }
 
-    public static boolean updateSideBlocks(World world, BlockPos pos)
-    {
-        if (!world.isRemote)
-        {
-            for (EnumFacing face : EnumFacing.HORIZONTALS)
-            {
-                IBlockState state = world.getBlockState(pos.offset(face));
-                if (!isValidSideBlock(state))
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     private static boolean tryLight(World world, BlockPos pos)
     {
         // Replace the block
@@ -96,6 +80,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
         if (tile != null)
         {
             tile.consumeFuel();
+            tile.updateClosedState();
         }
         return true;
     }
@@ -116,7 +101,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
         super(5);
     }
 
-    public void updateClosedState(World world, BlockPos pos)
+    public void updateClosedState()
     {
         for (EnumFacing face : EnumFacing.HORIZONTALS)
         {
@@ -133,12 +118,12 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
     public void update()
     {
         // todo: remove
-        if (world.getTotalWorldTime() % 20 == 0)
-            TinkersForging.getLog().info("Charcoal Forge Tick: Fuel {} | Temp: {}", fuelTicksRemaining, temperature);
+        //if (world.getTotalWorldTime() % 20 == 0)
+        //    TinkersForging.getLog().info("Charcoal Forge Tick: Fuel {} | Temp: {}", fuelTicksRemaining, temperature);
         if (fuelTicksRemaining > 0)
         {
             // Consume fuel ticks
-            fuelTicksRemaining--;
+            fuelTicksRemaining -= isClosed ? 1 : 2;
 
             if (fuelTicksRemaining == 0)
             {
@@ -147,15 +132,24 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
                 if (fuelTicksRemaining == 0)
                 {
                     // Couldn't consume any more fuel
-                    world.setBlockState(pos, world.getBlockState(pos).withProperty(LIT, false));
+                    IBlockState state = world.getBlockState(pos);
+                    if (state.getBlock() == ModBlocks.CHARCOAL_FORGE)
+                    {
+                        world.setBlockState(pos, world.getBlockState(pos).withProperty(LIT, false));
+                    }
+                    else
+                    {
+                        onBreakBlock();
+                        world.setBlockToAir(pos);
+                    }
                 }
             }
 
             // Update temperature
-            float actualMaxTemp = isClosed ? MAX_TEMPERATURE : MAX_TEMPERATURE * 0.6f;
+            float actualMaxTemp = isClosed ? MAX_TEMPERATURE : MAX_TEMPERATURE * 0.35f;
             if (temperature < actualMaxTemp)
             {
-                temperature += (float) ModConfig.GENERAL.temperatureModifierCharcoalForge;
+                temperature += (float) ModConfig.GENERAL.charcoalForgeTemperatureModifier;
                 if (temperature > actualMaxTemp)
                     temperature = actualMaxTemp;
             }
@@ -170,7 +164,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
                     // Add temperature
                     if (cap.getTemperature() < temperature)
                     {
-                        CapabilityForgeItem.addTemp(stack, cap, 2.0f);
+                        CapabilityForgeItem.addTemp(stack, cap, (float) ModConfig.GENERAL.charcoalForgeTemperatureModifier);
                     }
 
                     if (cap.isMolten())
@@ -185,7 +179,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
         else if (temperature > 0)
         {
             // When it is not burning fuel, then decrease the temperature until it reaches zero
-            temperature -= (float) ModConfig.GENERAL.temperatureModifierCharcoalForge;
+            temperature -= (float) ModConfig.GENERAL.charcoalForgeTemperatureModifier;
             if (temperature < 0)
                 temperature = 0;
         }
@@ -264,14 +258,10 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
     {
         // Consume fuel
         IBlockState state = world.getBlockState(pos);
-        if (state.getValue(LAYERS) == 1)
-        {
-            world.setBlockToAir(pos);
-        }
-        else
+        if (state.getValue(LAYERS) > 2)
         {
             world.setBlockState(pos, state.withProperty(LAYERS, state.getValue(LAYERS) - 1));
-            fuelTicksRemaining = FUEL_TICKS_MAX;
+            fuelTicksRemaining = (int) (FUEL_TICKS_MAX * ModConfig.GENERAL.charcoalForgeFuelModifier);
         }
     }
 }
