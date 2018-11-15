@@ -29,7 +29,7 @@ import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.util.Metal;
 
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 import static net.minecraft.util.text.TextFormatting.GREEN;
 
 @SideOnly(Side.CLIENT)

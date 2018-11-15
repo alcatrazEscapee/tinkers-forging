@@ -1,0 +1,20 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        " B ",
+        "B B",
+        "BFB"
+    ],
+    "key": {
+        "F": {
+            "item": "minecraft:furnace"
+        },
+        "B": {
+            "type": "forge:ore_dict",
+            "ore": "ingotBrick"
+        }
+    },
+    "result": {
+        "item": "tinkersforging:forge"
+    }
+}

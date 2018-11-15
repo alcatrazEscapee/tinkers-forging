@@ -26,6 +26,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -41,10 +42,11 @@ import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.ForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
+import com.alcatrazescapee.tinkersforging.integration.patchouli.PatchouliIntegration;
 import com.alcatrazescapee.tinkersforging.util.TickTimer;
 import slimeknights.tconstruct.smeltery.events.TinkerCastingEvent;
 
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
 @Mod.EventBusSubscriber(modid = MOD_ID)
 @SuppressWarnings("unused")
@@ -80,6 +82,11 @@ public final class ModEventHandler
         if (event.getModID().equals(MOD_ID))
         {
             ConfigManager.sync(MOD_ID, Config.Type.INSTANCE);
+
+            if (Loader.isModLoaded("patchouli"))
+            {
+                PatchouliIntegration.resetTooltipFlag();
+            }
         }
     }
 
@@ -111,7 +118,7 @@ public final class ModEventHandler
     public static void onTinkersCastingEvent(TinkerCastingEvent.OnCasted event)
     {
         IForgeItem cap = event.output.getCapability(CapabilityForgeItem.CAPABILITY, null);
-        if (cap != null && ModConfig.GENERAL.enableTemperatureMechanics)
+        if (cap != null)
         {
             cap.setTemperature(cap.getMeltingTemperature() - 1f);
             event.output.setTagInfo(CapabilityForgeItem.NBT_KEY, cap.serializeNBT());

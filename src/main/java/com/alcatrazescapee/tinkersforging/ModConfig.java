@@ -8,7 +8,7 @@ package com.alcatrazescapee.tinkersforging;
 
 import net.minecraftforge.common.config.Config;
 
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
 @Config(modid = MOD_ID, category = "")
 @SuppressWarnings("WeakerAccess")
@@ -19,12 +19,17 @@ public final class ModConfig
 
     public static class GeneralConfig
     {
-        @Config.Name("Use Tinker's Construct")
+        @Config.Name("Tinker's Construct Compat")
         @Config.RequiresMcRestart
-        @Config.Comment({"Should this mod default to using Tinker's Construct metals, if they are enabled?",
-                "If true and Tinker's Construct is found, no new tool parts will be registered, and all tool part recipes will use Tinker's Materials",
+        @Config.Comment({"Should this mod default to using Tinker's Construct tool parts, if it is enabled?",
+                "If true and Tinker's Construct is found, no new tool parts will be registered, and all tool part recipes will use Tinker's parts",
                 "If false, or if Tinker's Construct is not found, Tinker's Forging will use its own tool parts for recipes."})
         public boolean useTinkersConstruct = true;
+
+        @Config.Name("Construct's Armory Compat")
+        @Config.RequiresMcRestart
+        @Config.Comment("Should this mod add recipes for Construct's Armory's armor parts, if it is enabled?")
+        public boolean useConstructsArmory = true;
 
         @Config.Name("Respect Tiers")
         @Config.RequiresMcRestart
@@ -35,10 +40,6 @@ public final class ModConfig
         @Config.RequiresMcRestart
         @Config.Comment("If this is true, any recipes that are added to the anvil that have a crafting equivalent (i.e. a shovel) will have their normal crafting recipes removed")
         public boolean removeCraftingRecipes = true;
-
-        @Config.Name("Enable Temperature Mechanics")
-        @Config.Comment("Enable temperature mechanics: items can only be worked if they are a certain temperature?")
-        public boolean enableTemperatureMechanics = true;
 
         @Config.Name("Enable Advanced Temperature Tooltips")
         @Config.Comment("If this is true, you will be able to see the exact temperature (in °C) of any items - including their exact workable and melting temperatures")
@@ -56,7 +57,7 @@ public final class ModConfig
 
         @Config.Name("Charcoal Forge Fuel Modifier")
         @Config.RangeDouble(min = 0.1, max = 10)
-        @Config.Comment("How long a single piece of charcoal lasts in the charcoal forge, realitive to in a furnace. Higher values = fuel lasts longer")
+        @Config.Comment("How long a single piece of charcoal lasts in the charcoal forge, relative to in a furnace. Higher values = fuel lasts longer")
         public double charcoalForgeFuelModifier = 1.0;
 
         @Config.Name("Brick Forge Temperature Modifier")
@@ -66,7 +67,7 @@ public final class ModConfig
 
         @Config.Name("Brick Forge Fuel Multiplier")
         @Config.RangeDouble(min = 0.1, max = 10)
-        @Config.Comment("The modifier for how fuel efficient the brick forge is, realitive to a furnace. Higher values = fuel lasts longer")
+        @Config.Comment("The modifier for how fuel efficient the brick forge is, relative to a furnace. Higher values = fuel lasts longer")
         public double forgeFuelModifier = 1.0;
 
         private GeneralConfig() {}

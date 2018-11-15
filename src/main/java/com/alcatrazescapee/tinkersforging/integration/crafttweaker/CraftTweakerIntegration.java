@@ -29,7 +29,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenRegister
 @SuppressWarnings("unused")
 @ZenClass("mods.tinkersforging.Anvil")
-public class CraftTweakerIntegration
+public final class CraftTweakerIntegration
 {
     @ZenMethod
     public static void add(IIngredient input, IItemStack output, int tier, String... ruleNames)

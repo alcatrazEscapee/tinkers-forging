@@ -73,6 +73,11 @@ tinkersforging.tooltip.shrink_third_last=Shrink Third Last
 
 tinkersforging.jei.category.anvil=Forging
 
+# Items
+
+item.tinkersforging:hammer.wood.name=Wooden Tinker's Hammer
+item.tinkersforging:hammer.stone.name=Stone Tinker's Hammer
+
 # Blocks
 tile.tinkersforging:charcoal_pile.name=Charcoal Pile
 tile.tinkersforging:charcoal_forge.name=Charcoal Forge

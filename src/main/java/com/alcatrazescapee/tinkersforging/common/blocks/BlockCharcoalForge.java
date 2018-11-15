@@ -200,7 +200,7 @@ public class BlockCharcoalForge extends BlockTileCore implements IPileBlock, IBu
             if (!world.isRemote)
             {
                 world.setBlockState(pos, state.withProperty(LIT, true));
-                TileCharcoalForge.lightNearbyForges(world, pos);
+                TileCharcoalForge.tryLight(world, pos);
                 stack.damageItem(1, player);
                 world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
 

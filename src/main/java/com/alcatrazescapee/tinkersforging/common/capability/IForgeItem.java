@@ -22,7 +22,7 @@ import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeStep;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeSteps;
 
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
 public interface IForgeItem extends INBTSerializable<NBTTagCompound>
 {

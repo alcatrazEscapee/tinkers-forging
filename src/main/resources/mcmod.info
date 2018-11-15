@@ -1,18 +1,18 @@
 [
-  {
-    "modid": "tinkersforging",
-    "name": "Tinker's Forging",
-    "description": "Adds Simple TFC-style Forging to 1.12+",
-    "version": "${version}",
-    "mcversion": "${mcversion}",
-    "url": "",
-    "updateUrl": "",
-    "authorList": [
-      "alcatrazEscapee"
-    ],
-    "credits": "",
-    "logoFile": "",
-    "screenshots": [],
-    "dependencies": []
-  }
+    {
+        "modid": "tinkersforging",
+        "name": "Tinker's Forging",
+        "description": "Adds Simple TFC-style Forging to 1.12+",
+        "version": "${version}",
+        "mcversion": "${mcversion}",
+        "url": "",
+        "updateUrl": "",
+        "authorList": [
+            "alcatrazEscapee"
+        ],
+        "credits": "",
+        "logoFile": "",
+        "screenshots": [],
+        "dependencies": []
+    }
 ]

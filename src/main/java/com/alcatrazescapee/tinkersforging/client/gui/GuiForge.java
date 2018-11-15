@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import com.alcatrazescapee.alcatrazcore.client.gui.GuiContainerTileCore;
 import com.alcatrazescapee.tinkersforging.common.tile.TileForge;
 
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 import static com.alcatrazescapee.tinkersforging.common.blocks.BlockForge.LIT;
 import static com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem.MAX_TEMPERATURE;
 import static com.alcatrazescapee.tinkersforging.common.tile.TileForge.*;

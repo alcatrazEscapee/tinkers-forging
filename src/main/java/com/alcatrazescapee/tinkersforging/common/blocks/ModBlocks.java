@@ -12,14 +12,13 @@ import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
-import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge;
 import com.alcatrazescapee.tinkersforging.common.tile.TileForge;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.util.Metal;
 
 import static com.alcatrazescapee.alcatrazcore.util.CoreHelpers.getNull;
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 import static com.alcatrazescapee.tinkersforging.client.ModCreativeTabs.TAB_ITEMS;
 
 @GameRegistry.ObjectHolder(value = MOD_ID)
@@ -40,7 +39,7 @@ public final class ModBlocks
     {
         RegistryHelper r = RegistryHelper.get(MOD_ID);
 
-        r.registerBlock(new BlockForge(), "forge");
+        r.registerBlock(new BlockForge(), "forge", TAB_ITEMS);
         r.registerBlock(new BlockCharcoalForge(), null, "charcoal_forge");
         r.registerBlock(new BlockCharcoalPile(), null, "charcoal_pile");
 
@@ -61,11 +60,6 @@ public final class ModBlocks
         {
             if (block.getMetal().isEnabled())
                 block.setCreativeTab(TAB_ITEMS);
-        }
-        // Temperature blocks
-        if (ModConfig.GENERAL.enableTemperatureMechanics)
-        {
-            FORGE.setCreativeTab(TAB_ITEMS);
         }
     }
 }

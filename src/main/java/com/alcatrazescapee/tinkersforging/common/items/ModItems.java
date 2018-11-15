@@ -19,7 +19,7 @@ import com.alcatrazescapee.tinkersforging.util.ItemType;
 import com.alcatrazescapee.tinkersforging.util.Metal;
 
 import static com.alcatrazescapee.alcatrazcore.util.CoreHelpers.getNull;
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 import static com.alcatrazescapee.tinkersforging.client.ModCreativeTabs.TAB_ITEMS;
 
 @GameRegistry.ObjectHolder(value = MOD_ID)
@@ -38,14 +38,15 @@ public final class ModItems
             if (tool != null)
                 r.registerItem(new ItemHammer(metal, tool), "hammer/" + metal.name());
 
+            r.registerItem(new ItemToolHead(ItemType.HAMMER_HEAD, metal), ItemType.HAMMER_HEAD.name() + "/" + metal.name());
+
+            // Below this line is not loaded if using TiCon compat
             if (Loader.isModLoaded("tconstruct") && ModConfig.GENERAL.useTinkersConstruct)
                 continue;
-            // Below this line is not loaded if using TiCon compat
 
-            for (ItemType type : ItemType.values())
+            for (ItemType type : ItemType.tools())
             {
-                if (type.isItemType())
-                    r.registerItem(new ItemToolHead(type, metal), type.name() + "/" + metal.name());
+                r.registerItem(new ItemToolHead(type, metal), type.name() + "/" + metal.name());
             }
         }
 

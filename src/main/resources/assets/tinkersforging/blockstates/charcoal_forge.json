@@ -1,56 +1,56 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "tinkersforging:charcoal_pile/1",
-    "textures": {
-      "all": "tinkersforging:blocks/charcoal_pile",
-      "particle": "tinkersforging:blocks/charcoal_pile"
+    "forge_marker": 1,
+    "defaults": {
+        "model": "tinkersforging:charcoal_pile/1",
+        "textures": {
+            "all": "tinkersforging:blocks/charcoal_pile",
+            "particle": "tinkersforging:blocks/charcoal_pile"
+        }
+    },
+    "variants": {
+        "lit": {
+            "true": {
+                "textures": {
+                    "top": "tinkersforging:blocks/charcoal_pile_lit"
+                }
+            },
+            "false": {
+                "textures": {
+                    "top": "tinkersforging:blocks/charcoal_pile"
+                }
+            }
+        },
+        "type": {
+            "1": {
+                "model": "tinkersforging:charcoal_pile/1"
+            },
+            "2": {
+                "model": "tinkersforging:charcoal_pile/2"
+            },
+            "3": {
+                "model": "tinkersforging:charcoal_pile/3"
+            },
+            "4": {
+                "model": "tinkersforging:charcoal_pile/4"
+            },
+            "5": {
+                "model": "tinkersforging:charcoal_pile/5"
+            },
+            "6": {
+                "model": "tinkersforging:charcoal_pile/6"
+            },
+            "7": {
+                "model": "tinkersforging:charcoal_pile/7"
+            },
+            "8": {
+                "model": "tinkersforging:charcoal_pile/8"
+            }
+        },
+        "normal": [
+            {}
+        ],
+        "inventory": [
+            {}
+        ]
     }
-  },
-  "variants": {
-    "lit": {
-      "true": {
-        "textures": {
-          "top": "tinkersforging:blocks/charcoal_pile_lit"
-        }
-      },
-      "false": {
-        "textures": {
-          "top": "tinkersforging:blocks/charcoal_pile"
-        }
-      }
-    },
-    "type": {
-      "1": {
-        "model": "tinkersforging:charcoal_pile/1"
-      },
-      "2": {
-        "model": "tinkersforging:charcoal_pile/2"
-      },
-      "3": {
-        "model": "tinkersforging:charcoal_pile/3"
-      },
-      "4": {
-        "model": "tinkersforging:charcoal_pile/4"
-      },
-      "5": {
-        "model": "tinkersforging:charcoal_pile/5"
-      },
-      "6": {
-        "model": "tinkersforging:charcoal_pile/6"
-      },
-      "7": {
-        "model": "tinkersforging:charcoal_pile/7"
-      },
-      "8": {
-        "model": "tinkersforging:charcoal_pile/8"
-      }
-    },
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {}
-    ]
-  }
 }

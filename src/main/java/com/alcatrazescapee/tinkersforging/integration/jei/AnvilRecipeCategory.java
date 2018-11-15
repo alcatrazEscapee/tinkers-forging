@@ -30,8 +30,8 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_NAME;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_NAME;
 import static com.alcatrazescapee.tinkersforging.integration.jei.JEIIntegration.ANVIL_UID;
 
 @ParametersAreNonnullByDefault

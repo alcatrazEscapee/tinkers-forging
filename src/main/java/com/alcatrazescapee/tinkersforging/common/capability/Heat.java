@@ -14,12 +14,12 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
 public enum Heat
 {
-    HOT(1f, 100f, TextFormatting.GRAY),
-    VERY_HOT(100f, 200f, TextFormatting.GRAY),
+    HOT(1f, 100f, TextFormatting.DARK_GRAY),
+    VERY_HOT(100f, 200f, TextFormatting.DARK_GRAY),
     DARK_RED(200f, 400f, TextFormatting.DARK_RED),
     RED(400f, 600f, TextFormatting.DARK_RED),
     BRIGHT_RED(600f, 900f, TextFormatting.RED),

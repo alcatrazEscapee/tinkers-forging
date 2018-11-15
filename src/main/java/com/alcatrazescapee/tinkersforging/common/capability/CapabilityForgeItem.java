@@ -22,7 +22,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import com.alcatrazescapee.tinkersforging.ModConfig;
 
 import static com.alcatrazescapee.alcatrazcore.util.CoreHelpers.getNull;
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
 @ParametersAreNonnullByDefault
 public final class CapabilityForgeItem
@@ -103,11 +103,13 @@ public final class CapabilityForgeItem
             if (meltTemp == DEFAULT_MELT_TEMPERATURE)
                 return DEFAULT_WORK_TEMPERATURE;
             else if (meltTemp > 1500)
-                return 1400;
+                return 1350;
             else if (meltTemp >= 1000)
                 return meltTemp - 400;
             else if (meltTemp >= 500)
                 return meltTemp - 250;
+            else if (meltTemp >= 300)
+                return meltTemp - 150;
             else if (meltTemp >= 200)
                 return 100;
             else
@@ -154,12 +156,11 @@ public final class CapabilityForgeItem
             case "steel": // 1370.0
                 return 1350;
             case "nickel": // 1455.0
-                return 1450;
             case "invar": // 1427.0
                 return 1450;
             case "cobalt": // 1495.0
             case "iron": // 1538.0
-                return 1500;
+                return 1600;
             case "ardite": // ???
             case "manyullyn": // ???
                 return 2100;

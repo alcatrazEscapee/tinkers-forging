@@ -103,15 +103,6 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
         ItemStack stack = inventory.getStackInSlot(SLOT_INPUT);
         IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);
 
-        /* Only for debugging
-        TinkersForging.getLog().info("Insert | Recipe: {} | NBT: {} | Display: {} | Cap: {} -> {}",
-                (cachedAnvilRecipe == null ? "<null>" : cachedAnvilRecipe.getName()),
-                stack.hasTagCompound() ? (stack.getTagCompound().getCompoundTag(CapabilityForgeItem.NBT_KEY).getString("recipe")) : "<null>",
-                inventory.getStackInSlot(SLOT_DISPLAY).getDisplayName(),
-                cap != null,
-                cap == null ? "<null>" : cap.getRecipeName());
-        */
-
         if (cap != null)
         {
             if (cachedAnvilRecipe == null || !cachedAnvilRecipe.test(stack))
@@ -159,13 +150,6 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
             {
                 inventory.setStackInSlot(SLOT_DISPLAY, ItemStack.EMPTY);
             }
-
-            /* Only for debugging
-            TinkersForging.getLog().info("Update | Recipe: {} | NBT: {} | Display: {} |",
-                    (cachedAnvilRecipe == null ? "null" : cachedAnvilRecipe.getName()),
-                    stack.hasTagCompound() ? (stack.getTagCompound().getCompoundTag(CapabilityForgeItem.NBT_KEY).getString("recipe")) : "null",
-                    inventory.getStackInSlot(SLOT_DISPLAY).getDisplayName());
-            */
         }
         else
         {
@@ -277,7 +261,13 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
                 else if (workingProgress < 0 || workingProgress >= 150)
                 {
                     // Consume input, produce no output
-                    inventory.setStackInSlot(SLOT_INPUT, cachedAnvilRecipe.consumeInput(input));
+                    ItemStack newInput = cachedAnvilRecipe.consumeInput(input);
+                    if (!newInput.isEmpty())
+                    {
+                        // Reset the capability data
+                        CapabilityForgeItem.clearStack(newInput);
+                    }
+                    inventory.setStackInSlot(SLOT_INPUT, newInput);
                     world.playSound(null, pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0f, 1.0f);
                 }
             }

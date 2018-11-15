@@ -7,6 +7,7 @@
 package com.alcatrazescapee.tinkersforging;
 
 import org.apache.logging.log4j.Logger;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -22,14 +23,28 @@ import com.alcatrazescapee.tinkersforging.common.items.ModItems;
 import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilButton;
 import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilRecipeUpdate;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
+import com.alcatrazescapee.tinkersforging.integration.patchouli.PatchouliIntegration;
 import com.alcatrazescapee.tinkersforging.util.TickTimer;
 
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_NAME;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_NAME;
 
-@Mod(modid = MOD_ID, version = ModConstants.VERSION, dependencies = ModConstants.DEPENDENCIES, name = MOD_NAME, useMetadata = true)
+@SuppressWarnings({"WeakerAccess", "unused"})
+@Mod(modid = MOD_ID, version = TinkersForging.VERSION, dependencies = TinkersForging.DEPENDENCIES, name = MOD_NAME, useMetadata = true)
 public final class TinkersForging
 {
+    public static final String MOD_ID = "tinkersforging";
+    public static final String MOD_NAME = "Tinkers Forging";
+    public static final String VERSION = "GRADLE:VERSION";
+
+    // Versioning
+    private static final String ALC_MIN = "1.0.2";
+    private static final String ALC_MAX = "2.0.0";
+    private static final String FORGE_MIN = "14.23.4.2705";
+    private static final String FORGE_MAX = "15.0.0.0";
+
+    public static final String DEPENDENCIES = "required-after:forge@[" + FORGE_MIN + "," + FORGE_MAX + ");" + "required-after:alcatrazcore@[" + ALC_MIN + "," + ALC_MAX + ");" + "after:tconstruct;";
+
     @Mod.Instance
     private static TinkersForging instance;
     private static Logger logger;
@@ -73,6 +88,11 @@ public final class TinkersForging
     public void init(FMLInitializationEvent event)
     {
         TickTimer.reset();
+
+        if (Loader.isModLoaded("patchouli"))
+        {
+            PatchouliIntegration.init();
+        }
 
         // Init Managers
         ModItems.init();

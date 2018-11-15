@@ -13,8 +13,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.oredict.OreDictionary;
 
+import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
 import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.ModMaterials;
@@ -39,7 +39,7 @@ public enum Metal
     ARDITE("ingotArdite", new Color(220, 84, 43)),
     COBALT("ingotCobalt", new Color(35, 118, 221)),
     MANYULLYN("ingotManyullyn", new Color(113, 65, 172)),
-    PIGIRON(() -> Loader.isModLoaded("tconstruct") && OreDictionary.doesOreNameExist("ingotPigiron"), new Color(254, 214, 214)),
+    PIGIRON(() -> Loader.isModLoaded("tconstruct") && CoreHelpers.doesOreHaveStack("ingotPigiron"), new Color(254, 214, 214)),
     // Base Metals
     BRASS("ingotBrass", new Color(227, 174, 31)),
     MITHRIL("ingotMithril", new Color(230, 250, 240)),
@@ -52,7 +52,7 @@ public enum Metal
 
     Metal(String oreName, Color color)
     {
-        this(() -> OreDictionary.doesOreNameExist(oreName), color, null, true);
+        this(() -> CoreHelpers.doesOreHaveStack(oreName), color, null, true);
     }
 
     Metal(BooleanSupplier precondition, Color color)
@@ -62,7 +62,7 @@ public enum Metal
 
     Metal(String oreName, Color color, @Nullable Item.ToolMaterial material, boolean isTinkersMetal)
     {
-        this(() -> OreDictionary.doesOreNameExist(oreName), color, material, isTinkersMetal);
+        this(() -> CoreHelpers.doesOreHaveStack(oreName), color, material, isTinkersMetal);
 
     }
 

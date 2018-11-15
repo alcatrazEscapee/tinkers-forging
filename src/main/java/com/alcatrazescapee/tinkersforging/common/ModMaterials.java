@@ -9,7 +9,7 @@ package com.alcatrazescapee.tinkersforging.common;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.util.EnumHelper;
 
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
 public final class ModMaterials
 {

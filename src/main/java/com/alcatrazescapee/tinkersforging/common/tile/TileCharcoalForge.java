@@ -9,6 +9,7 @@ package com.alcatrazescapee.tinkersforging.common.tile;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -42,38 +43,29 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
     public static final int FIELD_TEMPERATURE = 1;
     public static final int FUEL_TICKS_MAX = 1600;
 
-    public static void lightNearbyForges(World world, BlockPos pos)
-    {
-        if (tryLight(world, pos))
-        {
-            for (EnumFacing face : EnumFacing.HORIZONTALS)
-            {
-                BlockPos pos1 = pos.offset(face);
-                if (tryLight(world, pos1))
-                {
-                    lightNearbyForges(world, pos1);
-                }
-            }
-        }
-    }
-
-    private static boolean tryLight(World world, BlockPos pos)
+    public static void tryLight(World world, BlockPos pos)
     {
         // Replace the block
         IBlockState state = world.getBlockState(pos);
         if (state.getBlock() == ModBlocks.CHARCOAL_PILE)
         {
             int layers = state.getValue(LAYERS);
-            world.setBlockState(pos, ModBlocks.CHARCOAL_FORGE.getStateWithLayers(layers).withProperty(LIT, true));
+            if (layers >= 2)
+            {
+                world.setBlockState(pos, ModBlocks.CHARCOAL_FORGE.getStateWithLayers(layers).withProperty(LIT, true));
+            }
         }
         else if (state.getBlock() == ModBlocks.CHARCOAL_FORGE && !state.getValue(LIT))
         {
             int layers = state.getValue(LAYERS);
-            world.setBlockState(pos, ModBlocks.CHARCOAL_FORGE.getStateWithLayers(layers).withProperty(LIT, true));
+            if (layers >= 2)
+            {
+                world.setBlockState(pos, ModBlocks.CHARCOAL_FORGE.getStateWithLayers(layers).withProperty(LIT, true));
+            }
         }
         else
         {
-            return false;
+            return;
         }
         // Light the TE
         TileCharcoalForge tile = CoreHelpers.getTE(world, pos, TileCharcoalForge.class);
@@ -82,14 +74,11 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
             tile.consumeFuel();
             tile.updateClosedState();
         }
-        return true;
     }
 
     private static boolean isValidSideBlock(IBlockState state)
     {
-        return (state.isNormalCube() && !state.getMaterial().getCanBurn()) ||
-                state.getBlock() == ModBlocks.CHARCOAL_FORGE ||
-                state.getBlock() == ModBlocks.CHARCOAL_PILE;
+        return state.isNormalCube() && state.getMaterial() == Material.ROCK;
     }
 
     private int fuelTicksRemaining;
@@ -117,9 +106,10 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
     @Override
     public void update()
     {
-        // todo: remove
-        //if (world.getTotalWorldTime() % 20 == 0)
-        //    TinkersForging.getLog().info("Charcoal Forge Tick: Fuel {} | Temp: {}", fuelTicksRemaining, temperature);
+        if (world.isRemote)
+        {
+            return;
+        }
         if (fuelTicksRemaining > 0)
         {
             // Consume fuel ticks
@@ -152,6 +142,10 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
                 temperature += (float) ModConfig.GENERAL.charcoalForgeTemperatureModifier;
                 if (temperature > actualMaxTemp)
                     temperature = actualMaxTemp;
+            }
+            else if (temperature > actualMaxTemp)
+            {
+                temperature -= (float) ModConfig.GENERAL.charcoalForgeTemperatureModifier;
             }
 
             for (int i = SLOT_INPUT_MIN; i < SLOT_INPUT_MAX; i++)
@@ -196,6 +190,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
     {
         temperature = nbt.getFloat("temp");
         fuelTicksRemaining = nbt.getInteger("ticks");
+        isClosed = nbt.getBoolean("closed");
 
         super.readFromNBT(nbt);
     }
@@ -206,14 +201,15 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
     {
         nbt.setFloat("temp", temperature);
         nbt.setInteger("ticks", fuelTicksRemaining);
+        nbt.setBoolean("closed", isClosed);
 
         return super.writeToNBT(nbt);
     }
 
     @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState)
     {
-        return oldState.getBlock() != newSate.getBlock();
+        return oldState.getBlock() != newState.getBlock();
     }
 
     @Override

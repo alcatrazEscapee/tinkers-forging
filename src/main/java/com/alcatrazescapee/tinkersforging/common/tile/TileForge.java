@@ -66,9 +66,6 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
     @Override
     public void update()
     {
-        // todo: remove
-        //if (world.getTotalWorldTime() % 20 == 0)
-        //    TinkersForging.getLog().info("Forge Tick: Fuel {} | Temp: {}", fuelTicksRemaining, temperature);
         if (fuelTicksRemaining > 0)
         {
             // Consume fuel ticks

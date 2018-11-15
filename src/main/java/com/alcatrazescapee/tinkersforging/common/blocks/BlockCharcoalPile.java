@@ -45,7 +45,7 @@ public class BlockCharcoalPile extends BlockCore implements IPileBlock
 
         setSoundType(SoundType.GROUND);
         setHarvestLevel("shovel", 0);
-        setHardness(1.0F);
+        setHardness(1.0f);
         setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, 1));
     }
 
@@ -176,11 +176,11 @@ public class BlockCharcoalPile extends BlockCore implements IPileBlock
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         ItemStack stack = player.getHeldItem(hand);
-        if (FireRegistry.isFireStarter(stack))
+        if (state.getValue(LAYERS) >= 6 && FireRegistry.isFireStarter(stack))
         {
             if (!world.isRemote)
             {
-                TileCharcoalForge.lightNearbyForges(world, pos);
+                TileCharcoalForge.tryLight(world, pos);
             }
             return true;
         }

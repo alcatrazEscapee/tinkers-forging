@@ -25,13 +25,7 @@ public class ParticleForgeFlame extends Particle
 {
     public static void generateCharcoalForge(World world, BlockPos pos, Random rand)
     {
-        Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleForgeFlame(world,
-                pos.getX() + 0.5d + 0.45d * (rand.nextFloat() - rand.nextFloat()),
-                pos.getY() + 0.1d * world.getBlockState(pos).getValue(LAYERS),
-                pos.getZ() + 0.5d + 0.45d * (rand.nextFloat() - rand.nextFloat()),
-                0d,
-                0.01d,
-                0d));
+        Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleForgeFlame(world, pos.getX() + 0.5d + 0.45d * (rand.nextFloat() - rand.nextFloat()), pos.getY() + 0.1d * world.getBlockState(pos).getValue(LAYERS), pos.getZ() + 0.5d + 0.45d * (rand.nextFloat() - rand.nextFloat()), 0d, 0.01d, 0d));
     }
 
     public static void generateForge(World world, BlockPos pos, IBlockState state, Random rand)
@@ -50,13 +44,7 @@ public class ParticleForgeFlame extends Particle
             z += 0.1 * (rand.nextFloat() - rand.nextFloat());
             x += 0.5 + 0.5 * (rand.nextFloat() - rand.nextFloat());
         }
-        Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleForgeFlame(world,
-                x,
-                pos.getY() + 0.2d * rand.nextFloat(),
-                z,
-                0d,
-                0.01d,
-                0d));
+        Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleForgeFlame(world, x, pos.getY() + 0.2d * rand.nextFloat(), z, 0d, 0.01d, 0d));
     }
 
     private ParticleForgeFlame(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn)

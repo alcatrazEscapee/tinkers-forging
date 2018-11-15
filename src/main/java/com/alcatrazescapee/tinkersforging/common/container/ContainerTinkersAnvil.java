@@ -21,7 +21,6 @@ import net.minecraftforge.items.IItemHandler;
 import com.alcatrazescapee.alcatrazcore.inventory.container.ContainerTileInventory;
 import com.alcatrazescapee.alcatrazcore.inventory.slot.SlotOutput;
 import com.alcatrazescapee.alcatrazcore.inventory.slot.SlotTileCore;
-import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
@@ -31,7 +30,7 @@ import com.alcatrazescapee.tinkersforging.common.slot.SlotForgeInput;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeStep;
 
-import static com.alcatrazescapee.tinkersforging.ModConstants.MOD_ID;
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 import static com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil.*;
 
 @ParametersAreNonnullByDefault
@@ -163,13 +162,10 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
             return false;
         }
 
-        if (ModConfig.GENERAL.enableTemperatureMechanics)
+        if (!cap.isWorkable())
         {
-            if (!cap.isWorkable())
-            {
-                player.sendMessage(new TextComponentString("" + TextFormatting.RED).appendSibling(new TextComponentTranslation(MOD_ID + ".tooltip.too_cold")));
-                return false;
-            }
+            player.sendMessage(new TextComponentString("" + TextFormatting.RED).appendSibling(new TextComponentTranslation(MOD_ID + ".tooltip.too_cold")));
+            return false;
         }
 
         Slot slot = inventorySlots.get(SLOT_HAMMER);

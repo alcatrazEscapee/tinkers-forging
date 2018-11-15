@@ -1,41 +1,23 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        maven { // Forge Gradle
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven { // Curse Forge
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.1.0'
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.matthewprenger.cursegradle'
 
-repositories {
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "http://dvs1.progwml6.com/files/maven"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "modmaven.k-4u.nl"
-    }
-    maven {
-        // CraftTweaker
-        name 'jared maven'
-        url "http://maven.blamejared.com/"
-    }
-    maven {
-        // GuideAPI
-        url 'http://tehnut.info/maven/'
-    }
-    maven {
-        // Tinkers Construct
-        name 'DVS1 Maven FS'
-        url 'http://dvs1.progwml6.com/files/maven'
-    }
-}
+ext.priv = parseConfig(file('../../jar-signing/private.properties'))
 
 version = "${mod_version}"
 group = "com.alcatrazescapee.tinkersforging" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -55,10 +37,29 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_${mcp_mapping}"
+    mappings = "${mcp_mapping}"
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     replace 'GRADLE:VERSION', "${mod_version}"
+}
+
+repositories {
+    maven {
+        // JEI
+        url 'http://dvs1.progwml6.com/files/maven'
+    }
+    maven {
+        // JEI Fallback
+        url 'modmaven.k-4u.nl'
+    }
+    maven {
+        // CraftTweaker
+        url "http://maven.blamejared.com/"
+    }
+    maven {
+        // Tinkers Construct
+        url 'http://dvs1.progwml6.com/files/maven'
+    }
 }
 
 dependencies {
@@ -72,12 +73,12 @@ dependencies {
     // At runtime, use the full jar
     runtime "CraftTweaker2:CraftTweaker2-MC1120-Main:${crafttweaker_version}"
 
-    // Guide API
-    deobfCompile "info.amerifrance.guideapi:Guide-API:1.12-2.1.7-62"
+    // compile against Tinkers Construct but do not include it at runtime
+    deobfProvided "slimeknights.mantle:Mantle:${mantle_version}"
+    deobfProvided "slimeknights:TConstruct:${tinkers_construct_version}"
 
-    // Tinkers Construct
-    deobfCompile "slimeknights.mantle:Mantle:${mantle_version}"
-    deobfCompile "slimeknights:TConstruct:${tinkers_construct_version}"
+    // compile against Patchouli but do not include it at runtime
+    deobfProvided "vazkii.patchouli:Patchouli:${patchouli_version}"
 }
 
 processResources {
@@ -96,5 +97,29 @@ processResources {
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    keyStore = "${priv.keyStore}"
+    alias = "${priv.keyStoreAlias}"
+    storePass = "${priv.keyStorePass}"
+    keyPass = "${priv.keyStoreKeyPass}"
+
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+}
+
+build.dependsOn signJar
+
+def static parseConfig(File config) {
+    if (config.exists()) {
+        config.withReader {
+            def prop = new Properties()
+            prop.load(it)
+            return (new ConfigSlurper().parse(prop))
+        }
+    } else {
+        return null
     }
 }
