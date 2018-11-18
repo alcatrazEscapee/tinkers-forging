@@ -43,6 +43,7 @@ import com.alcatrazescapee.tinkersforging.common.capability.ForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
 import com.alcatrazescapee.tinkersforging.integration.patchouli.PatchouliIntegration;
+import com.alcatrazescapee.tinkersforging.integration.tconstruct.TinkersIntegration;
 import com.alcatrazescapee.tinkersforging.util.TickTimer;
 import slimeknights.tconstruct.smeltery.events.TinkerCastingEvent;
 
@@ -87,6 +88,19 @@ public final class ModEventHandler
             {
                 PatchouliIntegration.resetTooltipFlag();
             }
+
+            if (Loader.isModLoaded("tconstruct"))
+            {
+                TinkersIntegration.updateSharedConfig();
+            }
+        }
+        else if (event.getModID().equals("tconstruct"))
+        {
+            // Super-duper safe
+            if (Loader.isModLoaded("tconstruct"))
+            {
+                TinkersIntegration.updateSharedConfig();
+            }
         }
     }
 
@@ -121,7 +135,6 @@ public final class ModEventHandler
         if (cap != null)
         {
             cap.setTemperature(cap.getMeltingTemperature() - 1f);
-            event.output.setTagInfo(CapabilityForgeItem.NBT_KEY, cap.serializeNBT());
         }
     }
 

@@ -9,6 +9,8 @@ package com.alcatrazescapee.tinkersforging.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.alcatrazescapee.alcatrazcore.client.gui.GuiContainerTileCore;
 import com.alcatrazescapee.tinkersforging.common.tile.TileForge;
@@ -18,6 +20,7 @@ import static com.alcatrazescapee.tinkersforging.common.blocks.BlockForge.LIT;
 import static com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem.MAX_TEMPERATURE;
 import static com.alcatrazescapee.tinkersforging.common.tile.TileForge.*;
 
+@SideOnly(Side.CLIENT)
 public class GuiForge extends GuiContainerTileCore<TileForge>
 {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(MOD_ID, "textures/gui/forge.png");

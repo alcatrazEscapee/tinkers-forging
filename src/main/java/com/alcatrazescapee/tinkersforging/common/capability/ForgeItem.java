@@ -86,6 +86,7 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     @Override
     public void reset()
     {
+        // Note: this will only reset the non-temperature part of this capability
         steps.reset();
         recipeName = null;
         work = 0;
@@ -94,8 +95,15 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     @Override
     public float getTemperature()
     {
-        final float newTemp = temperature - (float) (TickTimer.getTicks() - lastUpdateTick) * (float) ModConfig.GENERAL.temperatureModifier;
-        return newTemp < 0 ? 0 : newTemp;
+        if (lastUpdateTick == -1)
+        {
+            return 0;
+        }
+        else
+        {
+            final float newTemp = temperature - (float) (TickTimer.getTicks() - lastUpdateTick) * (float) ModConfig.BALANCE.temperatureModifier;
+            return newTemp < 0 ? 0 : newTemp;
+        }
     }
 
     @Override
@@ -143,9 +151,18 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
             nbt.setString("recipe", recipeName);
         }
 
-        nbt.setFloat("temp", getTemperature());
-        nbt.setLong("tick", TickTimer.getTicks());
-
+        float temperature = getTemperature();
+        if (temperature == 0)
+        {
+            nbt.setFloat("temp", 0);
+            nbt.setLong("tick", -1);
+        }
+        else
+        {
+            nbt.setFloat("temp", temperature);
+            nbt.setLong("tick", TickTimer.getTicks());
+        }
+        //TinkersForging.getLog().info("Serialization: {}", nbt.toString());
         return nbt;
     }
 
@@ -154,10 +171,10 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     {
         if (nbt != null)
         {
-            if (nbt.hasKey(CapabilityForgeItem.NBT_KEY))
-            {
-                nbt = nbt.getCompoundTag(CapabilityForgeItem.NBT_KEY);
-            }
+            //if (nbt.hasKey(CapabilityForgeItem.NBT_KEY))
+            //{
+            //    nbt = nbt.getCompoundTag(CapabilityForgeItem.NBT_KEY);
+            //}
 
             work = nbt.getInteger("work");
             recipeName = nbt.hasKey("recipe") ? nbt.getString("recipe") : null; // stops defaulting to empty string

@@ -10,7 +10,8 @@
         {
             "type": "crafting",
             "recipe": "tinkersforging:brick_forge",
-            "text": "For the Sophisticated Tinkerer"
+            "text": "For the Sophisticated Tinkerer",
+            "link_recipe": true
         }
     ]
 }

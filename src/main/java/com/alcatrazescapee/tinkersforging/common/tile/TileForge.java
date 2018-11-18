@@ -85,7 +85,7 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
             // Update temperature
             if (temperature < MAX_TEMPERATURE)
             {
-                temperature += (float) ModConfig.GENERAL.forgeTemperatureModifier;
+                temperature += (float) ModConfig.BALANCE.forgeTemperatureModifier;
                 if (temperature > MAX_TEMPERATURE)
                     temperature = MAX_TEMPERATURE;
             }
@@ -100,7 +100,7 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
                     // Add temperature
                     if (cap.getTemperature() < temperature)
                     {
-                        CapabilityForgeItem.addTemp(stack, cap, 1.0f + (float) ModConfig.GENERAL.forgeTemperatureModifier);
+                        CapabilityForgeItem.addTemp(cap, 1.0f + (float) ModConfig.BALANCE.forgeTemperatureModifier);
                     }
 
                     if (cap.isMolten())
@@ -115,7 +115,7 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
         else if (temperature > 0)
         {
             // When it is not burning fuel, then decrease the temperature until it reaches zero
-            temperature -= (float) ModConfig.GENERAL.forgeTemperatureModifier;
+            temperature -= (float) ModConfig.BALANCE.forgeTemperatureModifier;
             if (temperature < 0)
                 temperature = 0;
         }
@@ -211,7 +211,7 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
         if (ticks > 0)
         {
             inventory.setStackInSlot(SLOT_FUEL, CoreHelpers.consumeItem(stack));
-            fuelTicksRemaining += (int) (ticks * ModConfig.GENERAL.forgeFuelModifier);
+            fuelTicksRemaining += (int) (ticks * ModConfig.BALANCE.forgeFuelModifier);
             fuelTicksMax = fuelTicksRemaining;
         }
     }

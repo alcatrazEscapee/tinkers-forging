@@ -11,6 +11,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -18,6 +20,7 @@ import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 
 import static com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil.SLOT_HAMMER;
 
+@SideOnly(Side.CLIENT)
 public class TESRTinkersAnvil extends TileEntitySpecialRenderer<TileTinkersAnvil>
 {
     @Override

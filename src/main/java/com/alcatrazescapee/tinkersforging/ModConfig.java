@@ -15,7 +15,8 @@ import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 public final class ModConfig
 {
     public static final GeneralConfig GENERAL = new GeneralConfig();
-    public static final ToolsConfig TOOLS = new ToolsConfig();
+    public static final BalanceConfig BALANCE = new BalanceConfig();
+    public static final MaterialsConfig MATERIALS = new MaterialsConfig();
 
     public static class GeneralConfig
     {
@@ -41,10 +42,11 @@ public final class ModConfig
         @Config.Comment("If this is true, any recipes that are added to the anvil that have a crafting equivalent (i.e. a shovel) will have their normal crafting recipes removed")
         public boolean removeCraftingRecipes = true;
 
-        @Config.Name("Enable Advanced Temperature Tooltips")
-        @Config.Comment("If this is true, you will be able to see the exact temperature (in °C) of any items - including their exact workable and melting temperatures")
-        public boolean enableAdvancedTemperatureTooltips = false;
+        private GeneralConfig() {}
+    }
 
+    public static class BalanceConfig
+    {
         @Config.Name("General Temperature Modifier")
         @Config.RangeDouble(min = 0, max = 10)
         @Config.Comment("A modifier for how fast items heat up and cool down. Higher values = faster heat transfer.")
@@ -70,10 +72,14 @@ public final class ModConfig
         @Config.Comment("The modifier for how fuel efficient the brick forge is, relative to a furnace. Higher values = fuel lasts longer")
         public double forgeFuelModifier = 1.0;
 
-        private GeneralConfig() {}
+        @Config.Name("Enable Advanced Temperature Tooltips")
+        @Config.Comment("If this is true, you will be able to see the exact temperature (in °C) of any items - including their exact workable and melting temperatures")
+        public boolean enableAdvancedTemperatureTooltips = false;
+
+        private BalanceConfig() {}
     }
 
-    public static class ToolsConfig
+    public static class MaterialsConfig
     {
         @Config.Comment("Tier of the Copper Anvil (if enabled)")
         @Config.RangeInt(min = 0, max = 5)
@@ -150,6 +156,6 @@ public final class ModConfig
         @Config.Name("Tier - Pig Iron")
         public int tierPigiron = 2;
 
-        private ToolsConfig() {}
+        private MaterialsConfig() {}
     }
 }

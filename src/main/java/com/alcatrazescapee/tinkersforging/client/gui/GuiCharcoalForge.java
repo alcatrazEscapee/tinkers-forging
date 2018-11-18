@@ -9,6 +9,8 @@ package com.alcatrazescapee.tinkersforging.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.alcatrazescapee.alcatrazcore.client.gui.GuiContainerTileCore;
 import com.alcatrazescapee.tinkersforging.ModConfig;
@@ -19,6 +21,7 @@ import static com.alcatrazescapee.tinkersforging.common.blocks.BlockCharcoalForg
 import static com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem.MAX_TEMPERATURE;
 import static com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge.*;
 
+@SideOnly(Side.CLIENT)
 public class GuiCharcoalForge extends GuiContainerTileCore<TileCharcoalForge>
 {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(MOD_ID, "textures/gui/charcoal_forge.png");
@@ -40,7 +43,7 @@ public class GuiCharcoalForge extends GuiContainerTileCore<TileCharcoalForge>
         if (fuelTicksRemaining > 0 && tile.getWorld().getBlockState(tile.getPos()).getValue(LIT))
         {
             // Draw burn time
-            int burnTime = (int) Math.round(14 * fuelTicksRemaining / (FUEL_TICKS_MAX * ModConfig.GENERAL.charcoalForgeFuelModifier));
+            int burnTime = (int) Math.round(14 * fuelTicksRemaining / (FUEL_TICKS_MAX * ModConfig.BALANCE.charcoalForgeFuelModifier));
             drawTexturedModalRect(x + 80, y + 56 - burnTime, 176, 14 - burnTime, 14, burnTime);
         }
 

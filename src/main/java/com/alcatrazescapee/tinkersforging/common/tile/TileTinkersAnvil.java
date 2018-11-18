@@ -80,8 +80,6 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
             if (cap != null)
             {
                 cap.setRecipe(cachedAnvilRecipe);
-                // update stack tag
-                stack.setTagInfo(CapabilityForgeItem.NBT_KEY, cap.serializeNBT());
             }
 
             inventory.setStackInSlot(SLOT_DISPLAY, cachedAnvilRecipe.getOutput());
@@ -123,7 +121,7 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
                 {
                     // no current recipe
                     resetFields();
-                    CapabilityForgeItem.clearStack(stack);
+                    cap.reset();
                     return;
                 }
             }
@@ -137,9 +135,6 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
             rules = cachedAnvilRecipe.getRules();
 
             cap.setRecipe(cachedAnvilRecipe);
-
-            // update stack tag
-            stack.setTagInfo(CapabilityForgeItem.NBT_KEY, cap.serializeNBT());
 
             // update display inventory
             if (cachedAnvilRecipe != null)
@@ -227,7 +222,6 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
             {
                 workingProgress += step.getStepAmount();
             }
-            input.setTagInfo(CapabilityForgeItem.NBT_KEY, cap.serializeNBT());
 
             // Handle possible recipe completion
             if (cachedAnvilRecipe != null)
@@ -239,7 +233,11 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
                     if (!newInput.isEmpty())
                     {
                         // Reset the capability data
-                        CapabilityForgeItem.clearStack(newInput);
+                        IForgeItem newCap = newInput.getCapability(CapabilityForgeItem.CAPABILITY, null);
+                        if (newCap != null)
+                        {
+                            newCap.reset();
+                        }
                     }
 
                     // Consume input + produce output / throw it in the world
@@ -265,7 +263,11 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
                     if (!newInput.isEmpty())
                     {
                         // Reset the capability data
-                        CapabilityForgeItem.clearStack(newInput);
+                        IForgeItem newCap = newInput.getCapability(CapabilityForgeItem.CAPABILITY, null);
+                        if (newCap != null)
+                        {
+                            newCap.reset();
+                        }
                     }
                     inventory.setStackInSlot(SLOT_INPUT, newInput);
                     world.playSound(null, pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0f, 1.0f);

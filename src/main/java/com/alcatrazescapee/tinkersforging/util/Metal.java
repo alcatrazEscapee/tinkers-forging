@@ -23,9 +23,8 @@ import com.alcatrazescapee.tinkersforging.common.ModMaterials;
 public enum Metal
 {
     // Vanilla Materials
-    IRON("ingotIron", new Color(255, 255, 255), Item.ToolMaterial.IRON, true),
-    GOLD("ingotGold", new Color(255, 248, 53), Item.ToolMaterial.GOLD, false),
-    DIAMOND("gemDiamond", new Color(95, 208, 241), Item.ToolMaterial.DIAMOND, false),
+    IRON(new Color(255, 255, 255), Item.ToolMaterial.IRON, true),
+    GOLD(new Color(255, 248, 53), Item.ToolMaterial.GOLD, false),
     // Common Modded Materials
     COPPER("ingotCopper", new Color(207, 134, 101)),
     TIN("ingotTin", new Color(120, 143, 149)),
@@ -39,7 +38,7 @@ public enum Metal
     ARDITE("ingotArdite", new Color(220, 84, 43)),
     COBALT("ingotCobalt", new Color(35, 118, 221)),
     MANYULLYN("ingotManyullyn", new Color(113, 65, 172)),
-    PIGIRON(() -> Loader.isModLoaded("tconstruct") && CoreHelpers.doesOreHaveStack("ingotPigiron"), new Color(254, 214, 214)),
+    PIGIRON(() -> Loader.isModLoaded("tconstruct") && CoreHelpers.doesOreHaveStack("ingotPigiron"), new Color(254, 188, 188)),
     // Base Metals
     BRASS("ingotBrass", new Color(227, 174, 31)),
     MITHRIL("ingotMithril", new Color(230, 250, 240)),
@@ -60,10 +59,9 @@ public enum Metal
         this(precondition, color, null, true);
     }
 
-    Metal(String oreName, Color color, @Nullable Item.ToolMaterial material, boolean isTinkersMetal)
+    Metal(Color color, @Nullable Item.ToolMaterial material, boolean isTinkersMetal)
     {
-        this(() -> CoreHelpers.doesOreHaveStack(oreName), color, material, isTinkersMetal);
-
+        this(() -> true, color, material, isTinkersMetal);
     }
 
     Metal(BooleanSupplier precondition, Color color, @Nullable Item.ToolMaterial material, boolean isTinkersMetal)
@@ -116,38 +114,37 @@ public enum Metal
         {
             case IRON:
             case GOLD:
-            case DIAMOND:
                 return material != null ? material.getHarvestLevel() : 1;
             case COPPER:
-                return ModConfig.TOOLS.tierCopper;
+                return ModConfig.MATERIALS.tierCopper;
             case TIN:
-                return ModConfig.TOOLS.tierTin;
+                return ModConfig.MATERIALS.tierTin;
             case BRONZE:
-                return ModConfig.TOOLS.tierBronze;
+                return ModConfig.MATERIALS.tierBronze;
             case STEEL:
-                return ModConfig.TOOLS.tierSteel;
+                return ModConfig.MATERIALS.tierSteel;
             case SILVER:
-                return ModConfig.TOOLS.tierSilver;
+                return ModConfig.MATERIALS.tierSilver;
             case LEAD:
-                return ModConfig.TOOLS.tierLead;
+                return ModConfig.MATERIALS.tierLead;
             case ALUMINIUM:
-                return ModConfig.TOOLS.tierAluminium;
+                return ModConfig.MATERIALS.tierAluminium;
             case COBALT:
-                return ModConfig.TOOLS.tierCobalt;
+                return ModConfig.MATERIALS.tierCobalt;
             case ARDITE:
-                return ModConfig.TOOLS.tierArdite;
+                return ModConfig.MATERIALS.tierArdite;
             case MANYULLYN:
-                return ModConfig.TOOLS.tierManyullyn;
+                return ModConfig.MATERIALS.tierManyullyn;
             case BRASS:
-                return ModConfig.TOOLS.tierBrass;
+                return ModConfig.MATERIALS.tierBrass;
             case INVAR:
-                return ModConfig.TOOLS.tierInvar;
+                return ModConfig.MATERIALS.tierInvar;
             case MITHRIL:
-                return ModConfig.TOOLS.tierMithril;
+                return ModConfig.MATERIALS.tierMithril;
             case PIGIRON:
-                return ModConfig.TOOLS.tierPigiron;
+                return ModConfig.MATERIALS.tierPigiron;
             case ELECTRUM:
-                return ModConfig.TOOLS.tierElectrum;
+                return ModConfig.MATERIALS.tierElectrum;
             default:
                 TinkersForging.getLog().warn("Missing tier config check!");
                 return 0;

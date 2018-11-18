@@ -11,7 +11,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
@@ -19,7 +18,10 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.oredict.OreDictionary;
 
+import com.alcatrazescapee.alcatrazcore.network.capability.CapabilityContainerListenerManager;
 import com.alcatrazescapee.tinkersforging.ModConfig;
+import com.alcatrazescapee.tinkersforging.common.container.ContainerListenerForgeItem;
+import com.alcatrazescapee.tinkersforging.common.network.PacketUpdateForgeItem;
 
 import static com.alcatrazescapee.alcatrazcore.util.CoreHelpers.getNull;
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
@@ -29,7 +31,6 @@ public final class CapabilityForgeItem
 {
     @CapabilityInject(IForgeItem.class)
     public static final Capability<IForgeItem> CAPABILITY = getNull();
-    public static final String NBT_KEY = MOD_ID + ":forge_item";
     public static final ResourceLocation KEY = new ResourceLocation(MOD_ID, "forge_item");
 
     public static final float MAX_TEMPERATURE = 1500f;
@@ -39,17 +40,25 @@ public final class CapabilityForgeItem
 
     public static void preInit()
     {
+        // Register Capability
         CapabilityManager.INSTANCE.register(IForgeItem.class, new DumbStorage(), () -> new ForgeItem(null, null));
+
+        // Register Sync Handler
+        CapabilityContainerListenerManager.registerContainerListenerFactory(ContainerListenerForgeItem::new);
+        CapabilityContainerListenerManager.registerTContainerPacket(PacketUpdateForgeItem.class, new PacketUpdateForgeItem.Handler());
     }
 
+    /**
+     * Used by the Tinker's Anvil to clear a stack if it hasn't been worked yet
+     */
     public static void clearStackCheckRecipe(ItemStack stack)
     {
         IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);
         if (cap != null)
         {
-            if (cap.getTemperature() < 1f && (cap.getRecipeName() == null || cap.getWork() == 0))
+            if (cap.getRecipeName() == null || cap.getWork() == 0)
             {
-                clearStack(stack, cap);
+                cap.reset();
             }
         }
     }
@@ -57,11 +66,10 @@ public final class CapabilityForgeItem
     /**
      * Use this to increase the heat on an item stack
      */
-    public static void addTemp(ItemStack stack, IForgeItem cap, float modifier)
+    public static void addTemp(IForgeItem cap, float modifier)
     {
-        final float temp = cap.getTemperature() + modifier * (float) ModConfig.GENERAL.temperatureModifier;
+        final float temp = cap.getTemperature() + modifier * (float) ModConfig.BALANCE.temperatureModifier;
         cap.setTemperature(temp > MAX_TEMPERATURE ? MAX_TEMPERATURE : temp);
-        stack.setTagInfo(NBT_KEY, cap.serializeNBT());
     }
 
     static float getMeltingTemperature(@Nullable ItemStack stack)
@@ -86,15 +94,6 @@ public final class CapabilityForgeItem
         return DEFAULT_MELT_TEMPERATURE;
     }
 
-    public static void clearStack(ItemStack stack)
-    {
-        IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);
-        if (cap != null)
-        {
-            clearStack(stack, cap);
-        }
-    }
-
     static float getWorkingTemperature(@Nullable ItemStack stack)
     {
         if (stack != null)
@@ -116,17 +115,6 @@ public final class CapabilityForgeItem
                 return 0;
         }
         return DEFAULT_WORK_TEMPERATURE;
-    }
-
-    private static void clearStack(ItemStack stack, IForgeItem cap)
-    {
-        cap.reset();
-        stack.removeSubCompound(CapabilityForgeItem.NBT_KEY);
-        NBTTagCompound nbt = stack.getTagCompound();
-        if (nbt != null && nbt.isEmpty())
-        {
-            stack.setTagCompound(null);
-        }
     }
 
     private static float getMetalTemperature(String name)

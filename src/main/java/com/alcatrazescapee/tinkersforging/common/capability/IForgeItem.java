@@ -71,7 +71,7 @@ public interface IForgeItem extends INBTSerializable<NBTTagCompound>
         if (temp < 1f) return;
 
         String tooltip;
-        if (ModConfig.GENERAL.enableAdvancedTemperatureTooltips)
+        if (ModConfig.BALANCE.enableAdvancedTemperatureTooltips)
         {
             // Temperature number
             tooltip = Heat.getColorFor(temp) + I18n.format(MOD_ID + ".tooltip.temperature_advanced", (int) temp);

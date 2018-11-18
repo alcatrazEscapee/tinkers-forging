@@ -49,11 +49,6 @@ public final class ClientEventHandler
                 event.getToolTip().add(GREEN + I18n.format(MOD_ID + ".tooltip.has_been_worked"));
                 cap.addTooltipInfo(event.getToolTip());
             }
-            else
-            {
-                // If the work == 0, recipe == null, temperature <= 1, then it is safe to reset in interest of better stack-ability
-                CapabilityForgeItem.clearStack(event.getItemStack());
-            }
         }
     }
 

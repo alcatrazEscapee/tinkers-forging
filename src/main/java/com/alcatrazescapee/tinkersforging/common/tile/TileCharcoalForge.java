@@ -41,7 +41,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
 
     public static final int FIELD_FUEL = 0;
     public static final int FIELD_TEMPERATURE = 1;
-    public static final int FUEL_TICKS_MAX = 1600;
+    public static final int FUEL_TICKS_MAX = 1600; // todo: change back for testing
 
     public static void tryLight(World world, BlockPos pos)
     {
@@ -53,6 +53,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
             if (layers >= 2)
             {
                 world.setBlockState(pos, ModBlocks.CHARCOAL_FORGE.getStateWithLayers(layers).withProperty(LIT, true));
+                light(world, pos);
             }
         }
         else if (state.getBlock() == ModBlocks.CHARCOAL_FORGE && !state.getValue(LIT))
@@ -61,18 +62,17 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
             if (layers >= 2)
             {
                 world.setBlockState(pos, ModBlocks.CHARCOAL_FORGE.getStateWithLayers(layers).withProperty(LIT, true));
+                light(world, pos);
             }
         }
-        else
-        {
-            return;
-        }
-        // Light the TE
+    }
+
+    private static void light(World world, BlockPos pos)
+    {
         TileCharcoalForge tile = CoreHelpers.getTE(world, pos, TileCharcoalForge.class);
         if (tile != null)
         {
             tile.consumeFuel();
-            tile.updateClosedState();
         }
     }
 
@@ -139,13 +139,13 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
             float actualMaxTemp = isClosed ? MAX_TEMPERATURE : MAX_TEMPERATURE * 0.35f;
             if (temperature < actualMaxTemp)
             {
-                temperature += (float) ModConfig.GENERAL.charcoalForgeTemperatureModifier;
+                temperature += (float) ModConfig.BALANCE.charcoalForgeTemperatureModifier;
                 if (temperature > actualMaxTemp)
                     temperature = actualMaxTemp;
             }
             else if (temperature > actualMaxTemp)
             {
-                temperature -= (float) ModConfig.GENERAL.charcoalForgeTemperatureModifier;
+                temperature -= (float) ModConfig.BALANCE.charcoalForgeTemperatureModifier;
             }
 
             for (int i = SLOT_INPUT_MIN; i < SLOT_INPUT_MAX; i++)
@@ -158,7 +158,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
                     // Add temperature
                     if (cap.getTemperature() < temperature)
                     {
-                        CapabilityForgeItem.addTemp(stack, cap, (float) ModConfig.GENERAL.charcoalForgeTemperatureModifier);
+                        CapabilityForgeItem.addTemp(cap, (float) ModConfig.BALANCE.charcoalForgeTemperatureModifier);
                     }
 
                     if (cap.isMolten())
@@ -173,7 +173,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
         else if (temperature > 0)
         {
             // When it is not burning fuel, then decrease the temperature until it reaches zero
-            temperature -= (float) ModConfig.GENERAL.charcoalForgeTemperatureModifier;
+            temperature -= (float) ModConfig.BALANCE.charcoalForgeTemperatureModifier;
             if (temperature < 0)
                 temperature = 0;
         }
@@ -257,7 +257,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
         if (state.getValue(LAYERS) > 2)
         {
             world.setBlockState(pos, state.withProperty(LAYERS, state.getValue(LAYERS) - 1));
-            fuelTicksRemaining = (int) (FUEL_TICKS_MAX * ModConfig.GENERAL.charcoalForgeFuelModifier);
+            fuelTicksRemaining = (int) (FUEL_TICKS_MAX * ModConfig.BALANCE.charcoalForgeFuelModifier);
         }
     }
 }

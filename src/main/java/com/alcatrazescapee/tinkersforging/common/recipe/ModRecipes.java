@@ -32,6 +32,7 @@ import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.items.ItemHammer;
 import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
+import com.alcatrazescapee.tinkersforging.integration.patchouli.PatchouliIntegration;
 import com.alcatrazescapee.tinkersforging.util.ItemType;
 import com.alcatrazescapee.tinkersforging.util.Metal;
 
@@ -62,7 +63,7 @@ public final class ModRecipes
         }
 
         // Tinker's Construct Tool Parts
-        if (Loader.isModLoaded("tconstruct"))
+        if (Loader.isModLoaded("tconstruct") && ModConfig.GENERAL.useTinkersConstruct)
         {
             for (ItemType type : ItemType.tinkersParts())
             {
@@ -80,7 +81,7 @@ public final class ModRecipes
         }
 
         // Construct Armory's Armor Parts
-        if (Loader.isModLoaded("conarm"))
+        if (Loader.isModLoaded("conarm") && ModConfig.GENERAL.useConstructsArmory)
         {
             for (ItemType type : ItemType.constructArmors())
             {
@@ -123,11 +124,6 @@ public final class ModRecipes
                 String metalIngotName = UPPER_UNDERSCORE_TO_LOWER_CAMEL.convert("INGOT_" + metal.name());
                 String metalBlockName = UPPER_UNDERSCORE_TO_LOWER_CAMEL.convert("BLOCK_" + metal.name());
                 if (metalIngotName == null || metalBlockName == null) continue;
-
-                if (metal == Metal.DIAMOND && !OreDictionary.doesOreNameExist(metalIngotName))
-                {
-                    metalIngotName = "gemDiamond";
-                }
 
                 NonNullList<ItemStack> ingots = OreDictionary.getOres(metalIngotName, false);
                 if (ingots.isEmpty()) continue;
@@ -190,6 +186,12 @@ public final class ModRecipes
                     r.register(new ShapedOreRecipe(loc, anvil, "IBI", " I ", "III", 'B', metalBlockName, 'I', metalIngotName).setRegistryName(loc));
                 }
             }
+        }
+
+        // Patchouli Book
+        if (Loader.isModLoaded("patchouli"))
+        {
+            PatchouliIntegration.registerRecipes(event);
         }
     }
 

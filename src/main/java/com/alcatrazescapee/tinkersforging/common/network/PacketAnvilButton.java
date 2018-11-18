@@ -18,7 +18,7 @@ public class PacketAnvilButton implements IMessage
 {
     private int buttonId;
 
-    // no args constructor required for forge
+    @SuppressWarnings("unused")
     public PacketAnvilButton() {}
 
     public PacketAnvilButton(int buttonId)

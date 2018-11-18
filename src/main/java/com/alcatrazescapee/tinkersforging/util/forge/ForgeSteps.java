@@ -32,6 +32,11 @@ public class ForgeSteps implements INBTSerializable<NBTTagCompound>
         for (int i = 0; i < 3; i++) addStep(null);
     }
 
+    public boolean isEmpty()
+    {
+        return steps.get(0) == null && steps.get(1) == null && steps.get(2) == null;
+    }
+
     public void addStep(@Nullable ForgeStep step)
     {
         steps.add(step);

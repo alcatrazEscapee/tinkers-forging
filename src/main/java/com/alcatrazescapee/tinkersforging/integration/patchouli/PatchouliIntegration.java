@@ -8,9 +8,14 @@ package com.alcatrazescapee.tinkersforging.integration.patchouli;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
@@ -24,41 +29,50 @@ import static com.alcatrazescapee.tinkersforging.util.property.IPileBlock.LAYERS
 
 public final class PatchouliIntegration
 {
-    private static IPatchouliAPI api;
+    private static IPatchouliAPI api = null;
 
     @Optional.Method(modid = "patchouli")
     public static void init()
     {
-        api = PatchouliAPI.instance;
-        if (api.isStub())
-        {
-            TinkersForging.getLog().info("Failed to intercept Patchouli API. Book may be questionable");
-            return;
-        }
-
         // Register charcoal forge multiblock
-        api.registerMultiblock(new ResourceLocation(MOD_ID, "charcoal_forge"),
-                api.makeMultiblock(new String[][] {{"   ", " 0 ", "   "}, {" S ", "SCS", "_S_"}},
-                        'S', api.predicateMatcher(Blocks.STONE, x -> x.isNormalCube() && x.getMaterial() == Material.ROCK),
-                        'C', api.predicateMatcher(ModBlocks.CHARCOAL_FORGE.getStateWithLayers(6).withProperty(LIT, true), x -> x.getBlock() == ModBlocks.CHARCOAL_PILE && x.getValue(LAYERS) >= 6),
-                        ' ', api.anyMatcher(),
-                        '0', api.anyMatcher())).setSymmetrical(true);
+        getAPI().registerMultiblock(new ResourceLocation(MOD_ID, "charcoal_forge"),
+                getAPI().makeMultiblock(new String[][] {{"   ", " 0 ", "   "}, {" S ", "SCS", "_S_"}},
+                        'S', getAPI().predicateMatcher(Blocks.STONE, x -> x.isNormalCube() && x.getMaterial() == Material.ROCK),
+                        'C', getAPI().predicateMatcher(ModBlocks.CHARCOAL_FORGE.getStateWithLayers(6).withProperty(LIT, true), x -> x.getBlock() == ModBlocks.CHARCOAL_PILE && x.getValue(LAYERS) >= 6),
+                        ' ', getAPI().anyMatcher(),
+                        '0', getAPI().anyMatcher())).setSymmetrical(true);
 
         // Set config flags
-        api.setConfigFlag(MOD_ID + ":tool_parts", !Loader.isModLoaded("tconstruct") || !ModConfig.GENERAL.useTinkersConstruct);
-        api.setConfigFlag(MOD_ID + ":tinkers_construct", Loader.isModLoaded("tconstruct"));
-        api.setConfigFlag(MOD_ID + ":construct_armory", Loader.isModLoaded("conarm"));
-        api.setConfigFlag(MOD_ID + ":tooltip_advanced", ModConfig.GENERAL.enableAdvancedTemperatureTooltips);
+        getAPI().setConfigFlag(MOD_ID + ":tool_parts", !Loader.isModLoaded("tconstruct") || !ModConfig.GENERAL.useTinkersConstruct);
+        getAPI().setConfigFlag(MOD_ID + ":tooltip_advanced", ModConfig.BALANCE.enableAdvancedTemperatureTooltips);
     }
 
     @Optional.Method(modid = "patchouli")
     public static void resetTooltipFlag()
     {
-        if (api != null && !api.isStub())
+        getAPI().setConfigFlag(MOD_ID + ":tooltip_advanced", ModConfig.BALANCE.enableAdvancedTemperatureTooltips);
+        getAPI().reloadBookContents();
+    }
+
+    @Optional.Method(modid = "patchouli")
+    public static void registerRecipes(RegistryEvent.Register<IRecipe> event)
+    {
+        ResourceLocation loc = new ResourceLocation(MOD_ID, "guide_book");
+        ItemStack output = getAPI().getBookStack(MOD_ID + ":book");
+        event.getRegistry().register(new ShapelessOreRecipe(loc, output, Items.BOOK, "hammer").setRegistryName(loc));
+    }
+
+    private static IPatchouliAPI getAPI()
+    {
+        if (api == null)
         {
-            api.setConfigFlag(MOD_ID + ":tooltip_advanced", ModConfig.GENERAL.enableAdvancedTemperatureTooltips);
-            api.reloadBookContents();
+            api = PatchouliAPI.instance;
+            if (api.isStub())
+            {
+                TinkersForging.getLog().warn("Failed to intercept Patchouli API. Problems may occur");
+            }
         }
+        return api;
     }
 
 }

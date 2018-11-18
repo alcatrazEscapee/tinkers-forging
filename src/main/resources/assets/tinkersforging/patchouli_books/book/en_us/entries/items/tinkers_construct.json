@@ -10,10 +10,10 @@
         {
             "type": "image",
             "images": [
-                "tinkersforging:textures/guide/casting_items_1.png"
+                "tinkersforging:textures/guide/tinkers_smeltery.png"
             ],
             "text": "A Smeltery. I think."
         }
     ],
-    "flag": "tinkersforging:tinkers_construct"
+    "flag": "modid:tconstruct"
 }

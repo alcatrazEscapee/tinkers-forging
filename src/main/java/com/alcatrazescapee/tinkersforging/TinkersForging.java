@@ -24,6 +24,7 @@ import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilButton;
 import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilRecipeUpdate;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
 import com.alcatrazescapee.tinkersforging.integration.patchouli.PatchouliIntegration;
+import com.alcatrazescapee.tinkersforging.integration.tconstruct.TinkersIntegration;
 import com.alcatrazescapee.tinkersforging.util.TickTimer;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
@@ -43,7 +44,7 @@ public final class TinkersForging
     private static final String FORGE_MIN = "14.23.4.2705";
     private static final String FORGE_MAX = "15.0.0.0";
 
-    public static final String DEPENDENCIES = "required-after:forge@[" + FORGE_MIN + "," + FORGE_MAX + ");" + "required-after:alcatrazcore@[" + ALC_MIN + "," + ALC_MAX + ");" + "after:tconstruct;";
+    public static final String DEPENDENCIES = "required-after:forge@[" + FORGE_MIN + "," + FORGE_MAX + ");" + "required-after:alcatrazcore@[" + ALC_MIN + "," + ALC_MAX + ");" + "after:tconstruct;after:alcatrazcore;";
 
     @Mod.Instance
     private static TinkersForging instance;
@@ -92,6 +93,10 @@ public final class TinkersForging
         if (Loader.isModLoaded("patchouli"))
         {
             PatchouliIntegration.init();
+        }
+        if (Loader.isModLoaded("tconstruct"))
+        {
+            TinkersIntegration.init();
         }
 
         // Init Managers

@@ -20,7 +20,7 @@
         {
             "type": "text",
             "title": "Melting Temperature",
-            "text": "$(li)300 C - Tin$(li)350 C - Lead$(li)400 C - Zinc, Pig Iron$(li)700 C - Aluminium$(li)900 C - Electrum, Brass$(li)950 C - Bronze, Silver$(li)1000 C - Copper$(li)1100 C - Gold$(li)1350 C - Steel$(li)1450 C - Nickel, Invar$(li)1600 C - Cobalt, Iron$(li)2100 C - Ardite, Manyullyn$(li)3200  C- Mithril$(li)4700 C - Diamond",
+            "text": "$(li)300 C - Tin$(li)350 C - Lead$(li)400 C - Zinc, Pig Iron$(li)700 C - Aluminium$(li)900 C - Electrum, Brass$(li)950 C - Bronze, Silver$(li)1000 C - Copper$(li)1100 C - Gold$(li)1350 C - Steel$(li)1450 C - Nickel, Invar$(li)1600 C - Cobalt, Iron$(li)2100 C - Ardite, Manyullyn$(li)3200 C - Mithril$(li)4700 C - Diamond",
             "flag": "tinkersforging:tooltip_advanced"
         },
         {
