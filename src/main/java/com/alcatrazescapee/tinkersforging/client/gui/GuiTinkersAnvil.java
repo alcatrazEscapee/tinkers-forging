@@ -45,27 +45,24 @@ public class GuiTinkersAnvil extends GuiContainerTileCore<TileTinkersAnvil>
     @Override
     public void initGui()
     {
+        super.initGui();
         int id = -1;
-        int bx = (width - xSize) / 2;
-        int by = (height - ySize) / 2;
         // Draw buttons here
         for (ForgeStep step : ForgeStep.values())
         {
-            addButton(new GuiButtonTinkersAnvil(++id, bx, by, step));
+            addButton(new GuiButtonTinkersAnvil(++id, guiLeft, guiTop, step));
         }
 
-        addButton(new GuiButtonTinkersAnvil(++id, bx + 63, by + 21, false));
-        addButton(new GuiButtonTinkersAnvil(++id, bx + 103, by + 21, true));
-
-        super.initGui();
+        addButton(new GuiButtonTinkersAnvil(++id, guiLeft + 63, guiTop + 21, false));
+        addButton(new GuiButtonTinkersAnvil(++id, guiLeft + 103, guiTop + 21, true));
     }
 
     @Override
     protected void renderHoveredToolTip(int mouseX, int mouseY)
     {
         // Rule tooltips
-        int x = (width - xSize) / 2 + 57;
-        int y = (height - ySize) / 2 + 42;
+        int x = guiLeft + 57;
+        int y = guiTop + 42;
 
         for (int i = FIELD_FIRST_RULE; i <= FIELD_THIRD_RULE; i++)
         {
@@ -99,19 +96,16 @@ public class GuiTinkersAnvil extends GuiContainerTileCore<TileTinkersAnvil>
     {
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
-        int x = (width - xSize) / 2;
-        int y = (height - ySize) / 2;
-
         // JEI Question Mark Icon
         if (JEIIntegration.isEnabled())
-            drawTexturedModalRect(x + 165, y + 6, 246, 40, 5, 7);
+            drawTexturedModalRect(guiLeft + 165, guiTop + 6, 246, 40, 5, 7);
 
         // Progress + Target
         int progress = tile.getField(TileTinkersAnvil.FIELD_PROGRESS);
-        drawTexturedModalRect(x + 10 + progress, y + 112, 196, 40, 7, 6);
+        drawTexturedModalRect(guiLeft + 10 + progress, guiTop + 112, 196, 40, 7, 6);
 
         int target = tile.getField(TileTinkersAnvil.FIELD_TARGET);
-        drawTexturedModalRect(x + 10 + target, y + 119, 203, 40, 7, 6);
+        drawTexturedModalRect(guiLeft + 10 + target, guiTop + 119, 203, 40, 7, 6);
 
         // Last Three Steps
         for (int i = FIELD_LAST_STEP; i <= FIELD_THIRD_STEP; i++)
@@ -120,7 +114,7 @@ public class GuiTinkersAnvil extends GuiContainerTileCore<TileTinkersAnvil>
             if (step != null)
             {
                 int xOffset = 22 * (2 - i + FIELD_LAST_STEP);
-                drawTexturedModalRect(x + 59 + xOffset, y + 69, step.getTexU() + 3, step.getTexV() + 3, 14, 14);
+                drawTexturedModalRect(guiLeft + 59 + xOffset, guiTop + 69, step.getTexU() + 3, step.getTexV() + 3, 14, 14);
             }
         }
 
@@ -134,9 +128,9 @@ public class GuiTinkersAnvil extends GuiContainerTileCore<TileTinkersAnvil>
             {
                 int xOffset = 22 * (i - FIELD_FIRST_RULE);
                 // The rule icon
-                drawTexturedModalRect(x + 59 + xOffset, y + 44, rule.getIconU(), rule.getIconV(), 14, 14);
+                drawTexturedModalRect(guiLeft + 59 + xOffset, guiTop + 44, rule.getIconU(), rule.getIconV(), 14, 14);
                 // The color / border
-                drawTexturedModalRect(x + 57 + xOffset, y + 42, rule.getOutlineU() + (rule.matches(steps) ? 0 : 18), rule.getOutlineV(), 18, 24);
+                drawTexturedModalRect(guiLeft + 57 + xOffset, guiTop + 42, rule.getOutlineU() + (rule.matches(steps) ? 0 : 18), rule.getOutlineV(), 18, 24);
             }
         }
 

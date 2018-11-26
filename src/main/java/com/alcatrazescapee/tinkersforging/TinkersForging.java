@@ -7,8 +7,11 @@
 package com.alcatrazescapee.tinkersforging;
 
 import org.apache.logging.log4j.Logger;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.ICrashCallable;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -31,7 +34,7 @@ import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_NAME;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-@Mod(modid = MOD_ID, version = TinkersForging.VERSION, dependencies = TinkersForging.DEPENDENCIES, name = MOD_NAME, useMetadata = true)
+@Mod(modid = MOD_ID, version = TinkersForging.VERSION, dependencies = TinkersForging.DEPENDENCIES, name = MOD_NAME, useMetadata = true, certificateFingerprint = "3c2d6be715971d1ed58a028cdb3fae72987fc934")
 public final class TinkersForging
 {
     public static final String MOD_ID = "tinkersforging";
@@ -48,34 +51,39 @@ public final class TinkersForging
 
     @Mod.Instance
     private static TinkersForging instance;
-    private static Logger logger;
-    private static SimpleNetworkWrapper network;
+
+    public static Logger getLog()
+    {
+        return instance.log;
+    }
+
+    public static SimpleNetworkWrapper getNetwork()
+    {
+        return instance.network;
+    }
+
+    private Logger log;
 
     public static TinkersForging getInstance()
     {
         return instance;
     }
 
-    public static Logger getLog()
-    {
-        return logger;
-    }
-
-    public static SimpleNetworkWrapper getNetwork()
-    {
-        return network;
-    }
+    private SimpleNetworkWrapper network;
+    private boolean isSignedBuild = true;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        logger = event.getModLog();
-        logger.debug("If you can see this, debug logging is working :)");
+        log = event.getModLog();
+        log.debug("If you can see this, debug logging is working :)");
+        if (!isSignedBuild)
+            log.warn("You are not running an official build. This version will NOT be supported by the author.");
 
         int id = -1;
         network = NetworkRegistry.INSTANCE.newSimpleChannel(MOD_ID);
-        network.registerMessage(PacketAnvilButton.Handler.class, PacketAnvilButton.class, ++id, Side.SERVER);
-        network.registerMessage(PacketAnvilRecipeUpdate.Handler.class, PacketAnvilRecipeUpdate.class, ++id, Side.CLIENT);
+        network.registerMessage(new PacketAnvilButton.Handler(), PacketAnvilButton.class, ++id, Side.SERVER);
+        network.registerMessage(new PacketAnvilRecipeUpdate.Handler(), PacketAnvilRecipeUpdate.class, ++id, Side.CLIENT);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ModGuiHandler());
 
@@ -88,8 +96,13 @@ public final class TinkersForging
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
+        if (!isSignedBuild)
+            log.warn("You are not running an official build. This version will NOT be supported by the author.");
+
+        // Reset timer
         TickTimer.reset();
 
+        // Special Mod Integration
         if (Loader.isModLoaded("patchouli"))
         {
             PatchouliIntegration.init();
@@ -108,7 +121,30 @@ public final class TinkersForging
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
+        if (!isSignedBuild)
+            log.warn("You are not running an official build. This version will NOT be supported by the author.");
+
         // Post-Init Managers
         ModRecipes.postInit();
+    }
+
+    @Mod.EventHandler
+    public void onFingerprintViolation(FMLFingerprintViolationEvent event)
+    {
+        isSignedBuild = false;
+        FMLCommonHandler.instance().registerCrashCallable(new ICrashCallable()
+        {
+            @Override
+            public String getLabel()
+            {
+                return MOD_NAME;
+            }
+
+            @Override
+            public String call()
+            {
+                return "You are not running an official build. This version will NOT be supported by the author.";
+            }
+        });
     }
 }

@@ -34,4 +34,11 @@ public class ContainerForge extends ContainerTileInventory<TileForge>
                 addSlotToContainer(new SlotTileCore(cap, i, 62 + 18 * (i - SLOT_INPUT_MIN), 23, tile));
         }
     }
+
+    @Override
+    public void detectAndSendChanges()
+    {
+        detectAndSendAllChanges();
+        detectAndSendFieldChanges();
+    }
 }

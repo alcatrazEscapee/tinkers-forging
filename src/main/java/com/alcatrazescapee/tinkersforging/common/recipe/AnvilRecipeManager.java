@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.item.ItemStack;
+
 import com.alcatrazescapee.alcatrazcore.inventory.recipe.IRecipeManager;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
 
@@ -72,9 +74,9 @@ public class AnvilRecipeManager implements IRecipeManager<AnvilRecipe>
     }
 
     @Override
-    public void remove(Object input)
+    public void remove(Object output)
     {
-        recipes.removeIf(x -> x.matches(input));
+        recipes.removeIf(x -> output instanceof ItemStack && x.matchesOutput((ItemStack) output));
     }
 
     @Nullable

@@ -41,38 +41,15 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
 
     public static final int FIELD_FUEL = 0;
     public static final int FIELD_TEMPERATURE = 1;
-    public static final int FUEL_TICKS_MAX = 1600; // todo: change back for testing
+    public static final int FUEL_TICKS_MAX = 1600;
 
-    public static void tryLight(World world, BlockPos pos)
-    {
-        // Replace the block
-        IBlockState state = world.getBlockState(pos);
-        if (state.getBlock() == ModBlocks.CHARCOAL_PILE)
-        {
-            int layers = state.getValue(LAYERS);
-            if (layers >= 2)
-            {
-                world.setBlockState(pos, ModBlocks.CHARCOAL_FORGE.getStateWithLayers(layers).withProperty(LIT, true));
-                light(world, pos);
-            }
-        }
-        else if (state.getBlock() == ModBlocks.CHARCOAL_FORGE && !state.getValue(LIT))
-        {
-            int layers = state.getValue(LAYERS);
-            if (layers >= 2)
-            {
-                world.setBlockState(pos, ModBlocks.CHARCOAL_FORGE.getStateWithLayers(layers).withProperty(LIT, true));
-                light(world, pos);
-            }
-        }
-    }
-
-    private static void light(World world, BlockPos pos)
+    public static void light(World world, BlockPos pos)
     {
         TileCharcoalForge tile = CoreHelpers.getTE(world, pos, TileCharcoalForge.class);
         if (tile != null)
         {
             tile.consumeFuel();
+            tile.updateClosedState();
         }
     }
 
@@ -110,6 +87,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
         {
             return;
         }
+
         if (fuelTicksRemaining > 0)
         {
             // Consume fuel ticks
@@ -158,7 +136,7 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
                     // Add temperature
                     if (cap.getTemperature() < temperature)
                     {
-                        CapabilityForgeItem.addTemp(cap, (float) ModConfig.BALANCE.charcoalForgeTemperatureModifier);
+                        CapabilityForgeItem.addTemp(cap, 1.0f + (float) ModConfig.BALANCE.charcoalForgeTemperatureModifier);
                     }
 
                     if (cap.isMolten())

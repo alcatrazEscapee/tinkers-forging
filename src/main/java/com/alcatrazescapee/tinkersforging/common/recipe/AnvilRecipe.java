@@ -15,6 +15,7 @@ import net.minecraft.util.StringUtils;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import com.alcatrazescapee.alcatrazcore.inventory.recipe.RecipeCore;
+import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
 import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeRule;
@@ -144,6 +145,11 @@ public class AnvilRecipe extends RecipeCore
         buffer.writeInt(rules.length);
         for (ForgeRule rule : rules)
             buffer.writeInt(ForgeRule.getID(rule));
+    }
+
+    public boolean matchesOutput(ItemStack output)
+    {
+        return CoreHelpers.doStacksMatch(outputStack, output);
     }
 
     @Nonnull

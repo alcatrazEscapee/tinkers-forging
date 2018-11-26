@@ -34,4 +34,11 @@ public class ContainerCharcoalForge extends ContainerTileInventory<TileCharcoalF
                 addSlotToContainer(new SlotTileCore(cap, i, 44 + 18 * (i - SLOT_INPUT_MIN), 23, tile));
         }
     }
+
+    @Override
+    public void detectAndSendChanges()
+    {
+        detectAndSendAllChanges();
+        detectAndSendFieldChanges();
+    }
 }

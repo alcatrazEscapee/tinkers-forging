@@ -192,31 +192,9 @@ public class BlockCharcoalForge extends BlockTileCore implements IPileBlock, IBu
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+    @SuppressWarnings("deprecation")
+    public boolean isFullBlock(IBlockState state)
     {
-        ItemStack stack = player.getHeldItem(hand);
-        if (FireRegistry.isFireStarter(stack))
-        {
-            if (!world.isRemote)
-            {
-                world.setBlockState(pos, state.withProperty(LIT, true));
-                TileCharcoalForge.tryLight(world, pos);
-                stack.damageItem(1, player);
-                world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
-                TileCharcoalForge tile = CoreHelpers.getTE(world, pos, TileCharcoalForge.class);
-                if (tile != null)
-                {
-                    tile.updateClosedState();
-                }
-            }
-            return true;
-        }
-        else if (!player.isSneaking())
-        {
-            player.openGui(TinkersForging.getInstance(), ModGuiHandler.CHARCOAL_FORGE, world, pos.getX(), pos.getY(), pos.getZ());
-            return true;
-        }
         return false;
     }
 
@@ -261,5 +239,43 @@ public class BlockCharcoalForge extends BlockTileCore implements IPileBlock, IBu
         }
 
         super.onEntityWalk(worldIn, pos, entityIn);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isNormalCube(IBlockState state)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+    {
+        ItemStack stack = player.getHeldItem(hand);
+        if (FireRegistry.isFireStarter(stack))
+        {
+            if (!world.isRemote)
+            {
+                world.setBlockState(pos, state.withProperty(LIT, true));
+                stack.damageItem(1, player);
+                world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+                TileCharcoalForge.light(world, pos);
+            }
+            return true;
+        }
+        else if (!player.isSneaking())
+        {
+            player.openGui(TinkersForging.getInstance(), ModGuiHandler.CHARCOAL_FORGE, world, pos.getX(), pos.getY(), pos.getZ());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
+    {
+        return side == EnumFacing.UP ? isTopSolid(state) : (side == EnumFacing.DOWN);
     }
 }

@@ -12,7 +12,6 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 
-import com.alcatrazescapee.alcatrazcore.inventory.ingredient.IRecipeIngredient;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
@@ -28,7 +27,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
 @SuppressWarnings("unused")
-@ZenClass("mods.tinkersforging.Anvil")
+@ZenClass("mods.TinkersForging.Anvil")
 public final class CraftTweakerIntegration
 {
     @ZenMethod
@@ -83,13 +82,13 @@ public final class CraftTweakerIntegration
             @Override
             public void apply()
             {
-                ModRecipes.addRecipeAction(() -> ModRecipes.ANVIL.remove(IRecipeIngredient.of(stack)));
+                ModRecipes.addRecipeAction(() -> ModRecipes.ANVIL.remove(stack));
             }
 
             @Override
             public String describe()
             {
-                return "Removing Fire pit recipe for " + stack.getDisplayName();
+                return "Removing Anvil recipe for " + stack.getDisplayName();
             }
         });
     }

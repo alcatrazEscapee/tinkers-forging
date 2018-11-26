@@ -36,6 +36,8 @@ import com.alcatrazescapee.alcatrazcore.util.compat.FireRegistry;
 import com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge;
 import com.alcatrazescapee.tinkersforging.util.property.IPileBlock;
 
+import static com.alcatrazescapee.tinkersforging.util.property.IBurnBlock.LIT;
+
 @ParametersAreNonnullByDefault
 public class BlockCharcoalPile extends BlockCore implements IPileBlock
 {
@@ -173,17 +175,9 @@ public class BlockCharcoalPile extends BlockCore implements IPileBlock
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+    @SuppressWarnings("deprecation")
+    public boolean isFullBlock(IBlockState state)
     {
-        ItemStack stack = player.getHeldItem(hand);
-        if (state.getValue(LAYERS) >= 6 && FireRegistry.isFireStarter(stack))
-        {
-            if (!world.isRemote)
-            {
-                TileCharcoalForge.tryLight(world, pos);
-            }
-            return true;
-        }
         return false;
     }
 
@@ -223,5 +217,36 @@ public class BlockCharcoalPile extends BlockCore implements IPileBlock
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
     {
         return new ItemStack(Items.COAL, 1, 1);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isNormalCube(IBlockState state)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+    {
+        ItemStack stack = player.getHeldItem(hand);
+        int layers = state.getValue(LAYERS);
+        if (layers >= 6 && FireRegistry.isFireStarter(stack))
+        {
+            if (!world.isRemote)
+            {
+                world.setBlockState(pos, ModBlocks.CHARCOAL_FORGE.getStateWithLayers(layers).withProperty(LIT, true));
+                TileCharcoalForge.light(world, pos);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
+    {
+        return side == EnumFacing.UP ? isTopSolid(state) : (side == EnumFacing.DOWN);
     }
 }

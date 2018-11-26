@@ -38,19 +38,19 @@ public class PacketUpdateForgeItem extends PacketTContainerUpdate<IForgeItem, NB
     }
 
     @Override
-    public NBTTagCompound readCapability(IForgeItem instance)
+    protected NBTTagCompound readCapability(IForgeItem instance)
     {
         return instance.serializeNBT();
     }
 
     @Override
-    public void serializeCapability(ByteBuf buf, NBTTagCompound nbt)
+    protected void serializeCapability(ByteBuf buf, NBTTagCompound nbt)
     {
         ByteBufUtils.writeTag(buf, nbt);
     }
 
     @Override
-    public NBTTagCompound deserializeCapability(ByteBuf buf)
+    protected NBTTagCompound deserializeCapability(ByteBuf buf)
     {
         return ByteBufUtils.readTag(buf);
     }
@@ -58,7 +58,7 @@ public class PacketUpdateForgeItem extends PacketTContainerUpdate<IForgeItem, NB
     public static class Handler extends PacketTContainerUpdate.Handler<IForgeItem, NBTTagCompound, PacketUpdateForgeItem>
     {
         @Override
-        public void applyCapability(IForgeItem instance, NBTTagCompound nbt)
+        public void applyCapability(ItemStack stack, IForgeItem instance, NBTTagCompound nbt)
         {
             instance.deserializeNBT(nbt);
         }
