@@ -111,7 +111,12 @@ public final class ModEventHandler
 
         if (!stack.hasCapability(CapabilityForgeItem.CAPABILITY, null))
         {
-            if (CoreHelpers.doesStackMatchOrePrefix(stack, "ingot") || ModRecipes.ANVIL.isRecipe(stack))
+            if (CapabilityForgeItem.addCapabilityToStack(event, stack))
+            {
+                // The capability was applied via a custom override (takes priority over ingot based items)
+                return;
+            }
+            if (CoreHelpers.doesStackMatchOrePrefix(stack, "ingot"))
             {
                 event.addCapability(CapabilityForgeItem.KEY, new ForgeItem(stack, stack.getTagCompound()));
             }

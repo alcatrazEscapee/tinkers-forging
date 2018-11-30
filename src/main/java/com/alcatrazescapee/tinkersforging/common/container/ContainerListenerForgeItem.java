@@ -14,6 +14,7 @@ import net.minecraft.util.NonNullList;
 
 import com.alcatrazescapee.alcatrazcore.network.PacketTContainerUpdate;
 import com.alcatrazescapee.alcatrazcore.network.capability.CapabilityContainerListener;
+import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
 import com.alcatrazescapee.tinkersforging.common.network.PacketUpdateForgeItem;
@@ -36,5 +37,11 @@ public class ContainerListenerForgeItem extends CapabilityContainerListener<IFor
     protected PacketTContainerUpdate<IForgeItem, ?> createSingleUpdateMessage(int windowID, int slotID, IForgeItem instance)
     {
         return new PacketUpdateForgeItem(windowID, slotID, instance);
+    }
+
+    @Override
+    protected void sendToPlayer(EntityPlayerMP player, PacketTContainerUpdate<IForgeItem, ?> packet)
+    {
+        TinkersForging.getNetwork().sendTo(packet, player);
     }
 }

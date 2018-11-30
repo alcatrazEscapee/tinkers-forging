@@ -12,7 +12,9 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 
+import com.alcatrazescapee.alcatrazcore.inventory.ingredient.IRecipeIngredient;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
+import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeRule;
@@ -31,16 +33,16 @@ import stanhebben.zenscript.annotations.ZenMethod;
 public final class CraftTweakerIntegration
 {
     @ZenMethod
-    public static void add(IIngredient input, IItemStack output, int tier, String... ruleNames)
+    public static void addRecipe(final IIngredient input, final IItemStack output, final int tier, final String... ruleNames)
     {
-        AnvilRecipe recipe;
-        ItemStack outputStack = toStack(output);
-        List<ForgeRule> rules = new ArrayList<>(ruleNames.length);
+        final AnvilRecipe recipe;
+        final ItemStack outputStack = toStack(output);
+        final List<ForgeRule> rules = new ArrayList<>(ruleNames.length);
         for (String ruleName : ruleNames)
         {
             try
             {
-                ForgeRule rule = ForgeRule.valueOf(ruleName.toUpperCase());
+                final ForgeRule rule = ForgeRule.valueOf(ruleName.toUpperCase());
                 rules.add(rule);
             }
             catch (IllegalArgumentException e)
@@ -50,7 +52,7 @@ public final class CraftTweakerIntegration
         }
         if (input instanceof IOreDictEntry)
         {
-            IOreDictEntry ore = (IOreDictEntry) input;
+            final IOreDictEntry ore = (IOreDictEntry) input;
             recipe = new AnvilRecipe(outputStack, ore.getName(), ore.getAmount(), tier, rules.toArray(new ForgeRule[0]));
         }
         else
@@ -68,15 +70,15 @@ public final class CraftTweakerIntegration
             @Override
             public String describe()
             {
-                return "Adding Anvil recipe for " + recipe.getName();
+                return "Adding Anvil recipe for " + recipe.getName() + "\n";
             }
         });
     }
 
     @ZenMethod
-    public static void remove(IItemStack output)
+    public static void removeRecipe(final IItemStack output)
     {
-        ItemStack stack = toStack(output);
+        final ItemStack stack = toStack(output);
         CraftTweakerAPI.apply(new IAction()
         {
             @Override
@@ -88,18 +90,46 @@ public final class CraftTweakerIntegration
             @Override
             public String describe()
             {
-                return "Removing Anvil recipe for " + stack.getDisplayName();
+                return "Removing Anvil recipe for " + stack.getDisplayName() + "\n";
             }
         });
     }
 
+    @ZenMethod
+    public static void addItemHeat(final IIngredient input, final int workingTemperature, final int meltingTemperature)
+    {
+        final IRecipeIngredient ingredient;
+        if (input instanceof IOreDictEntry)
+        {
+            final IOreDictEntry ore = (IOreDictEntry) input;
+            ingredient = IRecipeIngredient.of(ore.getName());
+        }
+        else
+        {
+            ingredient = IRecipeIngredient.of(toStack(input));
+        }
+        CraftTweakerAPI.apply(new IAction()
+        {
+            @Override
+            public void apply()
+            {
+                CapabilityForgeItem.registerStackCapability(ingredient, (float) workingTemperature, (float) meltingTemperature);
+            }
+
+            @Override
+            public String describe()
+            {
+                return "Adding heat registry for " + ingredient.getName() + "\n";
+            }
+        });
+    }
 
     @Nonnull
-    private static ItemStack toStack(IIngredient ingredient)
+    private static ItemStack toStack(final IIngredient ingredient)
     {
         if (!(ingredient instanceof IItemStack))
             return ItemStack.EMPTY;
-        Object obj = ingredient.getInternal();
+        final Object obj = ingredient.getInternal();
         return obj instanceof ItemStack ? (ItemStack) obj : ItemStack.EMPTY;
     }
 }

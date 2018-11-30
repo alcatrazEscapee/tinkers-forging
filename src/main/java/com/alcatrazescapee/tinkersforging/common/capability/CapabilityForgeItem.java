@@ -6,6 +6,9 @@
 
 package com.alcatrazescapee.tinkersforging.common.capability;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -16,12 +19,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.oredict.OreDictionary;
 
+import com.alcatrazescapee.alcatrazcore.inventory.ingredient.IRecipeIngredient;
 import com.alcatrazescapee.alcatrazcore.network.capability.CapabilityContainerListenerManager;
 import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.common.container.ContainerListenerForgeItem;
-import com.alcatrazescapee.tinkersforging.common.network.PacketUpdateForgeItem;
 
 import static com.alcatrazescapee.alcatrazcore.util.CoreHelpers.getNull;
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
@@ -34,9 +38,10 @@ public final class CapabilityForgeItem
     public static final ResourceLocation KEY = new ResourceLocation(MOD_ID, "forge_item");
 
     public static final float MAX_TEMPERATURE = 1500f;
+    public static final float DEFAULT_MELT_TEMPERATURE = 1400f;
+    public static final float DEFAULT_WORK_TEMPERATURE = 800f;
 
-    private static final float DEFAULT_MELT_TEMPERATURE = 1400f;
-    private static final float DEFAULT_WORK_TEMPERATURE = 1000f;
+    private static final List<ForgeItemRegistry> EXTRA_CAPABILITIES = new ArrayList<>();
 
     public static void preInit()
     {
@@ -45,7 +50,6 @@ public final class CapabilityForgeItem
 
         // Register Sync Handler
         CapabilityContainerListenerManager.registerContainerListenerFactory(ContainerListenerForgeItem::new);
-        CapabilityContainerListenerManager.registerTContainerPacket(PacketUpdateForgeItem.class, new PacketUpdateForgeItem.Handler());
     }
 
     /**
@@ -70,6 +74,36 @@ public final class CapabilityForgeItem
     {
         final float temp = cap.getTemperature() + modifier * (float) ModConfig.BALANCE.temperatureModifier;
         cap.setTemperature(temp > MAX_TEMPERATURE ? MAX_TEMPERATURE : temp);
+    }
+
+    /**
+     * Use this to register a special heat application (the capability will take priority over default ones)
+     *
+     * @param ingredient         A predicate to check if the item stack should have this capability
+     * @param workingTemperature the working temperature of the capability
+     * @param meltingTemperature the melting temperature of the capability
+     */
+    public static void registerStackCapability(IRecipeIngredient ingredient, float workingTemperature, float meltingTemperature)
+    {
+        EXTRA_CAPABILITIES.add(new ForgeItemRegistry(ingredient, workingTemperature, meltingTemperature));
+    }
+
+    /**
+     * Adds capabilities to an item stack based on the item -> capability registry
+     *
+     * @return true if a capability was added
+     */
+    public static boolean addCapabilityToStack(AttachCapabilitiesEvent<ItemStack> event, ItemStack stack)
+    {
+        for (ForgeItemRegistry r : EXTRA_CAPABILITIES)
+        {
+            if (r.test(stack))
+            {
+                event.addCapability(KEY, new ForgeItem(stack.getTagCompound(), r.workingTemperature, r.meltingTemperature));
+                return true;
+            }
+        }
+        return false;
     }
 
     static float getMeltingTemperature(@Nullable ItemStack stack)
@@ -162,7 +196,7 @@ public final class CapabilityForgeItem
     }
 
     // This is not for usage; it will not do anything.
-    static class DumbStorage implements Capability.IStorage<IForgeItem>
+    private static class DumbStorage implements Capability.IStorage<IForgeItem>
     {
         @Nullable
         @Override
@@ -174,6 +208,25 @@ public final class CapabilityForgeItem
         @Override
         public void readNBT(Capability<IForgeItem> capability, IForgeItem instance, EnumFacing side, NBTBase nbtBase)
         {
+        }
+    }
+
+    private static class ForgeItemRegistry implements Predicate<ItemStack>
+    {
+        private final IRecipeIngredient ingredient;
+        private final float workingTemperature, meltingTemperature;
+
+        private ForgeItemRegistry(IRecipeIngredient ingredient, float workingTemperature, float meltingTemperature)
+        {
+            this.ingredient = ingredient;
+            this.workingTemperature = workingTemperature;
+            this.meltingTemperature = meltingTemperature;
+        }
+
+        @Override
+        public boolean test(ItemStack stack)
+        {
+            return ingredient.testIgnoreCount(stack);
         }
     }
 }

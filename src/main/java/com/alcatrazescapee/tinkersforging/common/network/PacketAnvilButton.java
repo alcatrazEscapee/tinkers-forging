@@ -6,11 +6,12 @@
 
 package com.alcatrazescapee.tinkersforging.common.network;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+import com.alcatrazescapee.alcatrazcore.AlcatrazCore;
 import com.alcatrazescapee.tinkersforging.common.container.ContainerTinkersAnvil;
 import io.netty.buffer.ByteBuf;
 
@@ -43,13 +44,11 @@ public class PacketAnvilButton implements IMessage
         @Override
         public IMessage onMessage(PacketAnvilButton message, MessageContext ctx)
         {
-            EntityPlayerMP serverPlayer = ctx.getServerHandler().player;
-            if (serverPlayer.openContainer instanceof ContainerTinkersAnvil)
+            EntityPlayer player = AlcatrazCore.getProxy().getPlayer(ctx);
+            if (player.openContainer instanceof ContainerTinkersAnvil)
             {
-                ContainerTinkersAnvil container = (ContainerTinkersAnvil) serverPlayer.openContainer;
-                serverPlayer.getServerWorld().addScheduledTask(() ->
-                        container.onReceivePacket(message.buttonId)
-                );
+                ContainerTinkersAnvil container = (ContainerTinkersAnvil) player.openContainer;
+                AlcatrazCore.getProxy().getThreadListener(ctx).addScheduledTask(() -> container.onReceivePacket(message.buttonId));
             }
             return null;
         }

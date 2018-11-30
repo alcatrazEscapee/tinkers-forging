@@ -6,12 +6,13 @@
 
 package com.alcatrazescapee.tinkersforging.common.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+import com.alcatrazescapee.alcatrazcore.AlcatrazCore;
 import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
@@ -54,11 +55,12 @@ public class PacketAnvilRecipeUpdate implements IMessage
     public static class Handler implements IMessageHandler<PacketAnvilRecipeUpdate, IMessage>
     {
         @Override
-        public IMessage onMessage(PacketAnvilRecipeUpdate message, MessageContext context)
+        public IMessage onMessage(PacketAnvilRecipeUpdate message, MessageContext ctx)
         {
-            Minecraft.getMinecraft().addScheduledTask(() ->
+            AlcatrazCore.getProxy().getThreadListener(ctx).addScheduledTask(() ->
             {
-                TileTinkersAnvil tile = CoreHelpers.getTE(Minecraft.getMinecraft().world, message.pos, TileTinkersAnvil.class);
+                World world = AlcatrazCore.getProxy().getWorld(ctx);
+                TileTinkersAnvil tile = CoreHelpers.getTE(world, message.pos, TileTinkersAnvil.class);
                 if (tile != null)
                 {
                     tile.setRecipe(message.recipe);

@@ -21,6 +21,9 @@ import com.alcatrazescapee.tinkersforging.util.TickTimer;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeStep;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeSteps;
 
+import static com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem.DEFAULT_MELT_TEMPERATURE;
+import static com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem.DEFAULT_WORK_TEMPERATURE;
+
 public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagCompound>
 {
     private final ForgeSteps steps;
@@ -34,14 +37,29 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     private float temperature;
     private long lastUpdateTick;
 
-    public ForgeItem(@Nullable ItemStack stack, @Nullable NBTTagCompound nbt)
+    public ForgeItem(@Nullable NBTTagCompound nbt, float workingTemperature, float meltingTemperature)
     {
         steps = new ForgeSteps();
 
-        this.meltingTemperature = CapabilityForgeItem.getMeltingTemperature(stack);
-        this.workingTemperature = CapabilityForgeItem.getWorkingTemperature(stack);
+        this.meltingTemperature = meltingTemperature;
+        this.workingTemperature = workingTemperature;
 
         deserializeNBT(nbt);
+    }
+
+    public ForgeItem(@Nullable ItemStack stack, @Nullable NBTTagCompound nbt)
+    {
+        this(nbt, CapabilityForgeItem.getWorkingTemperature(stack), CapabilityForgeItem.getMeltingTemperature(stack));
+    }
+
+    public ForgeItem(@Nullable NBTTagCompound nbt)
+    {
+        this(nbt, DEFAULT_WORK_TEMPERATURE, DEFAULT_MELT_TEMPERATURE);
+    }
+
+    public ForgeItem()
+    {
+        this(null, DEFAULT_WORK_TEMPERATURE, DEFAULT_MELT_TEMPERATURE);
     }
 
     @Override

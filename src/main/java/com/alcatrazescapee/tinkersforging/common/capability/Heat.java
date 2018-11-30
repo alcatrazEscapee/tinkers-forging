@@ -21,12 +21,13 @@ public enum Heat
     HOT(1f, 100f, TextFormatting.DARK_GRAY),
     VERY_HOT(100f, 200f, TextFormatting.DARK_GRAY),
     DARK_RED(200f, 400f, TextFormatting.DARK_RED),
-    RED(400f, 600f, TextFormatting.DARK_RED),
+    FAINT_RED(400f, 600f, TextFormatting.RED),
     BRIGHT_RED(600f, 900f, TextFormatting.RED),
     ORANGE(900f, 1050f, TextFormatting.GOLD),
     YELLOW(1050f, 1200f, TextFormatting.YELLOW),
     YELLOW_WHITE(1200f, 1350f, TextFormatting.YELLOW),
-    WHITE(1350f, Float.MAX_VALUE, TextFormatting.WHITE);
+    WHITE(1350f, 1499f, TextFormatting.WHITE),
+    BRILLIANT_WHITE(1500f, Float.MAX_VALUE, TextFormatting.WHITE);
 
     public static String getColorFor(float temperature)
     {
