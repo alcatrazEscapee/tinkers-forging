@@ -48,7 +48,13 @@ public final class CraftTweakerIntegration
             catch (IllegalArgumentException e)
             {
                 TinkersForging.getLog().warn("Illegal rule name {} specified in craft tweaker recipe!", ruleName);
+                return;
             }
+        }
+        if (rules.size() <= 0 || rules.size() > 3)
+        {
+            TinkersForging.getLog().warn("Illegal number of rules {} specified in craft tweaker recipe!", rules.size());
+            return;
         }
         if (input instanceof IOreDictEntry)
         {

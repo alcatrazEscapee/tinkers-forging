@@ -178,7 +178,7 @@ public class BlockCharcoalPile extends BlockCore implements IPileBlock
     @SuppressWarnings("deprecation")
     public boolean isFullBlock(IBlockState state)
     {
-        return false;
+        return state.getValue(LAYERS) == 8;
     }
 
     @Nonnull
@@ -223,7 +223,7 @@ public class BlockCharcoalPile extends BlockCore implements IPileBlock
     @SuppressWarnings("deprecation")
     public boolean isNormalCube(IBlockState state)
     {
-        return false;
+        return state.getValue(LAYERS) == 8;
     }
 
     @Override

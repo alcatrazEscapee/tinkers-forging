@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -162,11 +163,12 @@ public final class ModEventHandler
             if (face == EnumFacing.UP && state.getBlock() == ModBlocks.CHARCOAL_PILE || state.getBlock() == ModBlocks.CHARCOAL_FORGE)
             {
                 // Since these aren't the same property
-                IProperty<Integer> layers = state.getBlock() == ModBlocks.CHARCOAL_PILE ? BlockCharcoalPile.LAYERS : BlockCharcoalForge.LAYERS;
+                IProperty<Integer> layerProperty = state.getBlock() == ModBlocks.CHARCOAL_PILE ? BlockCharcoalPile.LAYERS : BlockCharcoalForge.LAYERS;
+                int layers = state.getValue(layerProperty);
                 // Add to an existing pile block
-                if (state.getValue(layers) < 8)
+                if (layers < 8 && world.checkNoEntityCollision(ModBlocks.CHARCOAL_PILE.getBoundingBox(ModBlocks.CHARCOAL_PILE.getStateWithLayers(layers + 1), world, pos).offset(pos)))
                 {
-                    world.setBlockState(pos, state.withProperty(layers, state.getValue(layers) + 1));
+                    world.setBlockState(pos, state.withProperty(layerProperty, layers + 1));
                     player.setHeldItem(event.getHand(), CoreHelpers.consumeItem(player, stack));
                     world.playSound(null, pos, SoundEvents.BLOCK_GRAVEL_PLACE, SoundCategory.BLOCKS, 1.0f, 0.5f);
 
@@ -177,7 +179,7 @@ public final class ModEventHandler
                 }
             }
 
-            if (world.getBlockState(pos.down().offset(face)).isNormalCube() && world.getBlockState(pos.offset(face)).getBlock().isReplaceable(world, pos.offset(face)))
+            if (world.getBlockState(pos.down().offset(face)).isNormalCube() && world.mayPlace(Blocks.STONE, pos.offset(face), false, face, player))
             {
                 // Create a new charcoal pile
                 if (!world.isRemote)
