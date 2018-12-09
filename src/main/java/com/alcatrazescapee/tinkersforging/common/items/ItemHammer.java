@@ -54,6 +54,8 @@ public class ItemHammer extends ItemToolCore
 
         this.metal = metal;
         MAP.put(metal, this);
+        //noinspection ConstantConditions
+        setCreativeTab(null);
 
         OreDictionaryHelper.register(this, "hammer");
         OreDictionaryHelper.register(this, "hammer");
@@ -67,6 +69,8 @@ public class ItemHammer extends ItemToolCore
         addToolClass(ToolClass.PICKAXE);
 
         this.metal = null;
+        //noinspection ConstantConditions
+        setCreativeTab(null);
 
         OreDictionaryHelper.register(this, "hammer");
         OreDictionaryHelper.register(this, "hammer", material.name());
