@@ -53,6 +53,18 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
         }
     }
 
+    public static boolean isValidSideBlocks(World world, BlockPos pos)
+    {
+        for (EnumFacing face : EnumFacing.HORIZONTALS)
+        {
+            if (!TileCharcoalForge.isValidSideBlock(world.getBlockState(pos.offset(face))))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static boolean isValidSideBlock(IBlockState state)
     {
         return state.isNormalCube() && state.getMaterial() == Material.ROCK;

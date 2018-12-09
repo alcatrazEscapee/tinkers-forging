@@ -5,14 +5,19 @@
         "description": "Adds Simple TFC-style Forging to 1.12+",
         "version": "${version}",
         "mcversion": "${mcversion}",
-        "url": "",
+        "url": "https://github.com/alcatrazEscapee/tinkers-forging",
         "updateUrl": "",
         "authorList": [
             "alcatrazEscapee"
         ],
         "credits": "",
-        "logoFile": "",
+        "logoFile": "assets/banner.png",
         "screenshots": [],
-        "dependencies": []
+        "requiredMods": [
+            "alcatrazcore"
+        ],
+        "dependencies": [
+            "alcatrazcore"
+        ]
     }
 ]

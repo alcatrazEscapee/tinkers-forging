@@ -252,17 +252,20 @@ public class BlockCharcoalForge extends BlockTileCore implements IPileBlock, IBu
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         ItemStack stack = player.getHeldItem(hand);
-        if (FireRegistry.isFireStarter(stack))
+        if (FireRegistry.isFireStarter(stack) && !state.getValue(LIT) && TileCharcoalForge.isValidSideBlocks(world, pos) && state.getValue(LAYERS) >= 6)
         {
-            if (!world.isRemote)
+            if (TileCharcoalForge.isValidSideBlocks(world, pos))
             {
-                world.setBlockState(pos, state.withProperty(LIT, true));
-                stack.damageItem(1, player);
-                world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                if (!world.isRemote)
+                {
+                    world.setBlockState(pos, state.withProperty(LIT, true));
+                    stack.damageItem(1, player);
+                    world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
-                TileCharcoalForge.light(world, pos);
+                    TileCharcoalForge.light(world, pos);
+                }
+                return true;
             }
-            return true;
         }
         else if (!player.isSneaking())
         {

@@ -31,10 +31,10 @@ public enum Heat
 
     public static String getColorFor(float temperature)
     {
-        Heat heat = Arrays.stream(Heat.values())
+        Heat heat = Arrays.stream(values())
                 .filter(x -> x.min <= temperature && temperature < x.max)
                 .findFirst()
-                .orElse(WHITE);
+                .orElse(BRILLIANT_WHITE);
         return "" + heat.format;
     }
 
@@ -42,14 +42,14 @@ public enum Heat
     @SideOnly(Side.CLIENT)
     public static String getTooltipFor(float temperature)
     {
-        Heat heat = Arrays.stream(Heat.values())
+        Heat heat = Arrays.stream(values())
                 .filter(x -> x.min <= temperature && temperature < x.max)
                 .findFirst()
-                .orElse(WHITE);
+                .orElse(BRILLIANT_WHITE);
 
         StringBuilder b = new StringBuilder();
         b.append(I18n.format(MOD_ID + ".tooltip.temperature_" + heat.name().toLowerCase()));
-        if (heat != Heat.WHITE)
+        if (heat != BRILLIANT_WHITE)
         {
             for (int i = 1; i <= 4; i++)
             {

@@ -231,7 +231,7 @@ public class BlockCharcoalPile extends BlockCore implements IPileBlock
     {
         ItemStack stack = player.getHeldItem(hand);
         int layers = state.getValue(LAYERS);
-        if (layers >= 6 && FireRegistry.isFireStarter(stack))
+        if (layers >= 6 && FireRegistry.isFireStarter(stack) && TileCharcoalForge.isValidSideBlocks(world, pos))
         {
             if (!world.isRemote)
             {
