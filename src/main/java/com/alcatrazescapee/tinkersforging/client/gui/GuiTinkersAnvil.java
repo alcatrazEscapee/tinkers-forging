@@ -14,6 +14,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -21,7 +22,6 @@ import com.alcatrazescapee.alcatrazcore.client.gui.GuiContainerTileCore;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilButton;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
-import com.alcatrazescapee.tinkersforging.integration.jei.JEIIntegration;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeRule;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeStep;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeSteps;
@@ -34,6 +34,8 @@ import static com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil.*;
 public class GuiTinkersAnvil extends GuiContainerTileCore<TileTinkersAnvil>
 {
     static final ResourceLocation BACKGROUND = new ResourceLocation(MOD_ID, "textures/gui/tinkers_anvil.png");
+
+    private static final boolean isJEIEnabled = Loader.isModLoaded("jei");
 
     public GuiTinkersAnvil(TileTinkersAnvil tile, String translationKey, Container container, InventoryPlayer playerInv)
     {
@@ -97,7 +99,7 @@ public class GuiTinkersAnvil extends GuiContainerTileCore<TileTinkersAnvil>
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
         // JEI Question Mark Icon
-        if (JEIIntegration.isEnabled())
+        if (isJEIEnabled)
             drawTexturedModalRect(guiLeft + 165, guiTop + 6, 246, 40, 5, 7);
 
         // Progress + Target

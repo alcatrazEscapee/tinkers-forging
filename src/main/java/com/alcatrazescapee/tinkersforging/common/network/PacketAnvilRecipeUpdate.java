@@ -59,7 +59,7 @@ public class PacketAnvilRecipeUpdate implements IMessage
         {
             AlcatrazCore.getProxy().getThreadListener(ctx).addScheduledTask(() ->
             {
-                World world = AlcatrazCore.getProxy().getWorld(ctx);
+                World world = AlcatrazCore.getProxy().getClientWorld();
                 TileTinkersAnvil tile = CoreHelpers.getTE(world, message.pos, TileTinkersAnvil.class);
                 if (tile != null)
                 {
