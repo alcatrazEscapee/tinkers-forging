@@ -1,6 +1,6 @@
 {
-    "name": "Tinker's Forging Guide",
-    "landing_text": "A mod that adds TFC Style Forging to 1.12+$(br2)Author:$(br)AlcatrazEscapee",
+    "name": "tinkersforging.patchouli.name",
+    "landing_text": "tinkersforging.patchouli.landing_text",
     "version": 1,
     "creative_tab": "tinkersforging.stuff",
     "model": "tinkersforging:guide_book",
