@@ -3,3 +3,5 @@ v1.0.3
 Changes:
  - Added a few config options: the target can now be set as a range
  - Added compatibility for No Tree Punching's tools (saw, knife, mattock)
+ - Fixed temperature tooltip on server being way too hot
+ - Fixed brick forge not syncing inventory properly - causing items to flicker

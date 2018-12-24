@@ -109,6 +109,4 @@ public interface IForgeItem extends INBTSerializable<NBTTagCompound>
         }
         tooltips.add(tooltip);
     }
-
-    default void infodump() {}
 }

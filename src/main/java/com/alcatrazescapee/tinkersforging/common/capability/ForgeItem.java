@@ -16,7 +16,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 import com.alcatrazescapee.tinkersforging.ModConfig;
-import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.capability.heat.IHeatRegistry;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
 import com.alcatrazescapee.tinkersforging.util.TickTimer;
@@ -39,7 +38,7 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     private float temperature;
     private long lastUpdateTick;
 
-    public ForgeItem(@Nullable NBTTagCompound nbt, IHeatRegistry heatRegistry)
+    private ForgeItem(@Nullable NBTTagCompound nbt, IHeatRegistry heatRegistry)
     {
         steps = new ForgeSteps();
 
@@ -213,11 +212,5 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
             temperature = nbt.getFloat("temp");
             lastUpdateTick = nbt.getLong("tick");
         }
-    }
-
-    @Override
-    public void infodump()
-    {
-        TinkersForging.getLog().info("Numbers: LUT: {}, TEMP: {}, TICK: {}", lastUpdateTick, temperature, TickTimer.getTicks());
     }
 }

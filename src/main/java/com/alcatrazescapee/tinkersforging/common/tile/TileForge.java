@@ -66,18 +66,6 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
     @Override
     public void update()
     {
-        // todo: remove logging
-        if (this.world.getTotalWorldTime() % 20 == 0)
-        {
-            ItemStack stack = inventory.getStackInSlot(SLOT_INPUT_MIN);
-            IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);
-            if (cap != null)
-            {
-                TinkersForging.getLog().info("Item: {}, T: {}", stack.getDisplayName(), cap.getTemperature());
-                cap.infodump();
-            }
-        }
-
         if (world.isRemote)
         {
             return;
