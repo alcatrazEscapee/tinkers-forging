@@ -66,6 +66,22 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
     @Override
     public void update()
     {
+        // todo: remove logging
+        if (this.world.getTotalWorldTime() % 20 == 0)
+        {
+            ItemStack stack = inventory.getStackInSlot(SLOT_INPUT_MIN);
+            IForgeItem cap = stack.getCapability(CapabilityForgeItem.CAPABILITY, null);
+            if (cap != null)
+            {
+                TinkersForging.getLog().info("Item: {}, T: {}", stack.getDisplayName(), cap.getTemperature());
+                cap.infodump();
+            }
+        }
+
+        if (world.isRemote)
+        {
+            return;
+        }
         if (fuelTicksRemaining > 0)
         {
             // Consume fuel ticks
@@ -124,13 +140,11 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
     @Override
     public boolean isItemValid(int slot, ItemStack stack)
     {
-        switch (slot)
+        if (slot == SLOT_FUEL)
         {
-            case SLOT_FUEL:
-                return TileEntityFurnace.isItemFuel(stack);
-            default:
-                return stack.hasCapability(CapabilityForgeItem.CAPABILITY, null);
+            return TileEntityFurnace.isItemFuel(stack);
         }
+        return stack.hasCapability(CapabilityForgeItem.CAPABILITY, null);
     }
 
     @Override

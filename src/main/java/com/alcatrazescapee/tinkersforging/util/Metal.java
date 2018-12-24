@@ -24,26 +24,26 @@ import com.alcatrazescapee.tinkersforging.common.ModMaterials;
 public enum Metal
 {
     // Vanilla Materials
-    IRON(new Color(255, 255, 255), Item.ToolMaterial.IRON, true),
-    GOLD(new Color(255, 248, 53), Item.ToolMaterial.GOLD, false),
+    IRON(new Color(255, 255, 255), Item.ToolMaterial.IRON, true, 1350f, 1600f),
+    GOLD(new Color(255, 248, 53), Item.ToolMaterial.GOLD, false, 700f, 1100f),
     // Common Modded Materials
-    COPPER("ingotCopper", new Color(207, 134, 101)),
-    TIN("ingotTin", new Color(120, 143, 149)),
-    BRONZE("ingotBronze", new Color(184, 115, 51)),
-    STEEL("ingotSteel", new Color(128, 128, 128)),
-    LEAD("ingotLead", new Color(101, 82, 127)),
-    SILVER("ingotSilver", new Color(239, 246, 255)),
-    ALUMINIUM("ingotAluminium", new Color(224, 224, 224)),
-    ELECTRUM("ingotElectrum", new Color(255, 241, 94)),
+    COPPER("ingotCopper", new Color(207, 134, 101), 600f, 1000f),
+    TIN("ingotTin", new Color(120, 143, 149), 150f, 300f),
+    BRONZE("ingotBronze", new Color(184, 115, 51), 700f, 950f),
+    STEEL("ingotSteel", new Color(128, 128, 128), 950f, 1350f),
+    LEAD("ingotLead", new Color(101, 82, 127), 200f, 350f),
+    SILVER("ingotSilver", new Color(239, 246, 255), 700f, 950f),
+    ALUMINIUM("ingotAluminium", new Color(224, 224, 224), 450f, 700f),
+    ELECTRUM("ingotElectrum", new Color(255, 241, 94), 650f, 900f),
     // Tinkers Construct Materials
-    ARDITE("ingotArdite", new Color(220, 84, 43)),
-    COBALT("ingotCobalt", new Color(35, 118, 221)),
-    MANYULLYN("ingotManyullyn", new Color(113, 65, 172)),
-    PIGIRON(() -> Loader.isModLoaded("tconstruct") && CoreHelpers.doesOreHaveStack("ingotPigiron"), new Color(254, 188, 188)),
+    ARDITE("ingotArdite", new Color(220, 84, 43), 1350f, 2100f),
+    COBALT("ingotCobalt", new Color(35, 118, 221), 1350f, 1600f),
+    MANYULLYN("ingotManyullyn", new Color(113, 65, 172), 1350f, 2100f),
+    PIGIRON(() -> Loader.isModLoaded("tconstruct") && CoreHelpers.doesOreHaveStack("ingotPigiron"), new Color(254, 188, 188), 400f, 250f),
     // Base Metals
-    BRASS("ingotBrass", new Color(227, 174, 31)),
-    MITHRIL("ingotMithril", new Color(230, 250, 240)),
-    INVAR("ingotInvar", new Color(160, 173, 189));
+    BRASS("ingotBrass", new Color(227, 174, 31), 650f, 900f),
+    MITHRIL("ingotMithril", new Color(230, 250, 240), 1250f, 3200f),
+    INVAR("ingotInvar", new Color(160, 173, 189), 1050f, 1450f);
 
     private static final EnumSet<Metal> NTP_METALS = EnumSet.of(IRON, GOLD, COPPER, TIN, BRONZE, STEEL);
 
@@ -51,33 +51,47 @@ public enum Metal
     private final Item.ToolMaterial material;
     private final BooleanSupplier precondition;
     private final boolean isTinkersMetal;
+    private final float workTemp;
+    private final float meltTemp;
 
-    Metal(String oreName, Color color)
+    Metal(String oreName, Color color, float work, float melt)
     {
-        this(() -> CoreHelpers.doesOreHaveStack(oreName), color, null, true);
+        this(() -> CoreHelpers.doesOreHaveStack(oreName), color, null, true, work, melt);
     }
 
-    Metal(BooleanSupplier precondition, Color color)
+    Metal(BooleanSupplier precondition, Color color, float work, float melt)
     {
-        this(precondition, color, null, true);
+        this(precondition, color, null, true, work, melt);
     }
 
-    Metal(Color color, @Nullable Item.ToolMaterial material, boolean isTinkersMetal)
+    Metal(Color color, @Nullable Item.ToolMaterial material, boolean isTinkersMetal, float work, float melt)
     {
-        this(() -> true, color, material, isTinkersMetal);
+        this(() -> true, color, material, isTinkersMetal, work, melt);
     }
 
-    Metal(BooleanSupplier precondition, Color color, @Nullable Item.ToolMaterial material, boolean isTinkersMetal)
+    Metal(BooleanSupplier precondition, Color color, @Nullable Item.ToolMaterial material, boolean isTinkersMetal, float work, float melt)
     {
         this.precondition = precondition;
         this.color = color.getRGB();
         this.material = material;
         this.isTinkersMetal = isTinkersMetal;
+        this.workTemp = work;
+        this.meltTemp = melt;
     }
 
     public int getColor()
     {
         return color;
+    }
+
+    public float getMeltTemp()
+    {
+        return meltTemp;
+    }
+
+    public float getWorkTemp()
+    {
+        return workTemp;
     }
 
     @Nullable

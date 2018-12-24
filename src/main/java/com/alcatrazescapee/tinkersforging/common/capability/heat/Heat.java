@@ -4,7 +4,7 @@
  * See the project LICENSE.md for more information.
  */
 
-package com.alcatrazescapee.tinkersforging.common.capability;
+package com.alcatrazescapee.tinkersforging.common.capability.heat;
 
 import java.util.Arrays;
 import javax.annotation.Nonnull;

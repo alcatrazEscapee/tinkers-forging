@@ -2,4 +2,4 @@ v1.0.3
 
 Changes:
  - Added a few config options: the target can now be set as a range
- - Added compatability for No Tree Punching's tools (saw, knife, mattock)
+ - Added compatibility for No Tree Punching's tools (saw, knife, mattock)

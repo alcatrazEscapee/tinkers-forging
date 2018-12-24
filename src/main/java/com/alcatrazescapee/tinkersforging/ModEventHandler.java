@@ -40,7 +40,6 @@ import com.alcatrazescapee.tinkersforging.common.blocks.BlockCharcoalForge;
 import com.alcatrazescapee.tinkersforging.common.blocks.BlockCharcoalPile;
 import com.alcatrazescapee.tinkersforging.common.blocks.ModBlocks;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
-import com.alcatrazescapee.tinkersforging.common.capability.ForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
 import com.alcatrazescapee.tinkersforging.integration.PatchouliIntegration;
@@ -112,15 +111,7 @@ public final class ModEventHandler
 
         if (!stack.hasCapability(CapabilityForgeItem.CAPABILITY, null))
         {
-            if (CapabilityForgeItem.addCapabilityToStack(event, stack))
-            {
-                // The capability was applied via a custom override (takes priority over ingot based items)
-                return;
-            }
-            if (CoreHelpers.doesStackMatchOrePrefix(stack, "ingot"))
-            {
-                event.addCapability(CapabilityForgeItem.KEY, new ForgeItem(stack, stack.getTagCompound()));
-            }
+            CapabilityForgeItem.addCapabilityToStack(event, stack);
         }
     }
 
