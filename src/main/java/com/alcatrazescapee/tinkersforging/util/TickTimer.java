@@ -10,18 +10,13 @@ public final class TickTimer
 {
     private static long ticks;
 
-    public static void reset()
-    {
-        ticks = 0L;
-    }
-
     public static long getTicks()
     {
         return ticks;
     }
 
-    public static void update(long ticks)
+    public static void update(long worldTicks)
     {
-        TickTimer.ticks = ticks;
+        ticks = worldTicks;
     }
 }

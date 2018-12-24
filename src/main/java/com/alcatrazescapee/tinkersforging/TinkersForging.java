@@ -102,7 +102,7 @@ public final class TinkersForging
             log.warn("You are not running an official build. This version will NOT be supported by the author.");
 
         // Reset timer
-        TickTimer.reset();
+        TickTimer.update(0L);
 
         // Special Mod Integration
         if (Loader.isModLoaded("patchouli"))
