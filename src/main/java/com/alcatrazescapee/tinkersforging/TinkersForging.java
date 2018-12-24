@@ -27,8 +27,8 @@ import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilButton;
 import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilRecipeUpdate;
 import com.alcatrazescapee.tinkersforging.common.network.PacketUpdateForgeItem;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
-import com.alcatrazescapee.tinkersforging.integration.patchouli.PatchouliIntegration;
-import com.alcatrazescapee.tinkersforging.integration.tconstruct.TinkersIntegration;
+import com.alcatrazescapee.tinkersforging.integration.PatchouliIntegration;
+import com.alcatrazescapee.tinkersforging.integration.TinkersIntegration;
 import com.alcatrazescapee.tinkersforging.util.TickTimer;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;

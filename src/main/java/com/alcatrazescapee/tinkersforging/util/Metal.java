@@ -7,6 +7,7 @@
 package com.alcatrazescapee.tinkersforging.util;
 
 import java.awt.*;
+import java.util.EnumSet;
 import java.util.function.BooleanSupplier;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -43,6 +44,8 @@ public enum Metal
     BRASS("ingotBrass", new Color(227, 174, 31)),
     MITHRIL("ingotMithril", new Color(230, 250, 240)),
     INVAR("ingotInvar", new Color(160, 173, 189));
+
+    private static final EnumSet<Metal> NTP_METALS = EnumSet.of(IRON, GOLD, COPPER, TIN, BRONZE, STEEL);
 
     private final int color;
     private final Item.ToolMaterial material;
@@ -106,6 +109,11 @@ public enum Metal
     public boolean isTinkersMetal()
     {
         return isTinkersMetal;
+    }
+
+    public boolean isNTPMetal()
+    {
+        return NTP_METALS.contains(this);
     }
 
     public int getTier()

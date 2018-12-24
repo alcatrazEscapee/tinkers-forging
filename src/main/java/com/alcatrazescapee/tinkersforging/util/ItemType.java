@@ -57,12 +57,17 @@ public enum ItemType
     CA_ARMOR_PLATE(3, HIT_LAST, HIT_SECOND_LAST, HIT_THIRD_LAST),
     CA_CHEST_CORE(6, HIT_LAST, BEND_ANY, UPSET_ANY),
     CA_LEGGINGS_CORE(5, HIT_ANY, BEND_ANY, DRAW_ANY),
-    CA_BOOTS_CORE(4, BEND_LAST, BEND_SECOND_LAST, SHRINK_THIRD_LAST);
+    CA_BOOTS_CORE(4, BEND_LAST, BEND_SECOND_LAST, SHRINK_THIRD_LAST),
+    // No Tree Punching
+    NTP_KNIFE(1, HIT_LAST, DRAW_NOT_LAST),
+    NTP_MATTOCK(4, HIT_LAST, BEND_SECOND_LAST, UPSET_THIRD_LAST),
+    NTP_SAW(3, PUNCH_LAST, HIT_SECOND_LAST, SHRINK_THIRD_LAST);
 
     private static final ItemType[] allNewToolTypes = {AXE_HEAD, PICKAXE_HEAD, SHOVEL_HEAD, HOE_HEAD, SWORD_BLADE};
     private static final ItemType[] allArmorTypes = {HELMET, CHESTPLATE, LEGGINGS, BOOTS};
     private static final ItemType[] allTiConTypes = {TC_PICK_HEAD, TC_AXE_HEAD, TC_HOE_HEAD, TC_SWORD_BLADE, TC_SHOVEL_HEAD, TC_KNIFE_BLADE, TC_BROAD_AXE_HEAD, TC_LARGE_SWORD_BLADE, TC_HAMMER_HEAD, TC_EXCAVATOR_HEAD, TC_SCYTHE_HEAD, TC_PAN_HEAD, TC_SIGN_HEAD, TC_KAMA_HEAD, TC_TOOL_ROD, TC_TOUGH_TOOL_ROD, TC_BINDING, TC_TOUGH_BINDING, TC_WIDE_GUARD, TC_HAND_GUARD, TC_CROSS_GUARD, TC_LARGE_PLATE};
     private static final ItemType[] allConArmTypes = {CA_HELMET_CORE, CA_ARMOR_TRIM, CA_ARMOR_PLATE, CA_CHEST_CORE, CA_LEGGINGS_CORE, CA_BOOTS_CORE};
+    private static final ItemType[] allNTPTypes = {NTP_KNIFE, NTP_MATTOCK, NTP_SAW};
 
     public static ItemType[] tools()
     {
@@ -82,6 +87,11 @@ public enum ItemType
     public static ItemType[] constructArmors()
     {
         return allConArmTypes;
+    }
+
+    public static ItemType[] ntpTools()
+    {
+        return allNTPTypes;
     }
 
     private final int amount;

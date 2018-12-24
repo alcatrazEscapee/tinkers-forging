@@ -1,4 +1,5 @@
-v1.0.1
+v1.0.3
 
 Changes:
- - Fixed 'not last' ordering upside down in the anvil gui
+ - Added a few config options: the target can now be set as a range
+ - Added compatability for No Tree Punching's tools (saw, knife, mattock)

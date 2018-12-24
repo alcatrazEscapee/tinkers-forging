@@ -19,6 +19,7 @@ import com.alcatrazescapee.alcatrazcore.tile.ITileFields;
 import com.alcatrazescapee.alcatrazcore.tile.TileInventory;
 import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
 import com.alcatrazescapee.alcatrazcore.util.collections.ImmutablePair;
+import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
@@ -226,7 +227,8 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
             // Handle possible recipe completion
             if (cachedAnvilRecipe != null)
             {
-                if (workingProgress == workingTarget && cachedAnvilRecipe.stepsMatch(steps))
+                int targetRange = ModConfig.BALANCE.forgeTargetRange + (5 - cachedAnvilRecipe.getTier()) * ModConfig.BALANCE.forgeTierRangeMod;
+                if (Math.abs(workingProgress - workingTarget) <= targetRange && cachedAnvilRecipe.stepsMatch(steps))
                 {
                     ItemStack output = inventory.getStackInSlot(SLOT_OUTPUT);
                     ItemStack newInput = cachedAnvilRecipe.consumeInput(input);

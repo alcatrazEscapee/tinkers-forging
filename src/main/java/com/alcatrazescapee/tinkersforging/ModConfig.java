@@ -32,6 +32,12 @@ public final class ModConfig
         @Config.Comment("Should this mod add recipes for Construct's Armory's armor parts, if it is enabled?")
         public boolean useConstructsArmory = true;
 
+
+        @Config.Name("No Tree Punching Compat")
+        @Config.Comment("Should this mod add tool parts and recipes for No Tree Punching's tools, if it is enabled?")
+        @Config.RequiresMcRestart
+        public boolean enableNoTreePunchingCompat = true;
+
         @Config.Name("Respect Tiers")
         @Config.RequiresMcRestart
         @Config.Comment("If this is true, you will not be able to use a lower tier anvil to make a higher tier item. Tiers of different anvils types are configurable.")
@@ -75,6 +81,16 @@ public final class ModConfig
         @Config.Name("Enable Advanced Temperature Tooltips")
         @Config.Comment("If this is true, you will be able to see the exact temperature (in °C) of any items - including their exact workable and melting temperatures")
         public boolean enableAdvancedTemperatureTooltips = false;
+
+        @Config.RangeInt(min = 0, max = 10)
+        @Config.Name("Forge Target Range")
+        @Config.Comment("The range that the work pointer needs to be in range of the target pointer for a forging to complete.")
+        public int forgeTargetRange = 3;
+
+        @Config.Name("Forge Target Range Tier Modifier")
+        @Config.RangeInt(min = 0, max = 10)
+        @Config.Comment({"Does the tier of the metal affect the target range? Lower tier metals have a larger range  by this value.", "Full calculation is [total range] = [target range] + (5 - [tier]) * [range tier modifier]"})
+        public int forgeTierRangeMod = 3;
 
         private BalanceConfig() {}
     }

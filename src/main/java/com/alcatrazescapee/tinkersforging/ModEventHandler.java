@@ -43,8 +43,8 @@ import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.ForgeItem;
 import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
-import com.alcatrazescapee.tinkersforging.integration.patchouli.PatchouliIntegration;
-import com.alcatrazescapee.tinkersforging.integration.tconstruct.TinkersIntegration;
+import com.alcatrazescapee.tinkersforging.integration.PatchouliIntegration;
+import com.alcatrazescapee.tinkersforging.integration.TinkersIntegration;
 import com.alcatrazescapee.tinkersforging.util.TickTimer;
 import slimeknights.tconstruct.smeltery.events.TinkerCastingEvent;
 

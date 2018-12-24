@@ -4,7 +4,7 @@
  * See the project LICENSE.md for more information.
  */
 
-package com.alcatrazescapee.tinkersforging.integration.crafttweaker;
+package com.alcatrazescapee.tinkersforging.integration;
 
 import java.util.ArrayList;
 import java.util.List;

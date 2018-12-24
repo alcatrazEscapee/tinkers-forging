@@ -4,7 +4,7 @@
  * See the project LICENSE.md for more information.
  */
 
-package com.alcatrazescapee.tinkersforging.integration.tconstruct;
+package com.alcatrazescapee.tinkersforging.integration;
 
 import net.minecraftforge.fml.common.Optional;
 

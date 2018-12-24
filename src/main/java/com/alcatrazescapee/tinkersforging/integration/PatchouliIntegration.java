@@ -4,7 +4,7 @@
  * See the project LICENSE.md for more information.
  */
 
-package com.alcatrazescapee.tinkersforging.integration.patchouli;
+package com.alcatrazescapee.tinkersforging.integration;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;

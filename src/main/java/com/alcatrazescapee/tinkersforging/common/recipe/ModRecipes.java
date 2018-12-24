@@ -32,7 +32,7 @@ import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.items.ItemHammer;
 import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
-import com.alcatrazescapee.tinkersforging.integration.patchouli.PatchouliIntegration;
+import com.alcatrazescapee.tinkersforging.integration.PatchouliIntegration;
 import com.alcatrazescapee.tinkersforging.util.ItemType;
 import com.alcatrazescapee.tinkersforging.util.Metal;
 
@@ -113,19 +113,19 @@ public final class ModRecipes
 
     public static void registerRecipes(RegistryEvent.Register<IRecipe> event)
     {
-        IForgeRegistryModifiable<IRecipe> r = (IForgeRegistryModifiable<IRecipe>) event.getRegistry();
-        Collection<IRecipe> recipes = r.getValuesCollection();
+        final IForgeRegistryModifiable<IRecipe> r = (IForgeRegistryModifiable<IRecipe>) event.getRegistry();
+        final Collection<IRecipe> recipes = r.getValuesCollection();
 
         for (Metal metal : Metal.values())
         {
             if (metal.isEnabled())
             {
                 // Setup
-                String metalIngotName = UPPER_UNDERSCORE_TO_LOWER_CAMEL.convert("INGOT_" + metal.name());
-                String metalBlockName = UPPER_UNDERSCORE_TO_LOWER_CAMEL.convert("BLOCK_" + metal.name());
+                final String metalIngotName = UPPER_UNDERSCORE_TO_LOWER_CAMEL.convert("INGOT_" + metal.name());
+                final String metalBlockName = UPPER_UNDERSCORE_TO_LOWER_CAMEL.convert("BLOCK_" + metal.name());
                 if (metalIngotName == null || metalBlockName == null) continue;
 
-                NonNullList<ItemStack> ingots = OreDictionary.getOres(metalIngotName, false);
+                final NonNullList<ItemStack> ingots = OreDictionary.getOres(metalIngotName, false);
                 if (ingots.isEmpty()) continue;
 
                 // Vanilla Armors
@@ -170,8 +170,8 @@ public final class ModRecipes
                 }
 
                 // Hammer Head
-                ItemStack hammer = ItemHammer.get(metal, 1);
-                ItemStack hammerHead = ItemToolHead.get(ItemType.HAMMER_HEAD, metal, 1);
+                final ItemStack hammer = ItemHammer.get(metal, 1);
+                final ItemStack hammerHead = ItemToolHead.get(ItemType.HAMMER_HEAD, metal, 1);
                 if (!hammer.isEmpty() && !hammerHead.isEmpty())
                 {
                     ResourceLocation loc = new ResourceLocation(MOD_ID, "hammer_" + metal.name().toLowerCase());
@@ -179,11 +179,27 @@ public final class ModRecipes
                 }
 
                 // Anvil recipes
-                ItemStack anvil = BlockTinkersAnvil.get(metal, 1);
+                final ItemStack anvil = BlockTinkersAnvil.get(metal, 1);
                 if (!anvil.isEmpty())
                 {
                     ResourceLocation loc = new ResourceLocation(MOD_ID, "anvil_" + metal.name().toLowerCase());
                     r.register(new ShapedOreRecipe(loc, anvil, "IBI", " I ", "III", 'B', metalBlockName, 'I', metalIngotName).setRegistryName(loc));
+                }
+
+                // No Tree Punching Tools
+                if (Loader.isModLoaded("notreepunching") && ModConfig.GENERAL.enableNoTreePunchingCompat && metal.isNTPMetal())
+                {
+                    for (ItemType type : ItemType.ntpTools())
+                    {
+                        // Anvil Recipe
+                        ItemStack result = ItemToolHead.get(type, metal, 1);
+                        ANVIL.add(new AnvilRecipe(result, metalIngotName, type.getAmount(), metal.getTier(), type.getRules()));
+
+                        // Crafting Recipe
+                        ItemStack tool = getNTPToolFor(type, metal);
+                        ResourceLocation loc = new ResourceLocation(MOD_ID, "ntp_tool_" + (type.name() + "_" + metal.name()).toLowerCase());
+                        r.register(new ShapedOreRecipe(loc, tool, "T", "S", 'T', result, 'S', "stickWood").setRegistryName(loc));
+                    }
                 }
             }
         }
@@ -198,8 +214,8 @@ public final class ModRecipes
     @Nullable
     private static ImmutablePair<IRecipe, ItemStack> getToolRecipeFor(Collection<IRecipe> recipes, ItemType type, boolean isTool, NonNullList<ItemStack> ingots)
     {
-        ItemStack stick = new ItemStack(Items.STICK);
-        InventoryCraftingEmpty tempCrafting = new InventoryCraftingEmpty(3, 3);
+        final ItemStack stick = new ItemStack(Items.STICK);
+        final InventoryCraftingEmpty tempCrafting = new InventoryCraftingEmpty(3, 3);
         for (ItemStack ingot : ingots)
         {
             if (isTool)
@@ -211,7 +227,7 @@ public final class ModRecipes
                 tempCrafting.setInventorySlotContents(pos, ingot);
 
             //noinspection ConstantConditions
-            IRecipe recipe = recipes.stream().filter(x -> x.matches(tempCrafting, null)).findFirst().orElse(null);
+            final IRecipe recipe = recipes.stream().filter(x -> x.matches(tempCrafting, null)).findFirst().orElse(null);
             if (recipe != null)
             {
                 return ImmutablePair.of(recipe, recipe.getCraftingResult(tempCrafting));
@@ -223,32 +239,39 @@ public final class ModRecipes
     @Nonnull
     private static ItemStack getTinkersPartFor(ItemType type, Metal metal)
     {
-        String metalName = metal.name().toLowerCase();
-        String toolName = type.name().toLowerCase().substring(3);
+        final String metalName = metal.name().toLowerCase();
+        final String toolName = type.name().toLowerCase().substring(3);
 
-        ItemStack stack = CoreHelpers.getStackByRegistryName("tconstruct:" + toolName);
+        final ItemStack stack = CoreHelpers.getStackByRegistryName("tconstruct:" + toolName);
         if (!stack.isEmpty())
         {
-            NBTTagCompound nbt = new NBTTagCompound();
+            final NBTTagCompound nbt = new NBTTagCompound();
             nbt.setString("Material", metalName);
             stack.setTagCompound(nbt);
         }
         return stack;
     }
 
+    @Nonnull
     private static ItemStack getConstructsArmorFor(ItemType type, Metal metal)
     {
-        String metalName = metal.name().toLowerCase();
-        String armorName = type.name().toLowerCase().substring(3);
+        final String metalName = metal.name().toLowerCase();
+        final String armorName = type.name().toLowerCase().substring(3);
 
-        ItemStack stack = CoreHelpers.getStackByRegistryName("conarm:" + armorName);
+        final ItemStack stack = CoreHelpers.getStackByRegistryName("conarm:" + armorName);
         if (!stack.isEmpty())
         {
-            NBTTagCompound nbt = new NBTTagCompound();
+            final NBTTagCompound nbt = new NBTTagCompound();
             nbt.setString("Material", metalName);
             stack.setTagCompound(nbt);
         }
         return stack;
+    }
+
+    private static ItemStack getNTPToolFor(ItemType type, Metal metal)
+    {
+        final String toolName = type.name().substring(4);
+        return CoreHelpers.getStackByRegistryName(("notreepunching:" + toolName + "/" + metal.name()).toLowerCase());
     }
 
     @Nonnull

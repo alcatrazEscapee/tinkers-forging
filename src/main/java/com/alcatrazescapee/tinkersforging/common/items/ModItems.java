@@ -44,6 +44,14 @@ public final class ModItems
             {
                 r.registerItem(new ItemToolHead(type, metal), type.name() + "/" + metal.name());
             }
+
+            if (Loader.isModLoaded("notreepunching") && ModConfig.GENERAL.enableNoTreePunchingCompat && metal.isNTPMetal())
+            {
+                for (ItemType type : ItemType.ntpTools())
+                {
+                    r.registerItem(new ItemToolHead(type, metal), type.name() + "/" + metal.name());
+                }
+            }
         }
 
         r.registerItem(new ItemHammer(Item.ToolMaterial.WOOD), "hammer/wood", TAB_ITEMS);
