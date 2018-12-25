@@ -39,7 +39,7 @@ public enum Metal
     ARDITE("ingotArdite", new Color(220, 84, 43), 1350f, 2100f),
     COBALT("ingotCobalt", new Color(35, 118, 221), 1350f, 1600f),
     MANYULLYN("ingotManyullyn", new Color(113, 65, 172), 1350f, 2100f),
-    PIGIRON(() -> Loader.isModLoaded("tconstruct") && CoreHelpers.doesOreHaveStack("ingotPigiron"), new Color(254, 188, 188), 400f, 250f),
+    PIGIRON(() -> Loader.isModLoaded("tconstruct") && CoreHelpers.doesOreHaveStack("ingotPigiron"), new Color(254, 188, 188), 250f, 400f),
     // Base Metals
     BRASS("ingotBrass", new Color(227, 174, 31), 650f, 900f),
     MITHRIL("ingotMithril", new Color(230, 250, 240), 1250f, 3200f),

@@ -191,7 +191,6 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
             nbt.setFloat("temp", temperature);
             nbt.setLong("tick", TickTimer.getTicks());
         }
-        //TinkersForging.getLog().info("Serialization: {}", nbt.toString());
         return nbt;
     }
 
@@ -200,11 +199,6 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     {
         if (nbt != null)
         {
-            //if (nbt.hasKey(CapabilityForgeItem.NBT_KEY))
-            //{
-            //    nbt = nbt.getCompoundTag(CapabilityForgeItem.NBT_KEY);
-            //}
-
             work = nbt.getInteger("work");
             recipeName = nbt.hasKey("recipe") ? nbt.getString("recipe") : null; // stops defaulting to empty string
             steps.deserializeNBT(nbt.getCompoundTag("steps"));
