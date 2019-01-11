@@ -150,17 +150,17 @@ public final class ModRecipes
                 {
                     for (ItemType type : ItemType.tools())
                     {
+                        // This will always register the default tools anvil recipes, even though the actual tools for modded materials might not exist.
+                        ItemStack output = ItemToolHead.get(type, metal, 1);
+                        ANVIL.add(new AnvilRecipe(output.copy(), metalIngotName, type.getAmount(), metal.getTier(), type.getRules()));
+
                         ImmutablePair<IRecipe, ItemStack> result = getToolRecipeFor(recipes, type, true, ingots);
                         if (result != null)
                         {
                             ResourceLocation loc = new ResourceLocation(MOD_ID, (metal.name() + "_" + type.name()).toLowerCase());
-                            ItemStack output = ItemToolHead.get(type, metal, 1);
 
                             // register the tool part recipe
                             r.register(new ShapedOreRecipe(loc, result.getValue(), "H", "S", 'S', "stickWood", 'H', output).setRegistryName(loc));
-
-                            // register the anvil recipe
-                            ANVIL.add(new AnvilRecipe(output.copy(), metalIngotName, type.getAmount(), metal.getTier(), type.getRules()));
 
                             // un-register the old recipe
                             if (ModConfig.GENERAL.removeCraftingRecipes)
