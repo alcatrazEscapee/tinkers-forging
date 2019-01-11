@@ -8,6 +8,7 @@ package com.alcatrazescapee.tinkersforging.common.blocks;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,6 +20,8 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -39,6 +42,8 @@ import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.client.ModGuiHandler;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.util.Metal;
+
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
 @ParametersAreNonnullByDefault
 public class BlockTinkersAnvil extends BlockTileCore
@@ -173,6 +178,14 @@ public class BlockTinkersAnvil extends BlockTileCore
             }
         }
         return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        tooltip.add(I18n.format(MOD_ID + ".tooltip.anvil_tier", this.tier));
     }
 
     @Override
