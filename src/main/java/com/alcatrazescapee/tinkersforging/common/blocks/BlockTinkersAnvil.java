@@ -31,6 +31,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -185,7 +186,7 @@ public class BlockTinkersAnvil extends BlockTileCore
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(I18n.format(MOD_ID + ".tooltip.anvil_tier", this.tier));
+        tooltip.add(TextFormatting.GRAY + I18n.format(MOD_ID + ".tooltip.anvil_tier", this.tier));
     }
 
     @Override
