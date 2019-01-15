@@ -42,6 +42,7 @@ public class ContainerTinkersAnvil extends ContainerTileInventory<TileTinkersAnv
     {
         super(player.inventory, tile, 0, 56);
         this.player = player;
+        tile.setCurrentPlayer(player);
     }
 
     public void onReceivePacket(int buttonID)

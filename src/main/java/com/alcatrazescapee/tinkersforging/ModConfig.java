@@ -11,7 +11,6 @@ import net.minecraftforge.common.config.Config;
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
 @Config(modid = MOD_ID, category = "")
-@SuppressWarnings("WeakerAccess")
 public final class ModConfig
 {
     public static final GeneralConfig GENERAL = new GeneralConfig();
@@ -47,6 +46,11 @@ public final class ModConfig
         @Config.RequiresMcRestart
         @Config.Comment("If this is true, any recipes that are added to the anvil that have a crafting equivalent (i.e. a shovel) will have their normal crafting recipes removed")
         public boolean removeCraftingRecipes = true;
+
+        @Config.Name("Force-Enabled Materials")
+        @Config.RequiresMcRestart
+        @Config.Comment({"This is a way to force Tinker's Forging to recognize other materials from other mods if they don't automatically get found.", "Put the relevant material name in here. See https://github.com/alcatrazEscapee/tinkers-forging/blob/1.12/src/main/java/com/alcatrazescapee/tinkersforging/util/Metal.java for a complete list of valid metals", "WARNING: This can cause broken recipes / items if you use it incorrectly. Only use it if you know what you are doing."})
+        public String[] forceEnabledMetals = {};
 
         private GeneralConfig() {}
     }
@@ -85,12 +89,21 @@ public final class ModConfig
         @Config.RangeInt(min = 0, max = 10)
         @Config.Name("Forge Target Range")
         @Config.Comment("The range that the work pointer needs to be in range of the target pointer for a forging to complete.")
-        public int forgeTargetRange = 3;
+        public int forgeTargetRange = 0;
 
         @Config.Name("Forge Target Range Tier Modifier")
         @Config.RangeInt(min = 0, max = 10)
-        @Config.Comment({"Does the tier of the metal affect the target range? Lower tier metals have a larger range  by this value.", "Full calculation is [total range] = [target range] + (5 - [tier]) * [range tier modifier]"})
-        public int forgeTierRangeMod = 3;
+        @Config.Comment({"Does the tier of the metal affect the target range? Lower tier metals have a larger range by this value.", "Full calculation is [total range] = [target range] + (5 - [tier]) * [range tier modifier]"})
+        public int forgeTierRangeMod = 0;
+
+        @Config.Name("Forging Gives Experience")
+        @Config.Comment("Should forging items on the Tinker's Anvil grant experience?")
+        public boolean forgeExperienceEnabled = true;
+
+        @Config.Name("Forging Experience Modifier")
+        @Config.RangeDouble(min = 0, max = 100)
+        @Config.Comment("Modifier for experience given by forging items on the Tinker's Anvil. Note higher tier items give more experience.")
+        public double forgeExperienceModifier = 3;
 
         private BalanceConfig() {}
     }

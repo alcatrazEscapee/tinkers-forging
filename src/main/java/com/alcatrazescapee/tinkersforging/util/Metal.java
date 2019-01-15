@@ -7,6 +7,7 @@
 package com.alcatrazescapee.tinkersforging.util;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.function.BooleanSupplier;
 import javax.annotation.Nullable;
@@ -36,23 +37,33 @@ public enum Metal
     ALUMINIUM("ingotAluminium", new Color(224, 224, 224), 450f, 700f),
     ELECTRUM("ingotElectrum", new Color(255, 241, 94), 650f, 900f),
     // Tinkers Construct Materials
-    ARDITE("ingotArdite", new Color(220, 84, 43), 1350f, 2100f),
-    COBALT("ingotCobalt", new Color(35, 118, 221), 1350f, 1600f),
-    MANYULLYN("ingotManyullyn", new Color(113, 65, 172), 1350f, 2100f),
-    PIGIRON(() -> Loader.isModLoaded("tconstruct") && CoreHelpers.doesOreHaveStack("ingotPigiron"), new Color(254, 188, 188), 250f, 400f),
+    ARDITE(() -> Loader.isModLoaded("tconstruct") || CoreHelpers.doesOreHaveStack("ingotArdite"), new Color(220, 84, 43), 1350f, 2100f),
+    COBALT(() -> Loader.isModLoaded("tconstruct") || CoreHelpers.doesOreHaveStack("ingotCobalt"), new Color(35, 118, 221), 1350f, 1600f),
+    MANYULLYN(() -> Loader.isModLoaded("tconstruct") || CoreHelpers.doesOreHaveStack("ingotManyullyn"), new Color(113, 65, 172), 1350f, 2100f),
+    PIGIRON(() -> Loader.isModLoaded("tconstruct") || CoreHelpers.doesOreHaveStack("ingotPigiron"), new Color(254, 188, 188), 250f, 400f),
     // Base Metals
     BRASS("ingotBrass", new Color(227, 174, 31), 650f, 900f),
     MITHRIL("ingotMithril", new Color(230, 250, 240), 1250f, 3200f),
     INVAR("ingotInvar", new Color(160, 173, 189), 1050f, 1450f);
 
+    public static void preInit()
+    {
+        // This is called from register recipes, as it is the latest possible time to check enables on metals
+        TinkersForging.getLog().info("YOU ARE NOW ALLOWED TO CHECK ENABLE VALUES!!!");
+        for (Metal metal : Metal.values())
+        {
+            metal.setEnabled();
+        }
+    }
+
     private static final EnumSet<Metal> NTP_METALS = EnumSet.of(IRON, GOLD, COPPER, TIN, BRONZE, STEEL);
 
     private final int color;
     private final Item.ToolMaterial material;
-    private final BooleanSupplier precondition;
     private final boolean isTinkersMetal;
     private final float workTemp;
     private final float meltTemp;
+    private BooleanSupplier precondition;
 
     Metal(String oreName, Color color, float work, float melt)
     {
@@ -170,6 +181,15 @@ public enum Metal
             default:
                 TinkersForging.getLog().warn("Missing tier config check!");
                 return 0;
+        }
+    }
+
+    private void setEnabled()
+    {
+        if (Arrays.stream(ModConfig.GENERAL.forceEnabledMetals).anyMatch(s -> s.toUpperCase().equals(this.name())))
+        {
+            TinkersForging.getLog().info("Force-Enabling Material: {}", name().toLowerCase());
+            this.precondition = () -> true;
         }
     }
 }

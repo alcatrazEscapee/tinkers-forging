@@ -9,6 +9,8 @@ package com.alcatrazescapee.tinkersforging.common.tile;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
@@ -48,7 +50,8 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
     public static final int SLOT_HAMMER = 2;
     public static final int SLOT_DISPLAY = 3;
 
-    private AnvilRecipe cachedAnvilRecipe;
+    private AnvilRecipe cachedAnvilRecipe = null;
+    private EntityPlayer currentPlayer = null;
     private ForgeSteps steps;
     private ForgeRule[] rules;
     private int workingProgress = 0; // Min = 0, Max = 150. If it goes over / under you lose the input
@@ -189,6 +192,11 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
         }
     }
 
+    public void setCurrentPlayer(EntityPlayer player)
+    {
+        this.currentPlayer = player;
+    }
+
     public int getTier()
     {
         return ((BlockTinkersAnvil) world.getBlockState(pos).getBlock()).getTier();
@@ -251,7 +259,25 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
                         CoreHelpers.dropItemInWorld(world, pos, result.getValue());
                     }
 
+                    // Play sound
                     world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 1.0f, 1.0f);
+
+                    // Drop experience
+                    if (ModConfig.BALANCE.forgeExperienceEnabled)
+                    {
+                        if (currentPlayer == null)
+                        {
+                            TinkersForging.getLog().info("No current player!!!");
+                        }
+                        int xp = (int) ModConfig.BALANCE.forgeExperienceModifier * (2 + cachedAnvilRecipe.getTier());
+                        while (xp > 0)
+                        {
+                            TinkersForging.getLog().info("Adding xp!!!");
+                            int k = EntityXPOrb.getXPSplit(xp);
+                            xp -= k;
+                            world.spawnEntity(new EntityXPOrb(world, currentPlayer.posX + 0.5d, currentPlayer.posY, currentPlayer.posZ + 0.5d, k));
+                        }
+                    }
 
                     // Reset forge stuff
                     resetFields();

@@ -29,6 +29,7 @@ import com.alcatrazescapee.tinkersforging.common.network.PacketUpdateForgeItem;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
 import com.alcatrazescapee.tinkersforging.integration.PatchouliIntegration;
 import com.alcatrazescapee.tinkersforging.integration.TinkersIntegration;
+import com.alcatrazescapee.tinkersforging.util.Metal;
 import com.alcatrazescapee.tinkersforging.util.TickTimer;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
@@ -90,6 +91,7 @@ public final class TinkersForging
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ModGuiHandler());
 
         // Pre-Init Managers
+        Metal.preInit();
         CapabilityForgeItem.preInit();
         ModBlocks.preInit();
         ModItems.preInit();

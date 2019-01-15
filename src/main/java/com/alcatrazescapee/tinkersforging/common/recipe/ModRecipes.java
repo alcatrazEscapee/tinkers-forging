@@ -47,8 +47,6 @@ public final class ModRecipes
 
     public static void init()
     {
-        // Tool Head + Armor Recipes are registered during crafting recipe construction
-
         // Hammer Head Recipes
         for (Metal metal : Metal.values())
         {
@@ -59,6 +57,25 @@ public final class ModRecipes
 
                 if (!output.isEmpty() && inputOre != null && OreDictionary.doesOreNameExist(inputOre))
                     ANVIL.add(new AnvilRecipe(output, inputOre, ItemType.HAMMER_HEAD.getAmount(), metal.getTier(), ItemType.HAMMER_HEAD.getRules()));
+            }
+        }
+
+        // Other tool part recipes
+        if (!ModConfig.GENERAL.useTinkersConstruct || !Loader.isModLoaded("tconstruct"))
+        {
+            for (ItemType type : ItemType.tools())
+            {
+                for (Metal metal : Metal.values())
+                {
+                    if (metal.isEnabled())
+                    {
+                        // This will always register the default tools anvil recipes, even though the actual tools for modded materials might not exist.
+                        final String metalIngotName = UPPER_UNDERSCORE_TO_LOWER_CAMEL.convert("INGOT_" + metal.name());
+                        if (metalIngotName == null) continue;
+                        ItemStack output = ItemToolHead.get(type, metal, 1);
+                        ANVIL.add(new AnvilRecipe(output.copy(), metalIngotName, type.getAmount(), metal.getTier(), type.getRules()));
+                    }
+                }
             }
         }
 
@@ -126,7 +143,8 @@ public final class ModRecipes
                 if (metalIngotName == null || metalBlockName == null) continue;
 
                 final NonNullList<ItemStack> ingots = OreDictionary.getOres(metalIngotName, false);
-                if (ingots.isEmpty()) continue;
+                // this is meant to stop things from not registering if the compat exists via other means
+                //if (ingots.isEmpty()) continue;
 
                 // Vanilla Armors
                 for (ItemType type : ItemType.armors())
@@ -150,13 +168,10 @@ public final class ModRecipes
                 {
                     for (ItemType type : ItemType.tools())
                     {
-                        // This will always register the default tools anvil recipes, even though the actual tools for modded materials might not exist.
-                        ItemStack output = ItemToolHead.get(type, metal, 1);
-                        ANVIL.add(new AnvilRecipe(output.copy(), metalIngotName, type.getAmount(), metal.getTier(), type.getRules()));
-
                         ImmutablePair<IRecipe, ItemStack> result = getToolRecipeFor(recipes, type, true, ingots);
                         if (result != null)
                         {
+                            ItemStack output = ItemToolHead.get(type, metal, 1);
                             ResourceLocation loc = new ResourceLocation(MOD_ID, (metal.name() + "_" + type.name()).toLowerCase());
 
                             // register the tool part recipe

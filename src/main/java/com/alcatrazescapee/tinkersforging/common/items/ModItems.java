@@ -33,16 +33,14 @@ public final class ModItems
             Item.ToolMaterial tool = metal.getMaterial();
             if (tool != null)
                 r.registerItem(new ItemHammer(metal, tool), "hammer/" + metal.name());
-
             r.registerItem(new ItemToolHead(ItemType.HAMMER_HEAD, metal), ItemType.HAMMER_HEAD.name() + "/" + metal.name());
 
-            // Below this line is not loaded if using TiCon compat
-            if (Loader.isModLoaded("tconstruct") && ModConfig.GENERAL.useTinkersConstruct)
-                continue;
-
-            for (ItemType type : ItemType.tools())
+            if (!Loader.isModLoaded("tconstruct") || !ModConfig.GENERAL.useTinkersConstruct)
             {
-                r.registerItem(new ItemToolHead(type, metal), type.name() + "/" + metal.name());
+                for (ItemType type : ItemType.tools())
+                {
+                    r.registerItem(new ItemToolHead(type, metal), type.name() + "/" + metal.name());
+                }
             }
 
             if (Loader.isModLoaded("notreepunching") && ModConfig.GENERAL.enableNoTreePunchingCompat && metal.isNTPMetal())
