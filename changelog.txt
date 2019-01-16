@@ -1,5 +1,4 @@
-v1.0.5
+v1.0.7
 
 Changes:
- - Added a basic tier tooltip to Tinker's Anvils
- - Fixed certain anvil recipes not registering when the material + item was present.
+ - Fixed a bug where switching between worlds could cause a tick to happen without proper temperature updates, resulting in items melting in forges when they shouldn't in some edge cases.

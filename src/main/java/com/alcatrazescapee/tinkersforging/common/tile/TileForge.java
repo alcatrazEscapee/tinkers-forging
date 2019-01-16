@@ -48,8 +48,6 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
     public TileForge()
     {
         super(4);
-
-        markDirty();
     }
 
     public boolean tryLight()
@@ -122,6 +120,11 @@ public class TileForge extends TileInventory implements ITickable, ITileFields
             temperature -= (float) ModConfig.BALANCE.forgeTemperatureModifier;
             if (temperature < 0)
                 temperature = 0;
+        }
+
+        if (world != null)
+        {
+            world.markChunkDirty(pos, this);
         }
     }
 

@@ -71,14 +71,14 @@ dependencies {
     // CraftTweaker API
     deobfProvided "CraftTweaker2:CraftTweaker2-API:4.1.8.5"
     // At runtime, use the full jar
-    runtime "CraftTweaker2:CraftTweaker2-MC1120-Main:${crafttweaker_version}"
+    //runtime "CraftTweaker2:CraftTweaker2-MC1120-Main:${crafttweaker_version}"
 
     // compile against Tinkers Construct but do not include it at runtime
     deobfProvided "slimeknights.mantle:Mantle:${mantle_version}"
     deobfProvided "slimeknights:TConstruct:${tinkers_construct_version}"
 
-    runtime "slimeknights.mantle:Mantle:${mantle_version}"
-    runtime "slimeknights:TConstruct:${tinkers_construct_version}"
+    //runtime "slimeknights.mantle:Mantle:${mantle_version}"
+    //runtime "slimeknights:TConstruct:${tinkers_construct_version}"
 
     // compile against Patchouli but do not include it at runtime
     deobfProvided "vazkii.patchouli:Patchouli:${patchouli_version}"

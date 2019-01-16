@@ -167,6 +167,11 @@ public class TileCharcoalForge extends TileInventory implements ITickable, ITile
             if (temperature < 0)
                 temperature = 0;
         }
+
+        if (world != null)
+        {
+            world.markChunkDirty(pos, this);
+        }
     }
 
     @Override

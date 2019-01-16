@@ -122,7 +122,7 @@ public final class ModEventHandler
     @SubscribeEvent
     public static void onWorldTick(TickEvent.WorldTickEvent event)
     {
-        if (event.phase == TickEvent.Phase.END)
+        if (event.phase == TickEvent.Phase.START)
         {
             TickTimer.update(event.world.getTotalWorldTime());
         }
@@ -132,7 +132,7 @@ public final class ModEventHandler
     @SideOnly(Side.CLIENT)
     public static void onClientTick(TickEvent.ClientTickEvent event)
     {
-        if (event.phase == TickEvent.Phase.END && !Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().player != null)
+        if (event.phase == TickEvent.Phase.START && !Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().player != null)
         {
             TickTimer.update(AlcatrazCore.getProxy().getClientWorld().getTotalWorldTime());
         }
