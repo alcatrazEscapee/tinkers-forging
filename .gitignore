@@ -10,9 +10,6 @@
 *.iws
 *.iml
 
-# Python
-*.py
-
 # Production
 /out/
 /run/

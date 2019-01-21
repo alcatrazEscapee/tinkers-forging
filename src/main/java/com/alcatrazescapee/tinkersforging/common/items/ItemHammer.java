@@ -13,11 +13,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.alcatrazescapee.alcatrazcore.item.tool.ItemToolCore;
 import com.alcatrazescapee.alcatrazcore.util.OreDictionaryHelper;
 import com.alcatrazescapee.tinkersforging.util.Metal;
+
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
 @ParametersAreNonnullByDefault
 public class ItemHammer extends ItemToolCore
@@ -80,5 +86,12 @@ public class ItemHammer extends ItemToolCore
     public Metal getMetal()
     {
         return metal;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerModel()
+    {
+        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(MOD_ID + ":hammer"));
     }
 }

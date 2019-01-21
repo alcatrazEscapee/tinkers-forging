@@ -11,12 +11,18 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.alcatrazescapee.alcatrazcore.item.ItemCore;
 import com.alcatrazescapee.alcatrazcore.util.collections.EnumTable;
 import com.alcatrazescapee.tinkersforging.util.ItemType;
 import com.alcatrazescapee.tinkersforging.util.Metal;
+
+import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
 @ParametersAreNonnullByDefault
 public class ItemToolHead extends ItemCore
@@ -43,10 +49,12 @@ public class ItemToolHead extends ItemCore
     }
 
     private final Metal metal;
+    private final ItemType type;
 
     public ItemToolHead(ItemType type, Metal metal)
     {
         this.metal = metal;
+        this.type = type;
         TABLE.put(type, metal, this);
     }
 
@@ -54,5 +62,12 @@ public class ItemToolHead extends ItemCore
     public Metal getMetal()
     {
         return metal;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerModel()
+    {
+        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(MOD_ID + ":" + type.name().toLowerCase()));
     }
 }
