@@ -33,8 +33,8 @@ import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.items.ItemHammer;
 import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
 import com.alcatrazescapee.tinkersforging.integration.PatchouliIntegration;
-import com.alcatrazescapee.tinkersforging.util.ItemType;
 import com.alcatrazescapee.tinkersforging.util.Metal;
+import com.alcatrazescapee.tinkersforging.util.material.ItemType;
 
 import static com.alcatrazescapee.alcatrazcore.util.OreDictionaryHelper.UPPER_UNDERSCORE_TO_LOWER_CAMEL;
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;

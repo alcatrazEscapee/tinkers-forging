@@ -19,8 +19,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.alcatrazescapee.alcatrazcore.item.ItemCore;
 import com.alcatrazescapee.alcatrazcore.util.collections.EnumTable;
-import com.alcatrazescapee.tinkersforging.util.ItemType;
 import com.alcatrazescapee.tinkersforging.util.Metal;
+import com.alcatrazescapee.tinkersforging.util.material.ItemType;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 

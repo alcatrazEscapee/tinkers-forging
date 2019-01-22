@@ -4,7 +4,7 @@
  * See the project LICENSE.md for more information.
  */
 
-package com.alcatrazescapee.tinkersforging.util;
+package com.alcatrazescapee.tinkersforging.util.material;
 
 import javax.annotation.Nonnull;
 

@@ -77,8 +77,8 @@ dependencies {
     deobfProvided "slimeknights.mantle:Mantle:${mantle_version}"
     deobfProvided "slimeknights:TConstruct:${tinkers_construct_version}"
 
-    //runtime "slimeknights.mantle:Mantle:${mantle_version}"
-    //runtime "slimeknights:TConstruct:${tinkers_construct_version}"
+    runtime "slimeknights.mantle:Mantle:${mantle_version}"
+    runtime "slimeknights:TConstruct:${tinkers_construct_version}"
 
     // compile against Patchouli but do not include it at runtime
     deobfProvided "vazkii.patchouli:Patchouli:${patchouli_version}"

@@ -16,7 +16,9 @@ def del_none(d: dict) -> dict:
     return d
 
 
-def model(filename_parts: tuple, parent: str = 'item/generated'):
+def model(filename_parts: tuple, parent: str = 'item/generated', texture: str = None):
+    if texture is None:
+        texture = '/'.join(filename_parts)
     p = os.path.join('models', 'item', *filename_parts) + '.json'
     os.makedirs(os.path.dirname(p), exist_ok=True)
     with open(p, 'w') as file:
@@ -25,7 +27,7 @@ def model(filename_parts: tuple, parent: str = 'item/generated'):
             'forge_marker': 1,
             'parent': parent,
             'textures': {
-                'layer0': '%s:items/%s' % (MOD_ID, '/'.join(filename_parts))
+                'layer0': '%s:items/%s' % (MOD_ID, texture)
             }
         }), file, indent=2)
 
@@ -33,7 +35,6 @@ def model(filename_parts: tuple, parent: str = 'item/generated'):
 MOD_ID = 'tinkersforging'
 TOOLS = [
     'axe_head',
-    'hammer',
     'hammer_head',
     'hoe_head',
     'ntp_knife',
@@ -50,3 +51,6 @@ if __name__ == '__main__':
     # Tool models
     for tool in TOOLS:
         model((tool,))
+
+    # Hammer is special
+    model(('hammer',), texture='hammer/metal')

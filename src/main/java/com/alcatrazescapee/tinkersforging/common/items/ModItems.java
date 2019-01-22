@@ -15,8 +15,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
 import com.alcatrazescapee.tinkersforging.ModConfig;
-import com.alcatrazescapee.tinkersforging.util.ItemType;
 import com.alcatrazescapee.tinkersforging.util.Metal;
+import com.alcatrazescapee.tinkersforging.util.material.ItemType;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 import static com.alcatrazescapee.tinkersforging.client.ModCreativeTabs.TAB_ITEMS;
