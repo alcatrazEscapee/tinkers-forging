@@ -6,14 +6,11 @@
 
 package com.alcatrazescapee.tinkersforging.common.blocks;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
+import com.alcatrazescapee.alcatrazcore.block.BlockTileCore;
+import com.alcatrazescapee.tinkersforging.TinkersForging;
+import com.alcatrazescapee.tinkersforging.client.ModGuiHandler;
+import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -38,11 +35,13 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.alcatrazescapee.alcatrazcore.block.BlockTileCore;
-import com.alcatrazescapee.tinkersforging.TinkersForging;
-import com.alcatrazescapee.tinkersforging.client.ModGuiHandler;
-import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
-import com.alcatrazescapee.tinkersforging.util.Metal;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
@@ -51,43 +50,41 @@ public class BlockTinkersAnvil extends BlockTileCore
 {
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
-    private static final Map<Metal, BlockTinkersAnvil> MAP = new HashMap<>();
+    private static final Map<MaterialType, BlockTinkersAnvil> MAP = new HashMap<>();
     private static final AxisAlignedBB AABB_X = new AxisAlignedBB(0.1875, 0, 0, 0.8125, 0.625, 1);
     private static final AxisAlignedBB AABB_Z = new AxisAlignedBB(0, 0, 0.1875, 1, 0.625, 0.8125);
+    private final MaterialType material;
 
-    @Nullable
-    public static BlockTinkersAnvil get(Metal metal)
-    {
-        return MAP.get(metal);
+    public BlockTinkersAnvil(MaterialType material) {
+        super(Material.IRON);
+
+        this.material = material;
+        this.tier = material.getTier();
+        MAP.put(material, this);
+
+        setHarvestLevel("pickaxe", material.getTier());
+        setSoundType(SoundType.ANVIL);
+        setHardness(3.0f + 1.0f * material.getTier());
+        setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 
-    @Nonnull
-    public static ItemStack get(Metal metal, int amount)
-    {
-        BlockTinkersAnvil block = get(metal);
-        return block == null ? ItemStack.EMPTY : new ItemStack(block, amount);
-    }
-
-    public static Collection<BlockTinkersAnvil> getAll()
-    {
+    public static Collection<BlockTinkersAnvil> getAll() {
         return MAP.values();
     }
 
-    private final Metal metal;
+    @Nullable
+    public static BlockTinkersAnvil get(MaterialType material)
+    {
+        return MAP.get(material);
+    }
+
     private final int tier;
 
-    public BlockTinkersAnvil(Metal metal)
+    @Nonnull
+    public static ItemStack get(MaterialType material, int amount)
     {
-        super(Material.IRON);
-
-        this.metal = metal;
-        this.tier = metal.getTier();
-        MAP.put(metal, this);
-
-        setHarvestLevel("pickaxe", metal.getTier());
-        setSoundType(SoundType.ANVIL);
-        setHardness(3.0f + 1.0f * metal.getTier());
-        setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        BlockTinkersAnvil block = get(material);
+        return block == null ? ItemStack.EMPTY : new ItemStack(block, amount);
     }
 
     public int getTier()
@@ -111,9 +108,9 @@ public class BlockTinkersAnvil extends BlockTileCore
     }
 
     @Nonnull
-    public Metal getMetal()
+    public MaterialType getMaterial()
     {
-        return metal;
+        return material;
     }
 
     @Override

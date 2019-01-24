@@ -6,11 +6,13 @@
 
 package com.alcatrazescapee.tinkersforging.common.capability;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
+import com.alcatrazescapee.alcatrazcore.inventory.ingredient.IRecipeIngredient;
+import com.alcatrazescapee.alcatrazcore.network.capability.CapabilityContainerListenerManager;
+import com.alcatrazescapee.tinkersforging.ModConfig;
+import com.alcatrazescapee.tinkersforging.common.capability.heat.IHeatRegistry;
+import com.alcatrazescapee.tinkersforging.common.capability.heat.IngredientHeatRegistry;
+import com.alcatrazescapee.tinkersforging.common.container.ContainerListenerForgeItem;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
@@ -20,14 +22,10 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 
-import com.alcatrazescapee.alcatrazcore.inventory.ingredient.IRecipeIngredient;
-import com.alcatrazescapee.alcatrazcore.network.capability.CapabilityContainerListenerManager;
-import com.alcatrazescapee.tinkersforging.ModConfig;
-import com.alcatrazescapee.tinkersforging.common.capability.heat.IHeatRegistry;
-import com.alcatrazescapee.tinkersforging.common.capability.heat.IngredientHeatRegistry;
-import com.alcatrazescapee.tinkersforging.common.capability.heat.SimpleHeatRegistry;
-import com.alcatrazescapee.tinkersforging.common.container.ContainerListenerForgeItem;
-import com.alcatrazescapee.tinkersforging.util.Metal;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.alcatrazescapee.alcatrazcore.util.CoreHelpers.getNull;
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
@@ -37,12 +35,12 @@ public final class CapabilityForgeItem
 {
     @CapabilityInject(IForgeItem.class)
     public static final Capability<IForgeItem> CAPABILITY = getNull();
-    public static final ResourceLocation KEY = new ResourceLocation(MOD_ID, "forge_item");
 
     public static final float MAX_TEMPERATURE = 1500f;
     public static final float DEFAULT_MELT_TEMPERATURE = 1400f;
     public static final float DEFAULT_WORK_TEMPERATURE = 800f;
 
+    private static final ResourceLocation KEY = new ResourceLocation(MOD_ID, "forge_item");
     private static final List<IHeatRegistry> HEAT_REGISTRY = new ArrayList<>();
     private static final IHeatRegistry DEFAULT = new IHeatRegistry.Impl();
 
@@ -55,11 +53,7 @@ public final class CapabilityForgeItem
         CapabilityContainerListenerManager.registerContainerListenerFactory(ContainerListenerForgeItem::new);
 
         // Add default metal entries
-        for (Metal metal : Metal.values())
-        {
-            HEAT_REGISTRY.add(new SimpleHeatRegistry(metal));
-        }
-
+        HEAT_REGISTRY.addAll(MaterialRegistry.getAllMaterials());
     }
 
     /**

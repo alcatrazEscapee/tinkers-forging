@@ -47,9 +47,10 @@ public final class ModConfig
         @Config.Comment("If this is true, any recipes that are added to the anvil that have a crafting equivalent (i.e. a shovel) will have their normal crafting recipes removed")
         public boolean removeCraftingRecipes = true;
 
+        // todo: change this to actually work with new material types
         @Config.Name("Force-Enabled Materials")
         @Config.RequiresMcRestart
-        @Config.Comment({"This is a way to force Tinker's Forging to recognize other materials from other mods if they don't automatically get found.", "Put the relevant material name in here. See https://github.com/alcatrazEscapee/tinkers-forging/blob/1.12/src/main/java/com/alcatrazescapee/tinkersforging/util/Metal.java for a complete list of valid metals", "WARNING: This can cause broken recipes / items if you use it incorrectly. Only use it if you know what you are doing."})
+        @Config.Comment({"This is a way to force Tinker's Forging to recognize other materials from other mods if they don't automatically get found.", "WARNING: This can cause broken recipes / items if you use it incorrectly. Only use it if you know what you are doing."})
         public String[] forceEnabledMetals = {};
 
         private GeneralConfig() {}

@@ -1,21 +1,22 @@
 package com.alcatrazescapee.tinkersforging.util.material;
 
-import java.util.function.BooleanSupplier;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
+import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
+import com.alcatrazescapee.alcatrazcore.util.OreDictionaryHelper;
+import com.alcatrazescapee.tinkersforging.common.capability.heat.IHeatRegistry;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.EnumHelper;
 
-import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
-import com.alcatrazescapee.alcatrazcore.util.OreDictionaryHelper;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.function.BooleanSupplier;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
 @ParametersAreNonnullByDefault
-public class MaterialType
+public class MaterialType implements IHeatRegistry
 {
     private static final Item.ToolMaterial[] TOOL_MATERIALS = {
             EnumHelper.addToolMaterial(MOD_ID + ":tier_0", 0, 120, 1.0f, 0.5f, 2),
@@ -53,8 +54,8 @@ public class MaterialType
         this.toolMaterial = toolMaterial;
         this.color = color;
         this.tier = MathHelper.clamp(tier, 0, 5);
-        this.workTemp = workTemp;
-        this.meltTemp = meltTemp;
+        this.workTemp = MathHelper.clamp(100, workTemp, 1400);
+        this.meltTemp = Math.max(workTemp + 100, meltTemp);
     }
 
     public MaterialType(String name, String oreName, BooleanSupplier precondition, @Nullable Item.ToolMaterial toolMaterial, int color, int tier, float workTemp, float meltTemp)
@@ -88,6 +89,11 @@ public class MaterialType
         return enabled;
     }
 
+    @Override
+    public boolean test(ItemStack stack) {
+        return CoreHelpers.doesStackMatchOre(stack, oreName);
+    }
+
     public void setEnabled()
     {
         this.enabled = true;
@@ -110,13 +116,13 @@ public class MaterialType
         return tier;
     }
 
-    public float getWorkTemp()
-    {
+    @Override
+    public float getWorkTemp() {
         return workTemp;
     }
 
-    public float getMeltTemp()
-    {
+    @Override
+    public float getMeltTemp() {
         return meltTemp;
     }
 }

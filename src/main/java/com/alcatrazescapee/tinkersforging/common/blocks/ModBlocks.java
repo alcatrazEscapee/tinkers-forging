@@ -6,13 +6,13 @@
 
 package com.alcatrazescapee.tinkersforging.common.blocks;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
 import com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge;
 import com.alcatrazescapee.tinkersforging.common.tile.TileForge;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
-import com.alcatrazescapee.tinkersforging.util.Metal;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static com.alcatrazescapee.alcatrazcore.util.CoreHelpers.getNull;
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
@@ -33,9 +33,9 @@ public final class ModBlocks
         r.registerBlock(new BlockCharcoalForge(), null, "charcoal_forge");
         r.registerBlock(new BlockCharcoalPile(), null, "charcoal_pile");
 
-        for (Metal metal : Metal.values())
+        for (MaterialType material : MaterialRegistry.getAllMaterials())
         {
-            r.registerBlock(new BlockTinkersAnvil(metal), "tinkers_anvil/" + metal.name());
+            r.registerBlock(new BlockTinkersAnvil(material), "tinkers_anvil/" + material.getName());
         }
 
         r.registerTile(TileTinkersAnvil.class, "tinkers_anvil");
@@ -48,7 +48,7 @@ public final class ModBlocks
         // Tinkers Anvil creative tab
         for (BlockTinkersAnvil block : BlockTinkersAnvil.getAll())
         {
-            if (block.getMetal().isEnabled())
+            if (block.getMaterial().isEnabled())
                 block.setCreativeTab(TAB_ITEMS);
         }
     }

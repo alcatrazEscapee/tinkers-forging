@@ -6,15 +6,14 @@
 
 package com.alcatrazescapee.tinkersforging.client;
 
-import javax.annotation.Nonnull;
-
+import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
-import com.alcatrazescapee.tinkersforging.util.Metal;
+import javax.annotation.Nonnull;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
@@ -27,7 +26,7 @@ public final class ModCreativeTabs
         @Nonnull
         public ItemStack createIcon()
         {
-            return BlockTinkersAnvil.get(Metal.IRON, 1);
+            return BlockTinkersAnvil.get(MaterialRegistry.getMaterial("iron"), 1);
         }
     };
 }

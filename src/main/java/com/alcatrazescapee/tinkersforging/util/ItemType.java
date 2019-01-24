@@ -4,11 +4,11 @@
  * See the project LICENSE.md for more information.
  */
 
-package com.alcatrazescapee.tinkersforging.util.material;
-
-import javax.annotation.Nonnull;
+package com.alcatrazescapee.tinkersforging.util;
 
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeRule;
+
+import javax.annotation.Nonnull;
 
 import static com.alcatrazescapee.tinkersforging.util.forge.ForgeRule.*;
 

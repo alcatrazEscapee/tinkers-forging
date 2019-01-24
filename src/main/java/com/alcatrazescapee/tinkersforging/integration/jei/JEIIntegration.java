@@ -6,22 +6,21 @@
 
 package com.alcatrazescapee.tinkersforging.integration.jei;
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.Loader;
-
 import com.alcatrazescapee.tinkersforging.client.gui.GuiTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.items.ItemHammer;
 import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
-import com.alcatrazescapee.tinkersforging.util.Metal;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.Loader;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
@@ -58,7 +57,7 @@ public final class JEIIntegration implements IModPlugin
 
         for (BlockTinkersAnvil block : BlockTinkersAnvil.getAll())
         {
-            if (block.getMetal().isEnabled())
+            if (block.getMaterial().isEnabled())
                 registry.addRecipeCatalyst(new ItemStack(block), ANVIL_UID);
             else
                 blacklist.addIngredientToBlacklist(new ItemStack(block));
@@ -66,14 +65,14 @@ public final class JEIIntegration implements IModPlugin
 
         for (ItemToolHead item : ItemToolHead.getAll())
         {
-            if (!item.getMetal().isEnabled())
+            if (!item.getMaterial().isEnabled())
                 blacklist.addIngredientToBlacklist(new ItemStack(item));
         }
 
         for (ItemHammer item : ItemHammer.getAll())
         {
-            Metal metal = item.getMetal();
-            if (metal != null && !metal.isEnabled())
+            MaterialType material = item.getMaterial();
+            if (material != null && !material.isEnabled())
                 blacklist.addIngredientToBlacklist(new ItemStack(item));
         }
 

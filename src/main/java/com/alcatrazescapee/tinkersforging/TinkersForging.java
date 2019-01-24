@@ -6,7 +6,18 @@
 
 package com.alcatrazescapee.tinkersforging;
 
-import org.apache.logging.log4j.Logger;
+import com.alcatrazescapee.tinkersforging.client.ModGuiHandler;
+import com.alcatrazescapee.tinkersforging.common.blocks.ModBlocks;
+import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
+import com.alcatrazescapee.tinkersforging.common.items.ModItems;
+import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilButton;
+import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilRecipeUpdate;
+import com.alcatrazescapee.tinkersforging.common.network.PacketUpdateForgeItem;
+import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
+import com.alcatrazescapee.tinkersforging.integration.PatchouliIntegration;
+import com.alcatrazescapee.tinkersforging.integration.TinkersIntegration;
+import com.alcatrazescapee.tinkersforging.util.TickTimer;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ICrashCallable;
 import net.minecraftforge.fml.common.Loader;
@@ -18,20 +29,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
-
-import com.alcatrazescapee.tinkersforging.client.ModGuiHandler;
-import com.alcatrazescapee.tinkersforging.common.blocks.ModBlocks;
-import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
-import com.alcatrazescapee.tinkersforging.common.items.ModItems;
-import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilButton;
-import com.alcatrazescapee.tinkersforging.common.network.PacketAnvilRecipeUpdate;
-import com.alcatrazescapee.tinkersforging.common.network.PacketUpdateForgeItem;
-import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
-import com.alcatrazescapee.tinkersforging.integration.PatchouliIntegration;
-import com.alcatrazescapee.tinkersforging.integration.TinkersIntegration;
-import com.alcatrazescapee.tinkersforging.util.Metal;
-import com.alcatrazescapee.tinkersforging.util.TickTimer;
-import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
+import org.apache.logging.log4j.Logger;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_NAME;
@@ -92,10 +90,9 @@ public final class TinkersForging
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ModGuiHandler());
 
         // Pre-Init Managers
-        MaterialRegistry.preInit();
-        Metal.preInit();
-        CapabilityForgeItem.preInit();
-        ModBlocks.preInit();
+        MaterialRegistry.preInit(); // Setup materials first
+        CapabilityForgeItem.preInit(); // Setup heat registry - after materials
+        ModBlocks.preInit(); // Setup blocks and items - after materials
         ModItems.preInit();
     }
 

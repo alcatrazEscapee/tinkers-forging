@@ -6,62 +6,66 @@
 
 package com.alcatrazescapee.tinkersforging.common.items;
 
-import java.util.Set;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
+import com.alcatrazescapee.alcatrazcore.item.ItemCore;
+import com.alcatrazescapee.tinkersforging.util.ItemType;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.alcatrazescapee.alcatrazcore.item.ItemCore;
-import com.alcatrazescapee.alcatrazcore.util.collections.EnumTable;
-import com.alcatrazescapee.tinkersforging.util.Metal;
-import com.alcatrazescapee.tinkersforging.util.material.ItemType;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
 @ParametersAreNonnullByDefault
 public class ItemToolHead extends ItemCore
 {
-    private static final EnumTable<ItemType, Metal, ItemToolHead> TABLE = new EnumTable<>(ItemType.class, Metal.class);
+    private static final Map<ItemType, Map<MaterialType, ItemToolHead>> TABLE = new HashMap<>();
+    private final MaterialType material;
+
+    public ItemToolHead(ItemType type, MaterialType material) {
+        this.material = material;
+        this.type = type;
+
+        if (!TABLE.containsKey(type)) {
+            TABLE.put(type, new HashMap<>());
+        }
+        TABLE.get(type).put(material, this);
+    }
 
     @Nullable
-    public static ItemToolHead get(ItemType type, Metal metal)
+    public static ItemToolHead get(ItemType type, MaterialType material)
     {
-        return TABLE.get(type, metal);
+        return TABLE.containsKey(type) ? TABLE.get(type).get(material) : null;
     }
 
     @Nonnull
-    public static Set<ItemToolHead> getAll()
+    public static Collection<ItemToolHead> getAll()
     {
-        return TABLE.values();
+        return TABLE.values().stream().map(Map::values).flatMap(Collection::stream).collect(Collectors.toList());
     }
 
+    private final ItemType type;
+
     @Nonnull
-    public static ItemStack get(ItemType type, Metal metal, int amount)
+    public static ItemStack get(ItemType type, MaterialType material, int amount)
     {
-        ItemToolHead item = get(type, metal);
+        ItemToolHead item = get(type, material);
         return item == null ? ItemStack.EMPTY : new ItemStack(item, amount);
     }
 
-    private final Metal metal;
-    private final ItemType type;
-
-    public ItemToolHead(ItemType type, Metal metal)
-    {
-        this.metal = metal;
-        this.type = type;
-        TABLE.put(type, metal, this);
-    }
-
     @Nonnull
-    public Metal getMetal()
+    public MaterialType getMaterial()
     {
-        return metal;
+        return material;
     }
 
     @SideOnly(Side.CLIENT)
