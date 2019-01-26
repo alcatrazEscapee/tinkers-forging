@@ -6,13 +6,11 @@
 
 package com.alcatrazescapee.tinkersforging.common.capability;
 
-import com.alcatrazescapee.alcatrazcore.inventory.ingredient.IRecipeIngredient;
-import com.alcatrazescapee.alcatrazcore.network.capability.CapabilityContainerListenerManager;
-import com.alcatrazescapee.tinkersforging.ModConfig;
-import com.alcatrazescapee.tinkersforging.common.capability.heat.IHeatRegistry;
-import com.alcatrazescapee.tinkersforging.common.capability.heat.IngredientHeatRegistry;
-import com.alcatrazescapee.tinkersforging.common.container.ContainerListenerForgeItem;
-import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
@@ -22,10 +20,13 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.List;
+import com.alcatrazescapee.alcatrazcore.inventory.ingredient.IRecipeIngredient;
+import com.alcatrazescapee.alcatrazcore.network.capability.CapabilityContainerListenerManager;
+import com.alcatrazescapee.tinkersforging.ModConfig;
+import com.alcatrazescapee.tinkersforging.common.capability.heat.IHeatRegistry;
+import com.alcatrazescapee.tinkersforging.common.capability.heat.IngredientHeatRegistry;
+import com.alcatrazescapee.tinkersforging.common.container.ContainerListenerForgeItem;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
 
 import static com.alcatrazescapee.alcatrazcore.util.CoreHelpers.getNull;
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
@@ -47,7 +48,7 @@ public final class CapabilityForgeItem
     public static void preInit()
     {
         // Register Capability
-        CapabilityManager.INSTANCE.register(IForgeItem.class, new DumbStorage(), () -> new ForgeItem(null));
+        CapabilityManager.INSTANCE.register(IForgeItem.class, new DumbStorage(), ForgeItem::new);
 
         // Register Sync Handler
         CapabilityContainerListenerManager.registerContainerListenerFactory(ContainerListenerForgeItem::new);
@@ -105,21 +106,6 @@ public final class CapabilityForgeItem
                 return;
             }
         }
-    }
-
-    static IHeatRegistry getHeatRegistry(@Nullable ItemStack stack)
-    {
-        if (stack != null)
-        {
-            for (IHeatRegistry r : HEAT_REGISTRY)
-            {
-                if (r.test(stack))
-                {
-                    return r;
-                }
-            }
-        }
-        return DEFAULT;
     }
 
     // This is not for usage; it will not do anything.

@@ -6,17 +6,18 @@
 
 package com.alcatrazescapee.tinkersforging.common.items;
 
-import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
-import com.alcatrazescapee.tinkersforging.ModConfig;
-import com.alcatrazescapee.tinkersforging.util.ItemType;
-import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
-import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+
+import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
+import com.alcatrazescapee.tinkersforging.ModConfig;
+import com.alcatrazescapee.tinkersforging.util.ItemType;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 import static com.alcatrazescapee.tinkersforging.client.ModCreativeTabs.TAB_ITEMS;
@@ -70,7 +71,11 @@ public final class ModItems
         for (ItemToolHead item : ItemToolHead.getAll())
         {
             if (item.getMaterial().isEnabled())
+            {
                 item.setCreativeTab(TAB_ITEMS);
+                // Doing this here is not the best practice but it works
+                item.setTranslationKey(MOD_ID + ":" + item.getType().name().toLowerCase());
+            }
         }
 
         // Add charcoal ore dict

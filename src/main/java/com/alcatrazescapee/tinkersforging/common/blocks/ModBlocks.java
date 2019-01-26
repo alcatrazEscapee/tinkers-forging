@@ -6,13 +6,15 @@
 
 package com.alcatrazescapee.tinkersforging.common.blocks;
 
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
 import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
+import com.alcatrazescapee.tinkersforging.common.items.ItemBlockTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge;
 import com.alcatrazescapee.tinkersforging.common.tile.TileForge;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
 import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static com.alcatrazescapee.alcatrazcore.util.CoreHelpers.getNull;
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
@@ -35,7 +37,7 @@ public final class ModBlocks
 
         for (MaterialType material : MaterialRegistry.getAllMaterials())
         {
-            r.registerBlock(new BlockTinkersAnvil(material), "tinkers_anvil/" + material.getName());
+            r.registerBlock(new BlockTinkersAnvil(material), ItemBlockTinkersAnvil::new, "tinkers_anvil/" + material.getName());
         }
 
         r.registerTile(TileTinkersAnvil.class, "tinkers_anvil");
@@ -49,7 +51,10 @@ public final class ModBlocks
         for (BlockTinkersAnvil block : BlockTinkersAnvil.getAll())
         {
             if (block.getMaterial().isEnabled())
+            {
                 block.setCreativeTab(TAB_ITEMS);
+                block.setTranslationKey(MOD_ID + ":tinkers_anvil");
+            }
         }
     }
 }

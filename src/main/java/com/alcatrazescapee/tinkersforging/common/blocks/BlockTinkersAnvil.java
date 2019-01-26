@@ -6,17 +6,21 @@
 
 package com.alcatrazescapee.tinkersforging.common.blocks;
 
-import com.alcatrazescapee.alcatrazcore.block.BlockTileCore;
-import com.alcatrazescapee.tinkersforging.TinkersForging;
-import com.alcatrazescapee.tinkersforging.client.ModGuiHandler;
-import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
-import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -35,13 +39,11 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.alcatrazescapee.alcatrazcore.block.BlockTileCore;
+import com.alcatrazescapee.tinkersforging.TinkersForging;
+import com.alcatrazescapee.tinkersforging.client.ModGuiHandler;
+import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
@@ -53,9 +55,30 @@ public class BlockTinkersAnvil extends BlockTileCore
     private static final Map<MaterialType, BlockTinkersAnvil> MAP = new HashMap<>();
     private static final AxisAlignedBB AABB_X = new AxisAlignedBB(0.1875, 0, 0, 0.8125, 0.625, 1);
     private static final AxisAlignedBB AABB_Z = new AxisAlignedBB(0, 0, 0.1875, 1, 0.625, 0.8125);
-    private final MaterialType material;
 
-    public BlockTinkersAnvil(MaterialType material) {
+    public static Collection<BlockTinkersAnvil> getAll()
+    {
+        return MAP.values();
+    }
+
+    @Nullable
+    public static BlockTinkersAnvil get(MaterialType material)
+    {
+        return MAP.get(material);
+    }
+
+    @Nonnull
+    public static ItemStack get(MaterialType material, int amount)
+    {
+        BlockTinkersAnvil block = get(material);
+        return block == null ? ItemStack.EMPTY : new ItemStack(block, amount);
+    }
+
+    private final MaterialType material;
+    private final int tier;
+
+    public BlockTinkersAnvil(MaterialType material)
+    {
         super(Material.IRON);
 
         this.material = material;
@@ -68,25 +91,6 @@ public class BlockTinkersAnvil extends BlockTileCore
         setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 
-    public static Collection<BlockTinkersAnvil> getAll() {
-        return MAP.values();
-    }
-
-    @Nullable
-    public static BlockTinkersAnvil get(MaterialType material)
-    {
-        return MAP.get(material);
-    }
-
-    private final int tier;
-
-    @Nonnull
-    public static ItemStack get(MaterialType material, int amount)
-    {
-        BlockTinkersAnvil block = get(material);
-        return block == null ? ItemStack.EMPTY : new ItemStack(block, amount);
-    }
-
     public int getTier()
     {
         return tier;
@@ -97,7 +101,16 @@ public class BlockTinkersAnvil extends BlockTileCore
     @Override
     public void registerModel()
     {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(MOD_ID + ":tinkers_anvil", "inventory"));
+        ModelLoader.setCustomStateMapper(this, new StateMapperBase()
+        {
+            @Override
+            @Nonnull
+            protected ModelResourceLocation getModelResourceLocation(IBlockState state)
+            {
+                return new ModelResourceLocation(MOD_ID + ":tinkers_anvil", getPropertyString(state.getProperties()));
+            }
+        });
     }
 
     @Nullable
@@ -178,19 +191,19 @@ public class BlockTinkersAnvil extends BlockTileCore
         return true;
     }
 
+    @Override
+    @Nonnull
+    public BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, FACING);
+    }
+
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         tooltip.add(TextFormatting.GRAY + I18n.format(MOD_ID + ".tooltip.anvil_tier", this.tier));
-    }
-
-    @Override
-    @Nonnull
-    public BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, FACING);
     }
 
     @Override

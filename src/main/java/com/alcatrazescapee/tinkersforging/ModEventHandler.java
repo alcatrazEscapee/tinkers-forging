@@ -160,12 +160,15 @@ public final class ModEventHandler
             BlockPos pos = event.getPos();
             EntityPlayer player = event.getEntityPlayer();
 
+            // Only allow placement when clicking on the top of a block
+            // This will prevent placing charcoal when clicking the side of a block - hopefully stops placing charcoal priority over inventories
+            // There seems to be no good way to do this
             EnumFacing face = event.getFace();
-            if (face == null) return;
+            if (face != EnumFacing.UP) return;
 
             IBlockState state = world.getBlockState(pos);
 
-            if (face == EnumFacing.UP && state.getBlock() == ModBlocks.CHARCOAL_PILE || state.getBlock() == ModBlocks.CHARCOAL_FORGE)
+            if (state.getBlock() == ModBlocks.CHARCOAL_PILE || state.getBlock() == ModBlocks.CHARCOAL_FORGE)
             {
                 // Since these aren't the same property
                 IProperty<Integer> layerProperty = state.getBlock() == ModBlocks.CHARCOAL_PILE ? BlockCharcoalPile.LAYERS : BlockCharcoalForge.LAYERS;

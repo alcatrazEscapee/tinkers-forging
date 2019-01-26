@@ -1,17 +1,18 @@
 package com.alcatrazescapee.tinkersforging.util.material;
 
-import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
-import com.alcatrazescapee.alcatrazcore.util.OreDictionaryHelper;
-import com.alcatrazescapee.tinkersforging.common.capability.heat.IHeatRegistry;
+import java.util.function.BooleanSupplier;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.EnumHelper;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.function.BooleanSupplier;
+import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
+import com.alcatrazescapee.alcatrazcore.util.OreDictionaryHelper;
+import com.alcatrazescapee.tinkersforging.common.capability.heat.IHeatRegistry;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
@@ -33,8 +34,10 @@ public class MaterialType implements IHeatRegistry
     private final float meltTemp;
     private final String name;
     private final String oreName;
+    private final String translationKey;
     private final Item.ToolMaterial toolMaterial;
     private final BooleanSupplier precondition;
+
     private boolean enabled;
 
     public MaterialType(String name, int color, int tier, float workTemp, float meltTemp)
@@ -44,8 +47,9 @@ public class MaterialType implements IHeatRegistry
 
     public MaterialType(String name, @Nullable Item.ToolMaterial toolMaterial, int color, int tier, float workTemp, float meltTemp)
     {
-        this.name = name;
-        this.oreName = OreDictionaryHelper.UPPER_UNDERSCORE_TO_LOWER_CAMEL.convert("INGOT_" + name);
+        this.name = name.toLowerCase();
+        this.oreName = OreDictionaryHelper.UPPER_UNDERSCORE_TO_LOWER_CAMEL.convert("INGOT_" + this.name);
+        this.translationKey = "material." + this.name + ".name";
 
         // noinspection ConstantConditions
         this.precondition = () -> CoreHelpers.doesOreHaveStack(oreName);
@@ -60,8 +64,9 @@ public class MaterialType implements IHeatRegistry
 
     public MaterialType(String name, String oreName, BooleanSupplier precondition, @Nullable Item.ToolMaterial toolMaterial, int color, int tier, float workTemp, float meltTemp)
     {
-        this.name = name;
+        this.name = name.toLowerCase();
         this.oreName = oreName;
+        this.translationKey = "material." + name + ".name";
 
         this.precondition = precondition;
         this.enabled = false;
@@ -79,18 +84,24 @@ public class MaterialType implements IHeatRegistry
         return name;
     }
 
+    @Nonnull
+    public String getTranslationKey()
+    {
+        return translationKey;
+    }
+
     public boolean isEnabled()
     {
         if (enabled)
         {
             return true;
         }
-        enabled = precondition.getAsBoolean();
-        return enabled;
+        return enabled = precondition.getAsBoolean();
     }
 
     @Override
-    public boolean test(ItemStack stack) {
+    public boolean test(ItemStack stack)
+    {
         return CoreHelpers.doesStackMatchOre(stack, oreName);
     }
 
@@ -117,12 +128,14 @@ public class MaterialType implements IHeatRegistry
     }
 
     @Override
-    public float getWorkTemp() {
-        return workTemp;
+    public float getMeltTemp()
+    {
+        return meltTemp;
     }
 
     @Override
-    public float getMeltTemp() {
-        return meltTemp;
+    public float getWorkTemp()
+    {
+        return workTemp;
     }
 }

@@ -8,6 +8,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Loader;
 
+import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.integration.TinkersIntegration;
 
@@ -41,6 +42,15 @@ public final class MaterialRegistry
         if (Loader.isModLoaded("tconstruct"))
         {
             TinkersIntegration.addAllMaterials();
+        }
+
+        // Force Enable materials
+        for (String s : ModConfig.GENERAL.forceEnabledMetals)
+        {
+            if (MATERIALS.containsKey(s))
+            {
+                MATERIALS.get(s).setEnabled();
+            }
         }
     }
 

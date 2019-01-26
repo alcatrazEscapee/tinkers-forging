@@ -9,14 +9,12 @@ package com.alcatrazescapee.tinkersforging.common.capability;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 import com.alcatrazescapee.tinkersforging.ModConfig;
-import com.alcatrazescapee.tinkersforging.common.capability.heat.IHeatRegistry;
 import com.alcatrazescapee.tinkersforging.common.recipe.AnvilRecipe;
 import com.alcatrazescapee.tinkersforging.util.TickTimer;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeStep;
@@ -28,39 +26,21 @@ import static com.alcatrazescapee.tinkersforging.common.capability.CapabilityFor
 public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagCompound>
 {
     private final ForgeSteps steps;
-    private int work;
-    private String recipeName;
-
     private final float meltingTemperature;
     private final float workingTemperature;
-
+    private int work;
+    private String recipeName;
     // These are the values from last point of update. They are updated when read from NBT, or when the temperature is set manually.
     private float temperature;
     private long lastUpdateTick;
 
-    private ForgeItem(@Nullable NBTTagCompound nbt, IHeatRegistry heatRegistry)
-    {
-        steps = new ForgeSteps();
-
-        this.meltingTemperature = heatRegistry.getMeltTemp();
-        this.workingTemperature = heatRegistry.getWorkTemp();
-
-        deserializeNBT(nbt);
-    }
-
     public ForgeItem(@Nullable NBTTagCompound nbt, float workingTemperature, float meltingTemperature)
     {
-        steps = new ForgeSteps();
-
+        this.steps = new ForgeSteps();
         this.meltingTemperature = meltingTemperature;
         this.workingTemperature = workingTemperature;
 
         deserializeNBT(nbt);
-    }
-
-    public ForgeItem(@Nullable ItemStack stack, @Nullable NBTTagCompound nbt)
-    {
-        this(nbt, CapabilityForgeItem.getHeatRegistry(stack));
     }
 
     public ForgeItem(@Nullable NBTTagCompound nbt)

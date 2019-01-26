@@ -32,6 +32,10 @@ def model(filename_parts: tuple, parent: str = 'item/generated', texture: str = 
         }), file, indent=2)
 
 
+def local(s: str) -> str:
+    return s.replace('_', ' ').title()
+
+
 MOD_ID = 'tinkersforging'
 TOOLS = [
     'axe_head',
@@ -51,6 +55,7 @@ if __name__ == '__main__':
     # Tool models
     for tool in TOOLS:
         model((tool,))
+        print('item.%s:%s.name=%%s %s' % (MOD_ID, tool, local(tool)))
 
     # Hammer is special
     model(('hammer',), texture='hammer/metal')
