@@ -8,7 +8,8 @@ tinkersforging.tooltip.has_been_worked=This item has been worked.
 tinkersforging.tooltip.too_cold=The item is not hot enough to work!
 tinkersforging.tooltip.tier_too_low=This anvil is too low tier for that item!
 tinkersforging.tooltip.no_hammer=There is no hammer in the anvil!
-tinkersforging.tooltip.anvil_tier=Tier %d
+tinkersforging.tooltip.anvil_tier=Tier: %d
+tinkersforging.tooltip.material=Material: %s
 
 tinkersforging.tooltip.temperature_advanced=%d °C
 tinkersforging.tooltip.temperature_works_at_advanced= - Works at %d °C
@@ -94,24 +95,26 @@ material.aluminium.name=Aluminium
 
 # Items
 
+item.tinkersforging:hammer.name=Tinker's Hammer
 item.tinkersforging:hammer.wood.name=Wooden Tinker's Hammer
 item.tinkersforging:hammer.stone.name=Stone Tinker's Hammer
+item.tinkersforging:hammer.diamond.name=Diamond Tinker's Hammer
 
 # Blocks
 
 tile.tinkersforging:charcoal_pile.name=Charcoal Pile
 tile.tinkersforging:charcoal_forge.name=Charcoal Forge
 tile.tinkersforging:forge.name=Brick Forge
-tile.tinkersforging:tinkers_anvil.name=%s Tinker's Anvil
+tile.tinkersforging:tinkers_anvil.name=Tinker's Anvil
 
 # Items: Tool Parts
 
-item.tinkersforging:axe_head.name=%s Axe Head
-item.tinkersforging:hammer_head.name=%s Hammer Head
-item.tinkersforging:hoe_head.name=%s Hoe Head
-item.tinkersforging:ntp_knife.name=%s Knife
-item.tinkersforging:ntp_mattock.name=%s Mattock
-item.tinkersforging:ntp_saw.name=%s Saw
-item.tinkersforging:pickaxe_head.name=%s Pickaxe Head
-item.tinkersforging:shovel_head.name=%s Shovel Head
-item.tinkersforging:sword_blade.name=%s Sword Blade
+item.tinkersforging:axe_head.name=Axe Head
+item.tinkersforging:hammer_head.name=Hammer Head
+item.tinkersforging:hoe_head.name=Hoe Head
+item.tinkersforging:ntp_knife.name=Knife Blade
+item.tinkersforging:ntp_mattock.name=Mattock Head
+item.tinkersforging:ntp_saw.name=Saw Blade
+item.tinkersforging:pickaxe_head.name=Pickaxe Head
+item.tinkersforging:shovel_head.name=Shovel Head
+item.tinkersforging:sword_blade.name=Sword Blade

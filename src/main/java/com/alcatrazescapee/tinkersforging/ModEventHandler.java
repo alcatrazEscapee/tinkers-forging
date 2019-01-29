@@ -142,10 +142,13 @@ public final class ModEventHandler
     @Optional.Method(modid = "tconstruct")
     public static void onTinkersCastingEvent(TinkerCastingEvent.OnCasted event)
     {
-        IForgeItem cap = event.output.getCapability(CapabilityForgeItem.CAPABILITY, null);
-        if (cap != null)
+        if (ModConfig.BALANCE.tinkersConstructCastingTemperature)
         {
-            cap.setTemperature(cap.getMeltingTemperature() - 1f);
+            IForgeItem cap = event.output.getCapability(CapabilityForgeItem.CAPABILITY, null);
+            if (cap != null)
+            {
+                cap.setTemperature(cap.getMeltingTemperature() - 1f);
+            }
         }
     }
 

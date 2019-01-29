@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.Loader;
 
 import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
+import com.alcatrazescapee.tinkersforging.integration.AdvToolboxIntegration;
 import com.alcatrazescapee.tinkersforging.integration.TinkersIntegration;
 
 @ParametersAreNonnullByDefault
@@ -18,6 +19,7 @@ public final class MaterialRegistry
     private static final Map<String, MaterialType> MATERIALS = new HashMap<>();
     private static final Set<String> TINKERS_MATERIALS = new HashSet<>();
     private static final Set<String> NTP_MATERIALS = new HashSet<>();
+    private static final Set<String> TOOLBOX_MATERIALS = new HashSet<>();
     private static final MaterialType NULL = new MaterialType("null", "null", () -> false, null, 0, 0, 0, 0);
 
     public static void preInit()
@@ -37,6 +39,12 @@ public final class MaterialRegistry
 
         // NTP Compat Materials
         NTP_MATERIALS.addAll(Arrays.asList("iron", "gold", "tin", "copper", "bronze", "steel"));
+
+        // Adventurer's Toolbox Materials
+        if (Loader.isModLoaded("toolbox"))
+        {
+            AdvToolboxIntegration.addAllMaterials();
+        }
 
         // Tinker's Construct Materials
         if (Loader.isModLoaded("tconstruct"))
@@ -65,14 +73,17 @@ public final class MaterialRegistry
 
     public static void addTinkersMaterial(MaterialType material)
     {
-        addTinkersMaterial(material.getName());
+        if (MATERIALS.containsKey(material.getName()))
+        {
+            TINKERS_MATERIALS.add(material.getName());
+        }
     }
 
-    public static void addTinkersMaterial(String name)
+    public static void addToolboxMaterial(MaterialType material)
     {
-        if (MATERIALS.containsKey(name))
+        if (MATERIALS.containsKey(material.getName()))
         {
-            TINKERS_MATERIALS.add(name);
+            TOOLBOX_MATERIALS.add(material.getName());
         }
     }
 
@@ -90,21 +101,16 @@ public final class MaterialRegistry
 
     public static boolean isTinkersMaterial(MaterialType material)
     {
-        return isTinkersMaterial(material.getName());
-    }
-
-    public static boolean isTinkersMaterial(String name)
-    {
-        return TINKERS_MATERIALS.contains(name);
+        return TINKERS_MATERIALS.contains(material.getName());
     }
 
     public static boolean isNTPMaterial(MaterialType material)
     {
-        return isNTPMaterial(material.getName());
+        return NTP_MATERIALS.contains(material.getName());
     }
 
-    public static boolean isNTPMaterial(String name)
+    public static boolean isToolboxMaterial(MaterialType material)
     {
-        return NTP_MATERIALS.contains(name);
+        return TOOLBOX_MATERIALS.contains(material.getName());
     }
 }

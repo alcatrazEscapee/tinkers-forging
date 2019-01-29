@@ -6,17 +6,13 @@
 
 package com.alcatrazescapee.tinkersforging.common.recipe;
 
-import com.alcatrazescapee.alcatrazcore.inventory.crafting.InventoryCraftingEmpty;
-import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
-import com.alcatrazescapee.alcatrazcore.util.collections.ImmutablePair;
-import com.alcatrazescapee.tinkersforging.ModConfig;
-import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
-import com.alcatrazescapee.tinkersforging.common.items.ItemHammer;
-import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
-import com.alcatrazescapee.tinkersforging.integration.PatchouliIntegration;
-import com.alcatrazescapee.tinkersforging.util.ItemType;
-import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
-import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -29,12 +25,18 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistryModifiable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.alcatrazescapee.alcatrazcore.inventory.crafting.InventoryCraftingEmpty;
+import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
+import com.alcatrazescapee.alcatrazcore.util.collections.ImmutablePair;
+import com.alcatrazescapee.tinkersforging.ModConfig;
+import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
+import com.alcatrazescapee.tinkersforging.common.items.ItemHammer;
+import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
+import com.alcatrazescapee.tinkersforging.integration.AdvToolboxIntegration;
+import com.alcatrazescapee.tinkersforging.integration.PatchouliIntegration;
+import com.alcatrazescapee.tinkersforging.util.ItemType;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
 
 import static com.alcatrazescapee.alcatrazcore.util.OreDictionaryHelper.UPPER_UNDERSCORE_TO_LOWER_CAMEL;
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
@@ -115,6 +117,12 @@ public final class ModRecipes
                         ANVIL.add(new AnvilRecipe(output, inputOre, type.getAmount(), material.getTier(), type.getRules()));
                 }
             }
+        }
+
+        // Adventurer's Toolbox Tool Parts
+        if (Loader.isModLoaded("toolbox"))
+        {
+            AdvToolboxIntegration.addRecipes();
         }
     }
 

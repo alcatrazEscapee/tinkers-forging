@@ -8,6 +8,7 @@ package com.alcatrazescapee.tinkersforging.common.items;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -15,8 +16,11 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -85,13 +89,11 @@ public class ItemToolHead extends ItemCore
         ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(MOD_ID + ":" + type.name().toLowerCase()));
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    @Nonnull
-    @SuppressWarnings("deprecation")
-    public String getItemStackDisplayName(ItemStack stack)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
-        String translationKey = getTranslationKey() + ".name";
-        String materialKey = material.getTranslationKey();
-        return I18n.translateToLocalFormatted(translationKey, I18n.translateToLocal(materialKey).trim()).trim();
+        tooltip.add(TextFormatting.DARK_GREEN + I18n.format(MOD_ID + ".tooltip.material", I18n.format("material." + material.getName() + ".name")));
+        super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 }

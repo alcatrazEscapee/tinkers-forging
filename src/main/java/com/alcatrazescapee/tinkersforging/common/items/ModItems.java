@@ -64,7 +64,10 @@ public final class ModItems
         for (ItemHammer item : ItemHammer.getAll())
         {
             if (item.getMaterial() == null || item.getMaterial().isEnabled())
+            {
                 item.setCreativeTab(TAB_ITEMS);
+                item.setTranslationKey(MOD_ID + ":hammer");
+            }
         }
 
         // Add tool part creative tabs
@@ -73,7 +76,6 @@ public final class ModItems
             if (item.getMaterial().isEnabled())
             {
                 item.setCreativeTab(TAB_ITEMS);
-                // Doing this here is not the best practice but it works
                 item.setTranslationKey(MOD_ID + ":" + item.getType().name().toLowerCase());
             }
         }

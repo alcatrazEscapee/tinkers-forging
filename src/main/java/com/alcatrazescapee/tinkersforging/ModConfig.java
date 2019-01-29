@@ -10,12 +10,12 @@ import net.minecraftforge.common.config.Config;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 
+@SuppressWarnings("WeakerAccess")
 @Config(modid = MOD_ID, category = "")
 public final class ModConfig
 {
     public static final GeneralConfig GENERAL = new GeneralConfig();
     public static final BalanceConfig BALANCE = new BalanceConfig();
-    public static final MaterialsConfig MATERIALS = new MaterialsConfig();
 
     public static class GeneralConfig
     {
@@ -47,7 +47,6 @@ public final class ModConfig
         @Config.Comment("If this is true, any recipes that are added to the anvil that have a crafting equivalent (i.e. a shovel) will have their normal crafting recipes removed")
         public boolean removeCraftingRecipes = true;
 
-        // todo: change this to actually work with new material types
         @Config.Name("Force-Enabled Materials")
         @Config.RequiresMcRestart
         @Config.Comment({"This is a way to force Tinker's Forging to recognize other materials from other mods if they don't automatically get found.", "WARNING: This can cause broken recipes / items if you use it incorrectly. Only use it if you know what you are doing."})
@@ -106,86 +105,10 @@ public final class ModConfig
         @Config.Comment("Modifier for experience given by forging items on the Tinker's Anvil. Note higher tier items give more experience.")
         public double forgeExperienceModifier = 3;
 
+        @Config.Name("Tinker's Construct Casting Heats Items")
+        @Config.Comment("Should Casting items in a Tinker's Construct casting table bring them to max temperature?")
+        public boolean tinkersConstructCastingTemperature = true;
+
         private BalanceConfig() {}
-    }
-
-    public static class MaterialsConfig
-    {
-        @Config.Comment("Tier of the Copper Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Copper")
-        public int tierCopper = 0;
-
-        @Config.Comment("Tier of the Tin Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Tin")
-        public int tierTin = 0;
-
-        @Config.Comment("Tier of the Bronze Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Bronze")
-        public int tierBronze = 1;
-
-        @Config.Comment("Tier of the Steel Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Steel")
-        public int tierSteel = 3;
-
-        @Config.Comment("Tier of the Silver Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Silver")
-        public int tierSilver = 1;
-
-        @Config.Comment("Tier of the Lead Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Lead")
-        public int tierLead = 0;
-
-        @Config.Comment("Tier of the Aluminium Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Aluminium")
-        public int tierAluminium = 0;
-
-        @Config.Comment("Tier of the Cobalt Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Cobalt")
-        public int tierCobalt = 3;
-
-        @Config.Comment("Tier of the Ardite Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Ardite")
-        public int tierArdite = 3;
-
-        @Config.Comment("Tier of the Manyullyn Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Manyullyn")
-        public int tierManyullyn = 4;
-
-        @Config.Comment("Tier of the Invar Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Invar")
-        public int tierInvar = 3;
-
-        @Config.Comment("Tier of the Brass Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Brass")
-        public int tierBrass = 1;
-
-        @Config.Comment("Tier of the Mithril Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Mithril")
-        public int tierMithril = 4;
-
-        @Config.Comment("Tier of the Electrum Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Electrum")
-        public int tierElectrum = 1;
-
-        @Config.Comment("Tier of the Pig Iron  Anvil (if enabled)")
-        @Config.RangeInt(min = 0, max = 5)
-        @Config.Name("Tier - Pig Iron")
-        public int tierPigiron = 2;
-
-        private MaterialsConfig() {}
     }
 }

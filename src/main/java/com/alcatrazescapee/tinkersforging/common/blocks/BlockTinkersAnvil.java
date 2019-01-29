@@ -97,7 +97,6 @@ public class BlockTinkersAnvil extends BlockTileCore
     }
 
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings("ConstantConditions")
     @Override
     public void registerModel()
     {
@@ -202,8 +201,9 @@ public class BlockTinkersAnvil extends BlockTileCore
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
+        tooltip.add(TextFormatting.DARK_GREEN + I18n.format(MOD_ID + ".tooltip.anvil_tier", this.tier));
+        tooltip.add(TextFormatting.DARK_GREEN + I18n.format(MOD_ID + ".tooltip.material", I18n.format("material." + material.getName() + ".name")));
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(TextFormatting.GRAY + I18n.format(MOD_ID + ".tooltip.anvil_tier", this.tier));
     }
 
     @Override

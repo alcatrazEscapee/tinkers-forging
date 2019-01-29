@@ -9,7 +9,6 @@ package com.alcatrazescapee.tinkersforging.common.blocks;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
-import com.alcatrazescapee.tinkersforging.common.items.ItemBlockTinkersAnvil;
 import com.alcatrazescapee.tinkersforging.common.tile.TileCharcoalForge;
 import com.alcatrazescapee.tinkersforging.common.tile.TileForge;
 import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
@@ -37,7 +36,7 @@ public final class ModBlocks
 
         for (MaterialType material : MaterialRegistry.getAllMaterials())
         {
-            r.registerBlock(new BlockTinkersAnvil(material), ItemBlockTinkersAnvil::new, "tinkers_anvil/" + material.getName());
+            r.registerBlock(new BlockTinkersAnvil(material), "tinkers_anvil/" + material.getName());
         }
 
         r.registerTile(TileTinkersAnvil.class, "tinkers_anvil");
