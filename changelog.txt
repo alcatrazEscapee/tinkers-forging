@@ -1,4 +1,6 @@
-v1.0.7
+v1.0.8
 
 Changes:
- - Fixed a bug where switching between worlds could cause a tick to happen without proper temperature updates, resulting in items melting in forges when they shouldn't in some edge cases.
+ - Material Registry is now dynamic! This allows other Tinker's Construct materials or other recognized metals to be added! Yay!
+ - Added a config option to disable automatic heating from the Tinker's Construct casting table (if you want)
+ - Charcoal placement will now only place on top of the block you click on - should fix most issues where charcoal placement took priority over opening an inventory.
