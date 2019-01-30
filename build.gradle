@@ -111,7 +111,7 @@ curseforge {
         apiKey = "${priv.curseforge_api_token}"
         id = "308629"
         changelog = file("changelog.txt")
-        releaseType = "release"
+        releaseType = "beta"
 
         addGameVersion("${mc_version}")
         relations {

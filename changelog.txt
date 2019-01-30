@@ -1,6 +1,4 @@
-v1.0.8
+v1.1.1
 
 Changes:
- - Material Registry is now dynamic! This allows other Tinker's Construct materials or other recognized metals to be added! Yay!
- - Added a config option to disable automatic heating from the Tinker's Construct casting table (if you want)
- - Charcoal placement will now only place on top of the block you click on - should fix most issues where charcoal placement took priority over opening an inventory.
+ - Fixed tools added from No Tree Punching having missing textures.

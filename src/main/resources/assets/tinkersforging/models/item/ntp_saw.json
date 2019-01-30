@@ -3,6 +3,6 @@
   "forge_marker": 1,
   "parent": "item/generated",
   "textures": {
-    "layer0": "tinkersforging:items/ntp_saw"
+    "layer0": "tinkersforging:items/saw_head"
   }
 }
