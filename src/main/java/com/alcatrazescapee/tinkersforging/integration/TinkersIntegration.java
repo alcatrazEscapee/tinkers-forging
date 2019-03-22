@@ -9,7 +9,6 @@ package com.alcatrazescapee.tinkersforging.integration;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.Optional;
 
-import com.alcatrazescapee.tinkersforging.TinkersForging;
 import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
 import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
 import slimeknights.tconstruct.common.config.Config;
@@ -44,7 +43,6 @@ public final class TinkersIntegration
                     }
                     float meltTemp = Math.max(300, baseTemp * 3.5f - 250);
                     float workTemp = MathHelper.clamp(meltTemp * 0.8f, 150, 1400);
-                    TinkersForging.getLog().info("Temps for {} = {}, {}, {}", material.getIdentifier(), baseTemp, meltTemp, workTemp);
 
                     MaterialType materialTF = new MaterialType(material.getIdentifier(), material.materialTextColor, headStats.harvestLevel, workTemp, meltTemp);
                     materialTF.setEnabled();

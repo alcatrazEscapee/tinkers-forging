@@ -3,6 +3,7 @@ package com.alcatrazescapee.tinkersforging.util.material;
 import java.awt.*;
 import java.util.*;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.item.Item;
@@ -20,7 +21,6 @@ public final class MaterialRegistry
     private static final Set<String> TINKERS_MATERIALS = new HashSet<>();
     private static final Set<String> NTP_MATERIALS = new HashSet<>();
     private static final Set<String> TOOLBOX_MATERIALS = new HashSet<>();
-    private static final MaterialType NULL = new MaterialType("null", "null", () -> false, null, 0, 0, 0, 0);
 
     public static void preInit()
     {
@@ -66,7 +66,7 @@ public final class MaterialRegistry
     {
         if (MATERIALS.containsKey(material.getName()))
         {
-            TinkersForging.getLog().warn("Material {} was overriden!", material.getName());
+            TinkersForging.getLog().debug("Material {} was overriden!", material.getName());
         }
         MATERIALS.put(material.getName(), material);
     }
@@ -93,10 +93,10 @@ public final class MaterialRegistry
         return MATERIALS.values();
     }
 
-    @Nonnull
+    @Nullable
     public static MaterialType getMaterial(String name)
     {
-        return MATERIALS.getOrDefault(name, NULL);
+        return MATERIALS.get(name);
     }
 
     public static boolean isTinkersMaterial(MaterialType material)
