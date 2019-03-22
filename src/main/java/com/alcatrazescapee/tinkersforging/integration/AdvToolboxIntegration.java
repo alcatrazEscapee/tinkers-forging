@@ -27,7 +27,6 @@ public final class AdvToolboxIntegration
     @Optional.Method(modid = "toolbox")
     public static void addAllMaterials()
     {
-        // todo: stuff here
         for (Map.Entry<String, HeadMaterial> entry : Materials.head_registry.entrySet())
         {
             HeadMaterial mat = entry.getValue();
