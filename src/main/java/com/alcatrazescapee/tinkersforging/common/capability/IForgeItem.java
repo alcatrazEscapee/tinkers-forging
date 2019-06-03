@@ -29,6 +29,10 @@ public interface IForgeItem extends INBTSerializable<NBTTagCompound>
 {
     // Work / Forging Related
 
+    int MIN_WORK = 0;
+    int MAX_WORK = 150;
+    int DEFAULT_WORK = MAX_WORK / 2;
+
     int getWork();
 
     void setWork(int work);

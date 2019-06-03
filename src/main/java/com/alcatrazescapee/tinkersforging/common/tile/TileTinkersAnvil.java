@@ -265,17 +265,15 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
                     // Drop experience
                     if (ModConfig.BALANCE.forgeExperienceEnabled)
                     {
-                        if (currentPlayer == null)
+                        if (currentPlayer != null)
                         {
-                            TinkersForging.getLog().info("No current player!!!");
-                        }
-                        int xp = (int) ModConfig.BALANCE.forgeExperienceModifier * (2 + cachedAnvilRecipe.getTier());
-                        while (xp > 0)
-                        {
-                            TinkersForging.getLog().info("Adding xp!!!");
-                            int k = EntityXPOrb.getXPSplit(xp);
-                            xp -= k;
-                            world.spawnEntity(new EntityXPOrb(world, currentPlayer.posX + 0.5d, currentPlayer.posY, currentPlayer.posZ + 0.5d, k));
+                            int xp = (int) ModConfig.BALANCE.forgeExperienceModifier * (2 + cachedAnvilRecipe.getTier());
+                            while (xp > 0)
+                            {
+                                int k = EntityXPOrb.getXPSplit(xp);
+                                xp -= k;
+                                world.spawnEntity(new EntityXPOrb(world, currentPlayer.posX + 0.5d, currentPlayer.posY, currentPlayer.posZ + 0.5d, k));
+                            }
                         }
                     }
 
@@ -284,7 +282,7 @@ public class TileTinkersAnvil extends TileInventory implements ITileFields
                     setRecipe(null);
                     inventory.setStackInSlot(SLOT_DISPLAY, ItemStack.EMPTY);
                 }
-                else if (workingProgress < 0 || workingProgress >= 150)
+                else if (workingProgress < IForgeItem.MIN_WORK || workingProgress >= IForgeItem.MAX_WORK)
                 {
                     // Consume input, produce no output
                     ItemStack newInput = cachedAnvilRecipe.consumeInput(input);

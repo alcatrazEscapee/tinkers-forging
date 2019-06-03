@@ -6,15 +6,6 @@
 
 package com.alcatrazescapee.tinkersforging.client;
 
-import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
-import com.alcatrazescapee.tinkersforging.client.render.TESRTinkersAnvil;
-import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
-import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
-import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
-import com.alcatrazescapee.tinkersforging.common.items.ItemHammer;
-import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
-import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
-import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.resources.I18n;
@@ -27,6 +18,16 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.alcatrazescapee.alcatrazcore.util.RegistryHelper;
+import com.alcatrazescapee.tinkersforging.client.render.TESRTinkersAnvil;
+import com.alcatrazescapee.tinkersforging.common.blocks.BlockTinkersAnvil;
+import com.alcatrazescapee.tinkersforging.common.capability.CapabilityForgeItem;
+import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
+import com.alcatrazescapee.tinkersforging.common.items.ItemHammer;
+import com.alcatrazescapee.tinkersforging.common.items.ItemToolHead;
+import com.alcatrazescapee.tinkersforging.common.tile.TileTinkersAnvil;
+import com.alcatrazescapee.tinkersforging.util.material.MaterialType;
 
 import static com.alcatrazescapee.tinkersforging.TinkersForging.MOD_ID;
 import static net.minecraft.util.text.TextFormatting.GREEN;
@@ -43,7 +44,7 @@ public final class ClientEventHandler
         IForgeItem cap = event.getItemStack().getCapability(CapabilityForgeItem.CAPABILITY, null);
         if (cap != null)
         {
-            if (cap.getWork() != 0 || cap.getRecipeName() != null || cap.getTemperature() >= 1f)
+            if (cap.getWork() != IForgeItem.DEFAULT_WORK || cap.getRecipeName() != null || cap.getTemperature() >= 1f)
             {
                 event.getToolTip().add(GREEN + I18n.format(MOD_ID + ".tooltip.has_been_worked"));
                 cap.addTooltipInfo(event.getToolTip());
@@ -52,12 +53,10 @@ public final class ClientEventHandler
     }
 
     @SubscribeEvent
-    @SuppressWarnings("ConstantConditions")
     @SideOnly(Side.CLIENT)
     public static void registerModels(ModelRegistryEvent event)
     {
         RegistryHelper.get(MOD_ID).initModels(event);
-
         ClientRegistry.bindTileEntitySpecialRenderer(TileTinkersAnvil.class, new TESRTinkersAnvil());
     }
 

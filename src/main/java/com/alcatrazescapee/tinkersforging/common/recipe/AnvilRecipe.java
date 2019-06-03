@@ -18,6 +18,7 @@ import com.alcatrazescapee.alcatrazcore.inventory.recipe.RecipeCore;
 import com.alcatrazescapee.alcatrazcore.util.CoreHelpers;
 import com.alcatrazescapee.tinkersforging.ModConfig;
 import com.alcatrazescapee.tinkersforging.TinkersForging;
+import com.alcatrazescapee.tinkersforging.common.capability.IForgeItem;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeRule;
 import com.alcatrazescapee.tinkersforging.util.forge.ForgeSteps;
 import io.netty.buffer.ByteBuf;
@@ -119,7 +120,12 @@ public class AnvilRecipe extends RecipeCore
     public int getWorkingTarget(long seed)
     {
         RANDOM.setSeed(seed + workingSeed);
-        return 30 + RANDOM.nextInt(90);
+        int target = 32 + RANDOM.nextInt(IForgeItem.MAX_WORK - 64);
+        if (target == IForgeItem.DEFAULT_WORK)
+        {
+            target += 20 * (RANDOM.nextBoolean() ? -1 : 1);
+        }
+        return target;
     }
 
     public boolean stepsMatch(ForgeSteps steps)

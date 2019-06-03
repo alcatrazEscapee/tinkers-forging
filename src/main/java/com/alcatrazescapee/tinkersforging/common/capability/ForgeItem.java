@@ -37,6 +37,7 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
     public ForgeItem(@Nullable NBTTagCompound nbt, float workingTemperature, float meltingTemperature)
     {
         this.steps = new ForgeSteps();
+        this.work = DEFAULT_WORK;
         this.meltingTemperature = meltingTemperature;
         this.workingTemperature = workingTemperature;
 
@@ -98,7 +99,7 @@ public class ForgeItem implements IForgeItem, ICapabilitySerializable<NBTTagComp
         // Note: this will only reset the non-temperature part of this capability
         steps.reset();
         recipeName = null;
-        work = 0;
+        work = DEFAULT_WORK;
     }
 
     @Override

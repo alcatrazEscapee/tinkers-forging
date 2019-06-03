@@ -71,7 +71,7 @@ dependencies {
     // CraftTweaker API
     deobfProvided "CraftTweaker2:CraftTweaker2-API:4.1.8.5"
     // At runtime, use the full jar
-    //runtime "CraftTweaker2:CraftTweaker2-MC1120-Main:${crafttweaker_version}"
+    runtime "CraftTweaker2:CraftTweaker2-MC1120-Main:${crafttweaker_version}"
 
     // compile against Tinkers Construct but do not include it at runtime
     deobfProvided "slimeknights.mantle:Mantle:${mantle_version}"
@@ -111,7 +111,7 @@ curseforge {
         apiKey = "${priv.curseforge_api_token}"
         id = "308629"
         changelog = file("changelog.txt")
-        releaseType = "beta"
+        releaseType = "release"
 
         addGameVersion("${mc_version}")
         relations {
