@@ -1,6 +1,4 @@
-v1.1.3
+v1.1.4
 
 Changes:
- - Added two missing tinkers construct parts to the anvil (bow limb and arrow head)
- - The progress bar now starts in the center when you start work, so you can't press "hit" and immediately lose the item
- - Removed some redundant log statements
+ - Fixed an issue with twilight forest's tinkers integrated materials loading after tinkers forging and not getting added to the anvil correctly.

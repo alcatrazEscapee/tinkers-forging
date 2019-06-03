@@ -29,6 +29,7 @@ import com.alcatrazescapee.tinkersforging.common.network.PacketUpdateForgeItem;
 import com.alcatrazescapee.tinkersforging.common.recipe.ModRecipes;
 import com.alcatrazescapee.tinkersforging.integration.PatchouliIntegration;
 import com.alcatrazescapee.tinkersforging.integration.TinkersIntegration;
+import com.alcatrazescapee.tinkersforging.integration.TwilightIntegration;
 import com.alcatrazescapee.tinkersforging.util.TickTimer;
 import com.alcatrazescapee.tinkersforging.util.material.MaterialRegistry;
 
@@ -49,7 +50,7 @@ public final class TinkersForging
     private static final String FORGE_MIN = "14.23.4.2705";
     private static final String FORGE_MAX = "15.0.0.0";
 
-    public static final String DEPENDENCIES = "required-after:forge@[" + FORGE_MIN + "," + FORGE_MAX + ");" + "required-after:alcatrazcore@[" + ALC_MIN + "," + ALC_MAX + ");" + "after:tconstruct;after:alcatrazcore;after:toolbox;";
+    public static final String DEPENDENCIES = "required-after:forge@[" + FORGE_MIN + "," + FORGE_MAX + ");" + "required-after:alcatrazcore@[" + ALC_MIN + "," + ALC_MAX + ");" + "after:tconstruct;after:alcatrazcore;after:toolbox;after:twilightforest";
 
     @Mod.Instance
     private static TinkersForging instance;
@@ -114,6 +115,11 @@ public final class TinkersForging
         if (Loader.isModLoaded("tconstruct"))
         {
             TinkersIntegration.init();
+        }
+        if (Loader.isModLoaded("twilightforest"))
+        {
+            // Dammit Twilight Forest, why you gotta be like this
+            TwilightIntegration.init();
         }
 
         // Init Managers
