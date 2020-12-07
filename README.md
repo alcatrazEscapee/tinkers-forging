@@ -2,6 +2,8 @@
 
 A mod that adds TFC Style Forging to 1.12+
 
+**This mod has been discontinued. It will not be receiving updates or support!**
+
 Author: AlcatrazEscapee
 
 This mod adds basic forging to the game. You must first acquire a Tinker's Anvil and Hammer - the basic tools of the trade. Then you will need to master heating items - either in a large open Charcoal Forge or a more conservative Brick Forge. When you heat ingots to the right temperature, they become Workable. Place them in an anvil and start hitting them to try and work them into shape. For detail about how forging works, see TerraFirmaCraft 1.7.10 forging rules.
